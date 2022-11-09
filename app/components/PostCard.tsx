@@ -66,7 +66,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
               {post.tags.map(({ tagName }, i) => (
                 <Link 
                   key={i}
-                  to={`/tag/${tagName}`}
+                  to={`/search?q=${tagName}`}
                   className='bg-purple-500 text-white py-1 px-1.5 text-xs font-bold rounded-md'
                 >#{tagName}</Link>
               ))}

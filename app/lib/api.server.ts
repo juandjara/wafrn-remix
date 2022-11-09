@@ -110,6 +110,23 @@ export async function getBlog({ id, page, startScroll }: { id: string; page: num
   return posts as Post[]
 }
 
+export async function searchPosts({ query, page }: { query: string; page: number }) {
+  const url = `${API_URL}/search/?term=${query}&page=${page}`
+  const res = await fetch(url)
+
+  const results = await res.json()
+
+  if (results.success === false) {
+    throw new Response('Error calling API at /search/:term', { status: 500, statusText: 'Server Error' })
+  }
+
+  for (const post of results.posts) {
+    await processPost(post)
+  }
+
+  return results.posts as Post[]
+}
+
 async function processPost(post: Post) {
   if (post.content) {
     await processHTML(post)

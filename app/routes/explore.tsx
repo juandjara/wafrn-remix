@@ -7,12 +7,6 @@ import { json } from '@remix-run/node'
 import { useFetcher, useLoaderData } from '@remix-run/react'
 import { useEffect, useState } from 'react'
 
-export function links() {
-  return [
-    { rel: "stylesheet", href: 'https://cdn.quilljs.com/1.3.6/quill.snow.css' }
-  ]
-}
-
 type LoaderData = {
   posts: Post[]
   params: {
