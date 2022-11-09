@@ -4,7 +4,7 @@ import { Link } from '@remix-run/react'
 const linkCN = [
   'flex items-center gap-3',
   'text-lg font-medium',
-  'hover:bg-purple-50 rounded-lg p-2'
+  'hover:bg-purple-100 rounded-lg p-2'
 ].join(' ')
 
 export default function Sidebar() {
