@@ -3,10 +3,9 @@ import { Menu } from "@headlessui/react"
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline"
 import { Link } from "@remix-run/react"
 import clsx from "clsx"
-import { HTMLProps } from "react"
 import PostContent from "./PostContent"
 
-export default function PostListItem({ post, root = false }: { post: Post, root?: boolean }) {
+export default function PostCard({ post, root = false }: { post: Post, root?: boolean }) {
   const children = (post.ancestors || [])
     .filter(p => p.content || p.tags.length)
     .sort((a, b) => {
@@ -35,7 +34,7 @@ export default function PostListItem({ post, root = false }: { post: Post, root?
       ) : null}
       {!!children.length && (
         <ul className='divide-y divide-gray-300 border-t border-gray-300'>
-          {children.map((p) => <PostListItem key={p.id} post={p} />)}
+          {children.map((p) => <PostCard key={p.id} post={p} />)}
         </ul>
       )}
       {post.content || post.tags.length ? (
@@ -69,14 +68,14 @@ export default function PostListItem({ post, root = false }: { post: Post, root?
         </>
       ) : null}
       {root && (
-        <div className='flex justify-end gap-1 border-t border-gray-300 pt-2 mt-4 text-purple-900'>
-          <button className='p-2 hover:bg-purple-50 rounded-md' title="Quick Reblog">
+        <div className='flex justify-end gap-2 border-t border-gray-300 pt-2 mt-4 text-purple-900'>
+          <button className='p-1.5 hover:bg-purple-50 rounded-md' title="Quick Reblog">
             <QuickReblogIcon className="w-5 h-5" />
           </button>
-          <button className='p-2 hover:bg-purple-50 rounded-md' title="Reblog">
+          <button className='p-1.5 hover:bg-purple-50 rounded-md' title="Reblog">
             <ReblogIcon className="w-5 h-5" />
           </button>
-          <button className='p-2 hover:bg-purple-50 rounded-md' title="Report">
+          <button className='p-1.5 hover:bg-purple-50 rounded-md' title="Report">
             <ReportIcon className="w-5 h-5" />
           </button>
         </div>

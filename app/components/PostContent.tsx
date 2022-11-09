@@ -54,7 +54,7 @@ function useProcessor(text: string) {
               }
             },
             a: (props: HTMLProps<HTMLAnchorElement>) => {
-              const linkCN = 'text-purple-500 hover:underline'
+              const linkCN = 'text-purple-700 hover:underline'
               if ((props as any)['data-mention']) {
                 return (
                   <Link to={props.href!} className={linkCN}>

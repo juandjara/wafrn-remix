@@ -1,7 +1,7 @@
 import type { Post } from "@/lib/api.server"
 import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
-import PostListItem from "./PostListItem"
+import PostCard from "./PostCard"
 
 type PostListProps = {
   posts: Post[]
@@ -21,7 +21,7 @@ export default function PostList({ posts, loadNextPage }: PostListProps) {
   return (
     <>
       <ul className='space-y-6'>
-        {posts.map((p) => <PostListItem root key={p.id} post={p} />)}
+        {posts.map((p) => <PostCard root key={p.id} post={p} />)}
       </ul>
       <div ref={intersectionRef}>
         <svg className="animate-spin my-8 mx-auto h-12 w-12 text-purple-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

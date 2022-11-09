@@ -124,7 +124,7 @@ async function processHTML(post: Post) {
       const key = `[mentionuserid="${m.userId}"]`
       const value = `<a 
           data-mention="${m.user.url}"
-          class="text-purple-500 hover:underline"
+          class="text-purple-700 hover:underline"
           href="/u/${m.user.url}">@${m.user.url}</a>`
       content = content.replace(key, value)
     }
