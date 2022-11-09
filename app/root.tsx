@@ -8,6 +8,7 @@ import {
   ScrollRestoration,
   useCatch,
 } from "@remix-run/react"
+import { Toaster } from "react-hot-toast"
 import GlobalSpinner from "./components/GlobalSpiner"
 import LiveReload from "./components/LiveReload"
 import Sidebar from "./components/Sidebar"
@@ -33,6 +34,7 @@ export default function App() {
         <Links />
       </head>
       <body className="bg-stone-100">
+        <Toaster />
         <GlobalSpinner />
         <div className="flex gap-3">
           <Sidebar />

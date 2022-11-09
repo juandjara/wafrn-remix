@@ -3,6 +3,7 @@ import { Menu } from "@headlessui/react"
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline"
 import { Link } from "@remix-run/react"
 import clsx from "clsx"
+import toast from "react-hot-toast"
 import PostContent from "./PostContent"
 
 export default function PostCard({ post, root = false }: { post: Post, root?: boolean }) {
@@ -15,7 +16,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
     })
 
   return (
-    <li className={clsx('bg-white', root ? 'border border-gray-300 rounded-md p-4' : 'py-4')}>
+    <li className={clsx('bg-white block', root ? 'border border-gray-300 rounded-md p-4' : 'py-4')}>
       {root && children.length > 0 ? (
         <div className='flex items-center gap-2 my-2'>        
           <img
@@ -52,7 +53,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
               </Link>
             </div>
             <button className='py-1 px-2 text-purple-900 bg-purple-50 hover:bg-purple-100 rounded-md'>Follow</button>
-            <PostActions />
+            <PostActions post={post} />
           </div>
           <PostContent post={post} />
           {post.tags.length ? (
@@ -112,7 +113,14 @@ function ReportIcon(props: React.ComponentProps<'svg'>) {
   )
 }
 
-function PostActions() {
+function PostActions({ post }: { post: Post }) {
+  function copyLink() {
+    const url = new URL(window.location.origin)
+    url.pathname = `/p/${post.id}`
+    navigator.clipboard.writeText(url.toString())
+    toast.success('Post link copied to your clipboard', { duration: 5000 })
+  }
+  
   return (
     <Menu as='div' className='relative'>
       <Menu.Button className='p-1.5 text-purple-900 bg-purple-50 hover:bg-purple-100 rounded-md'>
@@ -121,7 +129,9 @@ function PostActions() {
       <Menu.Items as="ul" className='absolute z-10 top-full right-0 flex flex-col bg-white mt-1 p-1 shadow-lg rounded-md space-y-2 w-40'>
         <Menu.Item as="li">
           {({ active }) => (
-            <button className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
+            <button 
+              onClick={copyLink}
+              className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
               <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M13 4.5a2.5 2.5 0 11.702 1.737L6.97 9.604a2.518 2.518 0 010 .792l6.733 3.367a2.5 2.5 0 11-.671 1.341l-6.733-3.367a2.5 2.5 0 110-3.475l6.733-3.366A2.52 2.52 0 0113 4.5z" />
               </svg>

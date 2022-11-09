@@ -48,15 +48,16 @@ export type Post = {
 
 const API_URL = 'https://api.wafrn.net'
 
-export async function getExplore({ page, startScroll }: { page: number; startScroll: number }) {
-  const res = await fetch(`${API_URL}/explore?page=${page}&startScroll=${startScroll}`)
-  const posts = await res.json()
+export async function getPost(id: string) {
+  const url = `${API_URL}/singlePost/${id}`
+  const res = await fetch(url)
+  const post = await res.json()
 
-  for (const post of posts) {
-    await processPost(post)
+  if (post.success === false) {
+    throw new Response('Error calling API at /singlePost/:id', { status: 500, statusText: 'Server Error' })
   }
 
-  return posts as Post[]
+  return processPost(post)
 }
 
 export async function getDetails(id: string) {
@@ -79,6 +80,17 @@ export async function getDetails(id: string) {
   }
 
   return data
+}
+
+export async function getExplore({ page, startScroll }: { page: number; startScroll: number }) {
+  const res = await fetch(`${API_URL}/explore?page=${page}&startScroll=${startScroll}`)
+  const posts = await res.json()
+
+  for (const post of posts) {
+    await processPost(post)
+  }
+
+  return posts as Post[]
 }
 
 export async function getBlog({ id, page, startScroll }: { id: string; page: number; startScroll: number }) {
@@ -154,14 +166,21 @@ async function processHTML(post: Post) {
     const [ unified, rehypeParse, rehypeSanitize, rehypeStringify ] = await Promise.all([
       import('unified').then(mod => mod.unified),
       import('rehype-parse').then(mod => mod.default),
-      import('rehype-sanitize').then(mod => mod.default),
+      import('rehype-sanitize'),
       import('rehype-stringify').then(mod => mod.default)
     ])
   
     // apply the html sanitizer
     const html = await unified()
       .use(rehypeParse, {fragment: true})
-      .use(rehypeSanitize)
+      .use(rehypeSanitize.default, {
+        ...rehypeSanitize.defaultSchema,
+        attributes: {
+          ...rehypeSanitize.defaultSchema.attributes,
+          '*': ['data*', ...(rehypeSanitize.defaultSchema.attributes?.['*'] || [])],
+          'img': ['loading', ...(rehypeSanitize.defaultSchema.attributes?.['img'] || [])],
+        }
+      })
       .use(rehypeStringify)
       .process(content)
   

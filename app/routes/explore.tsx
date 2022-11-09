@@ -1,3 +1,4 @@
+import Container from '@/components/Container'
 import PostList from '@/components/PostList'
 import type { Post } from '@/lib/api.server'
 import { getExplore } from '@/lib/api.server'
@@ -55,12 +56,12 @@ export default function Explore() {
   }, [fetcher.data])
 
   return (
-    <div className='p-3 mb-6 max-w-screen-md'>
+    <Container>
       <h1 className='my-4 text-4xl font-medium text-gray-500'>Explore</h1>
       <PostList
         posts={posts}
         loadNextPage={loadNextPage}
       />
-    </div>
+    </Container>
   )
 }

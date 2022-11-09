@@ -1,3 +1,4 @@
+import Container from '@/components/Container'
 import PostList from '@/components/PostList'
 import { getDetails, Post } from '@/lib/api.server'
 import { getBlog } from '@/lib/api.server'
@@ -71,12 +72,12 @@ export default function Blog() {
   }
 
   return (
-    <div className='p-3 mb-6 max-w-screen-md'>
+    <Container>
       <h1 className='my-4 text-4xl font-medium text-gray-500'>{initialParams.id}</h1>
       <PostList
         posts={posts}
         loadNextPage={loadNextPage}
       />
-    </div>
+    </Container>
   )
 }
