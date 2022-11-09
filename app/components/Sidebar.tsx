@@ -24,12 +24,6 @@ export default function Sidebar() {
             </Link>
           </li>
           <li>
-            <Link to="/register" className={linkCN}>
-              <LockClosedIcon className="w-5 h-5 text-purple-500" />
-              <span>Register</span>
-            </Link>
-          </li>
-          <li>
             <Link to="/explore" className={linkCN}>
               <RectangleGroupIcon className="w-5 h-5 text-purple-500" />
               <span>Explore</span>
