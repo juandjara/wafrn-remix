@@ -1,4 +1,5 @@
 import type { Post } from "@/lib/api.server"
+import { AnimatePresence } from "framer-motion"
 import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
 import PostCard from "./PostCard"
@@ -20,9 +21,11 @@ export default function PostList({ posts, loadNextPage }: PostListProps) {
 
   return (
     <>
-      <ul className='space-y-6'>
-        {posts.map((p) => <PostCard root key={p.id} post={p} />)}
-      </ul>
+      <AnimatePresence>
+        <ul className='space-y-6'>
+          {posts.map((p) => <PostCard root key={p.id} post={p} />)}
+        </ul>
+      </AnimatePresence>
       <div ref={intersectionRef}>
         <svg className="animate-spin my-8 mx-auto h-12 w-12 text-purple-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

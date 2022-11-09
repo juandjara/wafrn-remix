@@ -5,6 +5,7 @@ import { Link } from "@remix-run/react"
 import clsx from "clsx"
 import toast from "react-hot-toast"
 import PostContent from "./PostContent"
+import { motion } from 'framer-motion'
 
 export default function PostCard({ post, root = false }: { post: Post, root?: boolean }) {
   const children = (post.ancestors || [])
@@ -16,7 +17,11 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
     })
 
   return (
-    <li className={clsx('bg-white block', root ? 'border border-gray-300 rounded-md p-4' : 'py-4')}>
+    <motion.li
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: root ? 0 : 0.2 }}
+      className={clsx('bg-white block', root ? 'border border-gray-300 rounded-md p-4' : 'py-4')}>
       {root && children.length > 0 ? (
         <div className='flex items-center gap-2 my-2'>        
           <img
@@ -81,7 +86,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
           </button>
         </div>
       )}
-    </li>
+    </motion.li>
   )
 }
 
