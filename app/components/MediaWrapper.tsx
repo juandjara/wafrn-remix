@@ -10,14 +10,17 @@ export type MediaWrapperProps = {
 export default function MediaWrapper({ nsfw, type, src, alt }: MediaWrapperProps) {
   const [open, setOpen] = useState(!nsfw)
 
+  // using an extra div to avoid `ql-editor > *` styles that remove pointer
   const placeholder = (
-    <button className="block" onClick={() => setOpen(true)}>
-      <img
-        src="/nsfw.webp"
-        className="rounded-md"
-        alt="this media is nsfw. click to display"
-      />
-    </button>
+    <div>      
+      <button className="block" onClick={() => setOpen(true)}>
+        <img
+          src="/nsfw.webp"
+          className="rounded-md"
+          alt="this media is nsfw. click to display"
+        />
+      </button>
+    </div>
   )
 
   const content = type === 'image'
