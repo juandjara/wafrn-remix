@@ -64,10 +64,11 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
           {post.tags.length ? (
             <div className='mt-2 flex items-center gap-1 flex-wrap'>
               {post.tags.map(({ tagName }, i) => (
-                <span 
+                <Link 
                   key={i}
+                  to={`/tag/${tagName}`}
                   className='bg-purple-500 text-white py-1 px-1.5 text-xs font-bold rounded-md'
-                >#{tagName}</span>
+                >#{tagName}</Link>
               ))}
             </div>
           ) : null}
