@@ -75,6 +75,11 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
       ) : null}
       {root && (
         <div className='flex justify-end gap-2 border-t border-gray-300 pt-2 mt-4 text-purple-900'>
+          <Link to={`/p/${post.id}`} className="text-stone-700 font-medium text-sm">
+            <span>Notes: </span>
+            <span className="text-lg">{post.notes}</span>
+          </Link>
+          <div className="flex-grow"></div>
           <button className='p-1.5 hover:bg-purple-50 rounded-md' title="Quick Reblog">
             <QuickReblogIcon className="w-5 h-5" />
           </button>

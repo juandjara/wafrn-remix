@@ -38,7 +38,7 @@ export default function App() {
         <GlobalSpinner />
         <div className="flex gap-3">
           <Sidebar />
-          <div className="md:pl-80">
+          <div className="md:pl-80 flex-grow">
             <Outlet />
           </div>
         </div>

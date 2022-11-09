@@ -44,6 +44,7 @@ export type Post = {
   tags: PostTag[]
   postMentionsUserRelations: PostMention[]
   ancestors?: Omit<Post, 'ancestors'>[]
+  notes: number
 }
 
 const API_URL = 'https://api.wafrn.net'
