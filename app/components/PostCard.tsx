@@ -1,4 +1,4 @@
-import type { Post } from "@/lib/api.server"
+import { MEDIA_URL, Post } from "@/lib/api.server"
 import { Menu } from "@headlessui/react"
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline"
 import { Link } from "@remix-run/react"
@@ -27,7 +27,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
             alt='avatar'
             loading='lazy'
             className='w-8 h-8 rounded-lg'
-            src={'https://media.wafrn.net'.concat(post.user.avatar)}
+            src={MEDIA_URL.concat(post.user.avatar)}
           />
           <div className="flex-grow truncate">
             <Link className='text-purple-700 hover:underline' to={`/u/${post.user.url}`}>
@@ -49,7 +49,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
               alt='avatar'
               loading='lazy'
               className='w-8 h-8 rounded-lg'
-              src={'https://media.wafrn.net'.concat(post.user.avatar)}
+              src={MEDIA_URL.concat(post.user.avatar)}
             />
             <div className="flex-grow truncate">
               <Link className='text-purple-700 hover:underline' to={`/u/${post.user.url}`}>

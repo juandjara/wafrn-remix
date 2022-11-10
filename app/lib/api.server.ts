@@ -47,6 +47,7 @@ export type Post = {
   notes: number
 }
 
+export const MEDIA_URL = 'https://media.wafrn.net'
 const API_URL = 'https://api.wafrn.net'
 
 export async function getPost(id: string) {
@@ -172,13 +173,13 @@ async function processHTML(post: Post) {
         ? `<img
             loading="lazy"
             src="/nsfw.webp"
-            data-src="https://media.wafrn.net${m.url}"
+            data-src="${MEDIA_URL}${m.url}"
             data-type="${isImage ? 'image' : 'video'}"
             data-nsfw="true"
           />`
         : isImage
-          ? `<img loading="lazy" src="https://media.wafrn.net${m.url}" alt=${m.description} />`
-          : `<video controls src="https://media.wafrn.net${m.url}" />`
+          ? `<img loading="lazy" src="${MEDIA_URL}${m.url}" alt=${m.description} />`
+          : `<video controls src="${MEDIA_URL}${m.url}" />`
   
       content = content.replace(key, value)
     }

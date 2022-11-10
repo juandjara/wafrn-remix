@@ -1,7 +1,7 @@
 import Container from '@/components/Container'
 import PostList from '@/components/PostList'
 import Spinner from '@/components/Spinner'
-import type { Post, PostUser} from '@/lib/api.server'
+import { MEDIA_URL, Post, PostUser} from '@/lib/api.server'
 import { searchPosts } from '@/lib/api.server'
 import { buttonCN } from '@/lib/style'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
@@ -75,7 +75,7 @@ export default function Search() {
               alt='avatar'
               loading='lazy'
               className='w-12 h-12 rounded-lg flex-shrink-0 my-1'
-              src={'https://media.wafrn.net'.concat(user.avatar)}
+              src={MEDIA_URL.concat(user.avatar)}
             />
             <div className="flex-grow">
               <Link className='text-purple-700 text-lg hover:underline' to={`/u/${user.url}`}>
