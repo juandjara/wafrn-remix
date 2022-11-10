@@ -2,6 +2,8 @@ import Container from '@/components/Container'
 import PostList from '@/components/PostList'
 import { getDetails, Post, searchPosts } from '@/lib/api.server'
 import { getBlog } from '@/lib/api.server'
+import { buttonCN } from '@/lib/style'
+import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, useFetcher, useLoaderData } from '@remix-run/react'
@@ -59,17 +61,24 @@ export default function Blog() {
 
   return (
     <Container>
-      <h1 className='my-4 text-4xl font-medium text-gray-500'>
-        Search {initialParams.query ? `"${initialParams.query}"` : ''}
-      </h1>
+      <header className='mt-6 mb-8'>
+        <h1 className='text-4xl font-medium text-gray-500'>
+          {initialParams.query ? `Searching for "${initialParams.query}"` : 'Search'}
+        </h1>
+        <p className='mt-4'>
+          You can search for users by url and description, and posts by tags. No need to add # to your search. Have fun!
+        </p>
+      </header>
       <Form className='my-4'>
         <label htmlFor="q" className='text-stone-500 mb-1 block text-xs'>Search term</label>
-        <div className='flex items-center'>
-          <input className='border-stone-200 border rounded-l-md flex-grow py-1 px-2' name="q" defaultValue={initialParams.query} />
+        <div className='flex items-center gap-2'>
+          <input className='border-stone-200 border rounded-md flex-grow py-1 px-2' name="q" defaultValue={initialParams.query} />
           <button
             type='submit'
-            className='py-1 px-2 text-purple-900 bg-purple-100 hover:bg-purple-200 rounded-r-md'>
-            Search
+            className={`${buttonCN.small} ${buttonCN.primary} ${buttonCN.iconLeft} rounded-md border border-purple-200`}
+          >
+            <MagnifyingGlassIcon className='w-4 h-4' />
+            <p>Search</p>
           </button>
         </div>
       </Form>
