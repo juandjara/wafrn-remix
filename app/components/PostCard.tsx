@@ -20,7 +20,6 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
     <motion.li
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ delay: root ? 0 : 0.2 }}
       className={clsx('bg-white block', root ? 'border border-gray-300 rounded-md p-4' : 'py-4')}>
       {root && children.length > 0 ? (
         <div className='flex items-center gap-2 my-2'>        

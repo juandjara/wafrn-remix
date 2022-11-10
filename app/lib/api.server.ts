@@ -1,4 +1,4 @@
-type PostTag = {
+export type PostTag = {
   tagName: string
   tagPostRelations: Array<{
     createdAt: string
@@ -8,18 +8,18 @@ type PostTag = {
   }>
 }
 
-type PostUser = {
+export type PostUser = {
   avatar: string
   url: string
   description: string
 }
 
-type PostMention = {
+export type PostMention = {
   userId: string
   user: PostUser
 }
 
-type PostMedia = {
+export type PostMedia = {
   id: string
   NSFW: boolean
   adultContent: boolean
@@ -124,7 +124,10 @@ export async function searchPosts({ query, page }: { query: string; page: number
     await processPost(post)
   }
 
-  return results.posts as Post[]
+  return {
+    posts: results.posts as Post[],
+    users: results.users as PostUser[]
+  }
 }
 
 async function processPost(post: Post) {

@@ -4,8 +4,7 @@ import type { Post } from '@/lib/api.server'
 import { getExplore } from '@/lib/api.server'
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { useFetcher, useLoaderData } from '@remix-run/react'
-import { useEffect, useState } from 'react'
+import { useLoaderData } from '@remix-run/react'
 
 type LoaderData = {
   posts: Post[]
@@ -26,35 +25,14 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export default function Explore() {
-  const { posts: initialPosts, params: initialParams } = useLoaderData<LoaderData>()
-  const fetcher = useFetcher()
-  const [posts, setPosts] = useState(initialPosts)
-
-  function loadNextPage() {
-    const currentPage = fetcher.data?.params.page || initialParams.page
-    const currentPageData = fetcher.data?.posts
-
-    // if we have data (fetcher has run at least once) and the returned data is empty (last page)
-    // we asume there is no more data to fetch from the api
-    const isLastPage = currentPageData && currentPageData.length === 0
-
-    if (fetcher.state === 'idle' && !isLastPage) {
-      fetcher.load(`/explore?index&page=${currentPage + 1}&startScroll=${initialParams.startScroll}`)
-    }
-  }
-
-  useEffect(() => {
-    if (fetcher.data?.posts.length > 0) {
-      setPosts((posts) => posts.concat(fetcher.data.posts))
-    }
-  }, [fetcher.data])
+  const { posts, params: { startScroll } } = useLoaderData<LoaderData>()
 
   return (
     <Container>
       <h1 className='my-4 text-4xl font-medium text-gray-500'>Explore</h1>
       <PostList
-        posts={posts}
-        loadNextPage={loadNextPage}
+        initialPosts={posts}
+        getPageURL={page => `/explore?index&page=${page}&startScroll=${startScroll}`}
       />
     </Container>
   )
