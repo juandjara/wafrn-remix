@@ -23,7 +23,7 @@ export function links() {
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: 'Remix Tailwind Starter',
+  title: 'Wafrn - The social network that respects you',
   viewport: "width=device-width,initial-scale=1",
 })
 

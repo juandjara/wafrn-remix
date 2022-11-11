@@ -60,3 +60,5 @@ export const buttonCN = {
   cancel: 'hover:bg-slate-100 dark:hover:bg-slate-100/25',
   delete: 'text-red-700 hover:bg-red-50'
 }
+
+export const linkCN = 'text-purple-700 hover:underline'

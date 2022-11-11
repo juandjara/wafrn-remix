@@ -1,38 +1,50 @@
-import { MagnifyingGlassIcon, RectangleGroupIcon, LockClosedIcon } from '@heroicons/react/24/outline'
+import { MagnifyingGlassIcon, RectangleGroupIcon, LockClosedIcon, CurrencyEuroIcon, CodeBracketSquareIcon } from '@heroicons/react/24/outline'
 import { Link } from '@remix-run/react'
 
 const linkCN = [
   'flex items-center gap-3',
-  'text-lg font-medium',
-  'hover:bg-purple-100 rounded-lg p-2'
+  'font-medium',
+  'hover:bg-purple-100 bg-stone-50 rounded-lg p-2'
 ].join(' ')
 
 export default function Sidebar() {
   return (
-    <aside className="min-h-screen fixed top-0 px-6 py-6 flex-shrink-0 w-72 bg-white">
+    <aside className="min-h-screen fixed top-0 flex-shrink-0 w-72 bg-white">
       <Link to="/">
-        <h1 className="text-purple-700 bg-purple-700 rounded-lg text-2xl font-semibold p-4 mb-6 tracking-widest">
+        <h1 className="bg-purple-900 p-4">
           <img src="https://app.wafrn.net/assets/logo.png" alt="WAFRN" />
         </h1>
       </Link>
-      <nav>
-        <ul className="space-y-2 text-purple-700">
+      <nav className='px-4 py-4'>
+        <ul className="space-y-4 text-purple-900">
           <li>
             <Link to="/login" className={linkCN}>
-              <LockClosedIcon className="w-5 h-5 text-purple-500" />
+              <LockClosedIcon className="w-6 h-6 text-purple-700" />
               <span>Login</span>
             </Link>
           </li>
           <li>
             <Link to="/explore" className={linkCN}>
-              <RectangleGroupIcon className="w-5 h-5 text-purple-500" />
-              <span>Explore</span>
+              <RectangleGroupIcon className="w-6 h-6 text-purple-700" />
+              <span>Explore without login</span>
             </Link>
           </li>
           <li>
             <Link to="/search" className={linkCN}>
-              <MagnifyingGlassIcon className="w-5 h-5 text-purple-500" />
-              <span>Search</span>
+              <MagnifyingGlassIcon className="w-6 h-6 text-purple-700" />
+              <span>Search a blog</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/search" className={linkCN}>
+              <CurrencyEuroIcon className="w-6 h-6 text-purple-700" />
+              <span>Give us some money</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/search" className={linkCN}>
+              <CodeBracketSquareIcon className="w-6 h-6 text-purple-700" />
+              <span>Check the source code</span>
             </Link>
           </li>
         </ul>
