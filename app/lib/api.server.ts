@@ -1,3 +1,5 @@
+import { MEDIA_URL } from './config'
+
 export type PostTag = {
   tagName: string
   tagPostRelations: Array<{
@@ -47,7 +49,6 @@ export type Post = {
   notes: number
 }
 
-export const MEDIA_URL = 'https://media.wafrn.net'
 const API_URL = 'https://api.wafrn.net'
 
 export async function getPost(id: string) {
@@ -199,7 +200,7 @@ async function processHTML(post: Post) {
         ...rehypeSanitize.defaultSchema,
         attributes: {
           ...rehypeSanitize.defaultSchema.attributes,
-          '*': ['data*', ...(rehypeSanitize.defaultSchema.attributes?.['*'] || [])],
+          '*': ['data*', 'className', 'style', ...(rehypeSanitize.defaultSchema.attributes?.['*'] || [])],
           'img': ['loading', ...(rehypeSanitize.defaultSchema.attributes?.['img'] || [])],
         }
       })

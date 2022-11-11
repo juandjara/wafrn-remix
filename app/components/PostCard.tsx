@@ -1,4 +1,4 @@
-import { MEDIA_URL, Post } from "@/lib/api.server"
+import type { Post } from "@/lib/api.server"
 import { Menu } from "@headlessui/react"
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline"
 import { Link } from "@remix-run/react"
@@ -6,6 +6,7 @@ import clsx from "clsx"
 import toast from "react-hot-toast"
 import PostContent from "./PostContent"
 import { motion } from 'framer-motion'
+import { MEDIA_URL } from "@/lib/config"
 
 export default function PostCard({ post, root = false }: { post: Post, root?: boolean }) {
   const children = (post.ancestors || [])

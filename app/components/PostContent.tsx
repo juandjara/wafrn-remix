@@ -1,10 +1,12 @@
 import type { Post } from "@/lib/api.server"
+import { linkCN } from "@/lib/style"
 import { Link } from "@remix-run/react"
-import type { HTMLProps } from 'react'
+import type { HTMLProps} from 'react'
+import { isValidElement } from 'react'
 import { Children } from 'react'
 import { createElement, Fragment, useEffect, useState } from 'react'
+import Embed from "./embed/Embed"
 import MediaWrapper from "./MediaWrapper"
-import YoutubeEmbed from "./YoutubeEmbed"
 
 export default function PostContent({ post }: { post: Post }) {
   return (
@@ -12,6 +14,15 @@ export default function PostContent({ post }: { post: Post }) {
       {useProcessor(post.content)}
     </div>
   )
+}
+
+function isLink(text = '') {
+  try {
+    const u = new URL(text)
+    return u.protocol.startsWith('http')
+  } catch (err) {
+    return false
+  }
 }
 
 function useProcessor(text: string) {
@@ -39,12 +50,18 @@ function useProcessor(text: string) {
               />
             ),
             p: (props: HTMLProps<HTMLParagraphElement>) => {
+              // try to extract links from paragraphs and turn them into embeds
               try {
-                const urlText = Children.toArray(props.children)
-                if (urlText.length === 1 && typeof urlText[0] === 'string') {
-                  const ytID = getYoutubeID(urlText[0])
-                  if (ytID) {
-                    return <YoutubeEmbed id={ytID} />
+                const children = Children.toArray(props.children)
+                // if this paragraph has only a single child
+                if (children.length === 1) {
+                  // and the single child is text and a valid link
+                  if (typeof children[0] === 'string' && isLink(children[0])) {
+                    return <Embed link={children[0]} />
+                  }
+                  // or the single child is an element with a valid link as a href prop
+                  if (isValidElement(children[0]) && isLink(children[0].props.href)) {
+                    return <Embed link={children[0].props.href} />
                   }
                 }
 
@@ -54,18 +71,13 @@ function useProcessor(text: string) {
               }
             },
             a: (props: HTMLProps<HTMLAnchorElement>) => {
-              const linkCN = 'text-purple-700 hover:underline'
+              // convert mention links to internal links to avoid full page reload when clicking
               if ((props as any)['data-mention']) {
                 return (
                   <Link to={props.href!} className={linkCN}>
                     {props.children}
                   </Link>
                 )
-              }
-
-              let ytID = getYoutubeID(props.href)
-              if (ytID) {
-                return <YoutubeEmbed id={ytID} />
               }
 
               return (
@@ -89,19 +101,4 @@ function useProcessor(text: string) {
   }, [text])
 
   return Content
-}
-
-function getYoutubeID(link = '') {
-  try {
-    let ytID = null
-    if (link.includes('youtube.com/watch')) {
-      ytID = new URL(link).searchParams.get('v')
-    }
-    if (link.includes('https://youtu.be')) {
-      ytID = new URL(link).pathname
-    }
-    return ytID
-  } catch (err) {
-    return null
-  }
 }
