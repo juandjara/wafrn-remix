@@ -42,6 +42,11 @@ export default function Blog() {
   return (
     <Container>
       <h1 className='my-4 text-4xl font-medium text-gray-500'>{id}</h1>
+      {posts.length === 0 && (
+        <p>
+          This blog is empty
+        </p>
+      )}
       <PostList
         initialPosts={posts}
         getPageURL={page => `/u/${id}?index&page=${page}&startScroll=${startScroll}`}
