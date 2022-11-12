@@ -15,7 +15,7 @@ export default function MediaWrapper({ nsfw, type, src, alt }: MediaWrapperProps
     <span>
       <button className="block" onClick={() => setOpen(true)}>
         <img
-          src="/nsfw.webp"
+          src="/img/nsfw.webp"
           className="rounded-md"
           alt="this media is nsfw. click to display"
         />

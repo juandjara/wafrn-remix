@@ -173,7 +173,7 @@ async function processHTML(post: Post) {
       const value = isSensible 
         ? `<img
             loading="lazy"
-            src="/nsfw.webp"
+            src="/img/nsfw.webp"
             data-src="${MEDIA_URL}${m.url}"
             data-type="${isImage ? 'image' : 'video'}"
             data-nsfw="true"

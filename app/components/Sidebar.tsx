@@ -12,7 +12,7 @@ export default function Sidebar() {
     <aside className="min-h-screen fixed top-0 flex-shrink-0 w-72 bg-white">
       <Link to="/">
         <h1 className="bg-purple-900 p-4">
-          <img src="https://app.wafrn.net/assets/logo.png" alt="WAFRN" />
+          <img src="/img/wafrn-logo.png" alt="WAFRN" />
         </h1>
       </Link>
       <nav className='px-4 py-4'>
