@@ -1,6 +1,7 @@
 import Container from '@/components/Container'
-import PostList from '@/components/PostList'
-import { getDetails, Post, UserDetails } from '@/lib/api.server'
+import PostList from '@/components/post/PostList'
+import type { Post, UserDetails } from '@/lib/api.server'
+import { getDetails } from '@/lib/api.server'
 import { getBlog } from '@/lib/api.server'
 import { MEDIA_URL } from '@/lib/config'
 import { buttonCN } from '@/lib/style'
@@ -50,7 +51,7 @@ export default function Blog() {
         <img alt="" src={MEDIA_URL.concat(detail.avatar)} className="w-40 rounded-md border-stone-300" />
         <p className='mt-2 text-xl text-purple-900 font-medium'>{detail.url}</p>
         <p className='my-8'>{detail.description}</p>
-        <button className={`${buttonCN.normal} ${buttonCN.primary} block w-full`}>
+        <button className={`${buttonCN.normal} ${isFollowing ? buttonCN.delete : buttonCN.primary} block w-full`}>
           {isFollowing ? 'Unfollow' : 'Follow'}
         </button>
       </div>

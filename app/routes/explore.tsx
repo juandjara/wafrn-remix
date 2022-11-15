@@ -1,5 +1,5 @@
 import Container from '@/components/Container'
-import PostList from '@/components/PostList'
+import PostList from '@/components/post/PostList'
 import type { Post } from '@/lib/api.server'
 import { getExplore } from '@/lib/api.server'
 import type { LoaderFunction } from '@remix-run/node'

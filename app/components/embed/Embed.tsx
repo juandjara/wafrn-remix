@@ -1,4 +1,4 @@
-import YoutubeEmbed from "../YoutubeEmbed"
+import YoutubeEmbed from "./YoutubeEmbed"
 import LinkPreviewCard from "./LinkPreviewCard"
 
 function getYoutubeID(link = '') {

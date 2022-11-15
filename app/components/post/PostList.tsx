@@ -4,7 +4,7 @@ import { AnimatePresence } from "framer-motion"
 import { useEffect, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import PostCard from "./PostCard"
-import Spinner from "./Spinner"
+import Spinner from "../Spinner"
 
 type PostListProps = {
   initialPosts: Post[]

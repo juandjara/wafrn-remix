@@ -5,7 +5,7 @@ import type { HTMLProps} from 'react'
 import { isValidElement } from 'react'
 import { Children } from 'react'
 import { createElement, Fragment, useEffect, useState } from 'react'
-import Embed from "./embed/Embed"
+import Embed from "../embed/Embed"
 import MediaWrapper from "./MediaWrapper"
 
 export default function PostContent({ post }: { post: Post }) {

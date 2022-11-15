@@ -59,7 +59,7 @@ export const buttonCN = {
   ].join(' '),
   iconLeft: 'flex items-center gap-2 pl-2',
   cancel: 'hover:bg-slate-100 dark:hover:bg-slate-100/25',
-  delete: 'text-red-700 hover:bg-red-50'
+  delete: 'text-red-700 bg-red-50 hover:bg-red-100'
 }
 
 export const linkCN = 'text-purple-700 hover:underline'

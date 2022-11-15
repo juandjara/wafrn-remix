@@ -1,5 +1,5 @@
 import Container from '@/components/Container'
-import PostList from '@/components/PostList'
+import PostList from '@/components/post/PostList'
 import type { Post } from '@/lib/api.server'
 import { getDashboard } from '@/lib/api.server'
 import { requireUserSession } from '@/lib/session.server'

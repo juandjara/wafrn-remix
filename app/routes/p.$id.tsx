@@ -1,8 +1,9 @@
 import Container from "@/components/Container"
-import PostCard from "@/components/PostCard"
+import PostCard from "@/components/post/PostCard"
 import type { Post } from "@/lib/api.server"
 import { getPost } from "@/lib/api.server"
-import { LoaderFunction, redirect } from "@remix-run/node"
+import type { LoaderFunction} from "@remix-run/node"
+import { redirect } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 

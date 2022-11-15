@@ -1,5 +1,5 @@
 import Container from '@/components/Container'
-import PostList from '@/components/PostList'
+import PostList from '@/components/post/PostList'
 import Spinner from '@/components/Spinner'
 import type { Post, PostUser} from '@/lib/api.server'
 import { searchPosts } from '@/lib/api.server'
