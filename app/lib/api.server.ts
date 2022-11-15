@@ -41,6 +41,7 @@ export type Post = {
   content: string
   createdAt: string
   updatedAt: string
+  userId: string
   user: PostUser
   medias: PostMedia[]
   tags: PostTag[]
@@ -265,7 +266,6 @@ export async function login(form: FormData) {
 
   try {
     const text = await res.text()
-    console.log(text)
     const data = JSON.parse(text)
 
     if (data.success === false) {
@@ -273,6 +273,34 @@ export async function login(form: FormData) {
     }
   
     return data.token
+  } catch (err) {
+    throw err
+  }
+}
+
+export async function toggleFollow(token: string, { userId, isFollowing }: { userId: string; isFollowing: boolean }) {
+  const operation = isFollowing ? 'unfollow' : 'follow'
+  const url = `${API_URL}/${operation}`
+  const form = new FormData()
+  form.set('userId', userId)
+
+  const res = await fetch(url, {
+    body: form,
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+
+  try {
+    const text = await res.text()
+    const data = JSON.parse(text)
+
+    if (data.success === false) {
+      throw new Response(`Error calling API at /${operation}`, { status: 500, statusText: 'Server Error' })
+    }
+  
+    return data
   } catch (err) {
     throw err
   }

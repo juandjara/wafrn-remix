@@ -7,6 +7,7 @@ import toast from "react-hot-toast"
 import PostContent from "./PostContent"
 import { motion } from 'framer-motion'
 import { MEDIA_URL } from "@/lib/config"
+import FollowButton from "../FollowButton"
 
 export default function PostCard({ post, root = false }: { post: Post, root?: boolean }) {
   const children = (post.ancestors || [])
@@ -57,7 +58,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
                 {post.user.url}
               </Link>
             </div>
-            <button className='py-1 px-2 text-purple-900 bg-purple-50 hover:bg-purple-100 rounded-md'>Follow</button>
+            <FollowButton userId={post.userId} size='small' hideWhenFollowing />
             <PostActions post={post} />
           </div>
           <PostContent post={post} />
@@ -134,7 +135,7 @@ function PostActions({ post }: { post: Post }) {
   
   return (
     <Menu as='div' className='relative'>
-      <Menu.Button className='p-1.5 text-purple-900 bg-purple-50 hover:bg-purple-100 rounded-md'>
+      <Menu.Button className='p-1.5 text-purple-900 bg-purple-100 hover:bg-purple-200 rounded-md'>
         <EllipsisHorizontalIcon className="h-5 w-5" />
       </Menu.Button>
       <Menu.Items as="ul" className='absolute z-10 top-full right-0 flex flex-col bg-white mt-1 p-1 shadow-lg rounded-md space-y-2 w-40'>
