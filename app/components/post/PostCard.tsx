@@ -138,7 +138,7 @@ function PostActions({ post }: { post: Post }) {
       <Menu.Button className='p-1.5 text-purple-900 bg-purple-100 hover:bg-purple-200 rounded-md'>
         <EllipsisHorizontalIcon className="h-5 w-5" />
       </Menu.Button>
-      <Menu.Items as="ul" className='absolute z-10 top-full right-0 flex flex-col bg-white mt-1 p-1 shadow-lg rounded-md space-y-2 w-40'>
+      <Menu.Items as="ul" className='absolute z-10 top-full right-0 mt-2 p-1 space-y-2 w-40 flex flex-col bg-white border border-stone-100 shadow-lg rounded-md'>
         <Menu.Item as="li">
           {({ active }) => (
             <button 

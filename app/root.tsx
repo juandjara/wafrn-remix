@@ -48,30 +48,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json<RootLoaderData>({ user, relations })
 }
 
-export default function App() {
-  return (
-    <html lang="en">
-      <head>
-        <Meta />
-        <Links />
-      </head>
-      <body className="bg-stone-100">
-        <Toaster />
-        <GlobalSpinner />
-        <div className="flex gap-3">
-          <Sidebar />
-          <div className="md:pl-80 flex-grow">
-            <Outlet />
-          </div>
-        </div>
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
-    </html>
-  )
-}
-
 export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error)
   return (
@@ -120,6 +96,30 @@ export function CatchBoundary() {
           <Link to="/" className="bg-slate-700 text-white rounded-lg px-4 py-2">Take me home</Link>
         </div>
         <Scripts />
+      </body>
+    </html>
+  )
+}
+
+export default function App() {
+  return (
+    <html lang="en">
+      <head>
+        <Meta />
+        <Links />
+      </head>
+      <body className="bg-stone-100">
+        <Toaster />
+        <GlobalSpinner />
+        <div className="flex gap-3">
+          <Sidebar />
+          <div className="md:pl-80 flex-grow">
+            <Outlet />
+          </div>
+        </div>
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
       </body>
     </html>
   )
