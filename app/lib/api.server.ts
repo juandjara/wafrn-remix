@@ -63,6 +63,14 @@ export async function getPost(id: string) {
   return processPost(post)
 }
 
+export type UserDetails = {
+  id: string
+  avatar: string
+  description: string
+  url: string
+  NSFW: boolean
+}
+
 export async function getDetails(id: string) {
   const url = `${API_URL}/user?id=${id}`
   const res = await fetch(url)
@@ -72,7 +80,7 @@ export async function getDetails(id: string) {
     throw new Response('Error calling API at /userDetails', { status: 500, statusText: 'Server Error' })
   }
 
-  return data
+  return data as UserDetails
 }
 
 export async function getExplore({ page, startScroll }: { page: number; startScroll: number }) {
@@ -100,6 +108,28 @@ export async function getDashboard(token: string, { page, startScroll }: { page:
   }
 
   return posts as Post[]
+}
+
+export type UserRelations = {
+  followedUsers: string[] // array of user ids
+  blockedUsers: string[] // array of user ids
+}
+
+export async function getUserRelations(token: string) {
+  const url = `${API_URL}/getFollowedUsers`
+  const res = await fetch(url, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+
+  const data = await res.json()
+
+  if (data.success === false) {
+    throw new Response('Error calling API at /getFollowedUsers', { status: 500, statusText: 'Server Error' })
+  }
+
+  return data as UserRelations
 }
 
 export async function getBlog({ id, page, startScroll }: { id: string; page: number; startScroll: number }) {

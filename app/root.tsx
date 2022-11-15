@@ -13,7 +13,8 @@ import { Toaster } from "react-hot-toast"
 import GlobalSpinner from "./components/GlobalSpiner"
 import LiveReload from "./components/LiveReload"
 import Sidebar from "./components/Sidebar"
-import { getSessionData } from "./lib/session.server"
+import { getUserRelations, UserRelations } from "./lib/api.server"
+import { getSessionData, User } from "./lib/session.server"
 import tailwind from "./tailwind.css"
 
 export function links() {
@@ -29,9 +30,22 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 })
 
+export type RootLoaderData = {
+  user: User | null
+  relations: UserRelations
+}
+
 export const loader: LoaderFunction = async ({ request }) => {
-  const { user } = await getSessionData(request)
-  return json({ user })
+  const { user, token } = await getSessionData(request)
+  let relations = {
+    followedUsers: [] as string[],
+    blockedUsers: [] as string[]
+  }
+  if (user && token) {
+    relations = await getUserRelations(token)
+  }
+
+  return json<RootLoaderData>({ user, relations })
 }
 
 export default function App() {
