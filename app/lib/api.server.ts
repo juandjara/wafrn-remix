@@ -86,6 +86,22 @@ export async function getExplore({ page, startScroll }: { page: number; startScr
   return posts as Post[]
 }
 
+export async function getDashboard(token: string, { page, startScroll }: { page: number; startScroll: number }) {
+  const url = `${API_URL}/dashboard?page=${page}&startScroll=${startScroll}`
+  const res = await fetch(url, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  const posts = await res.json()
+
+  for (const post of posts) {
+    await processPost(post)
+  }
+
+  return posts as Post[]
+}
+
 export async function getBlog({ id, page, startScroll }: { id: string; page: number; startScroll: number }) {
   const url = `${API_URL}/blog?id=${id}&page=${page}&startScroll=${startScroll}`
   const res = await fetch(url)

@@ -96,7 +96,7 @@ export async function requireUserSession(
 ) {
   const { token, user } = await getSessionData(request)
   if (!token || !user) {
-    throw redirect(`/?redirectTo=${redirectTo}`)
+    throw redirect(redirectTo ? `/?redirectTo=${redirectTo}` : '/')
   }
   return { token, user }
 }

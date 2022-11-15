@@ -86,33 +86,34 @@ export default function Sidebar() {
           </li>
         </ul>
       </nav>
-      <div className='p-4 absolute bottom-0 inset-x-0 flex items-center justify-between'>
-        <p className='font-medium text-purple-900'>{user.url}</p>
-        <Menu as='div' className='relative'>
-          <Menu.Button className='p-1.5 text-purple-900 bg-purple-50 hover:bg-purple-100 rounded-md'>
-            <EllipsisVerticalIcon className="h-5 w-5" />
-          </Menu.Button>
-          <Menu.Items as="ul" className='absolute z-10 bottom-full right-0 flex flex-col bg-white mb-2 p-1 shadow-md rounded-md space-y-2 w-40'>
-            <Menu.Item as="li">
-              {({ active }) => (
-                <button className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
-                  <p className='flex-grow text-left'>Log out</p> 
-                  <LockClosedIcon className="w-6 h-6 text-purple-700" />
-                </button>
-              )}
-            </Menu.Item>
-            <Menu.Item as="li">
-              {({ active }) => (
-                <button className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
-                  <p className='flex-grow text-left'>Edit profile</p> 
-                  <UserCircleIcon className='w-6 h-6 text-purple-700' />
-                </button>
-              )}
-            </Menu.Item>
-          </Menu.Items>
-        </Menu>
-        {/* <button className={`${buttonCN.small} hover:bg-stone-100 text-stone-500`}>Log out</button> */}
-      </div>
+      {user && (
+        <div className='p-4 absolute bottom-0 inset-x-0 flex items-center justify-between'>
+          <Link to={`/u/${user.url}`} className='font-medium text-purple-900'>{user.url}</Link>
+          <Menu as='div' className='relative'>
+            <Menu.Button className='p-1.5 text-purple-900 bg-purple-50 hover:bg-purple-100 rounded-md'>
+              <EllipsisVerticalIcon className="h-6 w-6" />
+            </Menu.Button>
+            <Menu.Items as="ul" className='absolute z-10 bottom-full right-0 flex flex-col bg-white mb-2 p-1 shadow-md rounded-md space-y-2 w-40'>
+              <Menu.Item as="li">
+                {({ active }) => (
+                  <button className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
+                    <p className='flex-grow text-left'>Log out</p> 
+                    <LockClosedIcon className="w-6 h-6 text-purple-700" />
+                  </button>
+                )}
+              </Menu.Item>
+              <Menu.Item as="li">
+                {({ active }) => (
+                  <button className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
+                    <p className='flex-grow text-left'>Edit profile</p> 
+                    <UserCircleIcon className='w-6 h-6 text-purple-700' />
+                  </button>
+                )}
+              </Menu.Item>
+            </Menu.Items>
+          </Menu>
+        </div>
+      )}
     </aside>
   )
 }
