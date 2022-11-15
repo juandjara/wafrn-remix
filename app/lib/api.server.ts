@@ -64,19 +64,9 @@ export async function getPost(id: string) {
 }
 
 export async function getDetails(id: string) {
-  const url = `${API_URL}/userDetails`
-  const form = new FormData()
-  form.set('id', id)
-  const res = await fetch(url, {
-    method: 'POST',
-    body: form,
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
-  })
+  const url = `${API_URL}/user?id=${id}`
+  const res = await fetch(url)
   const data = await res.json()
-  console.log(data, res.status)
 
   if (data.success === false) {
     throw new Response('Error calling API at /userDetails', { status: 500, statusText: 'Server Error' })
@@ -210,5 +200,34 @@ async function processHTML(post: Post) {
     // store visited post in the cache
     contentMap.set(post.id, html.toString())
     post.content = contentMap.get(post.id)
+  }
+}
+
+type LoginParams = {
+  email: string
+  password: string
+  captchaResponse: string
+}
+
+export async function login(form: FormData) {
+  const url = `${API_URL}/login`
+
+  const res = await fetch(url, {
+    body: form,
+    method: 'POST',
+  })
+
+  try {
+    const text = await res.text()
+    console.log(text)
+    const data = JSON.parse(text)
+
+    if (data.success === false) {
+      throw new Response('Error calling API at /login', { status: 500, statusText: 'Server Error' })
+    }
+  
+    return data.token
+  } catch (err) {
+    throw err
   }
 }

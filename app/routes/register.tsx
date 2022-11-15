@@ -1,12 +1,13 @@
 import Container from "@/components/Container"
 import { buttonCN, inputCN, linkCN } from "@/lib/style"
+import { XCircleIcon } from "@heroicons/react/20/solid"
 import { Form, Link } from "@remix-run/react"
-import { ChangeEvent, useState } from "react"
+import type { ChangeEvent} from "react"
+import { useRef, useState } from "react"
 
 export default function Register() {
   const [image, setImage] = useState('')
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
+  const inputFileRef = useRef<HTMLInputElement>(null)
 
   function handleFileChange(ev: ChangeEvent<HTMLInputElement>) {
     const file = ev.target.files?.[0]
@@ -16,6 +17,13 @@ export default function Register() {
         setImage(reader.result as string)
       }, false)
       reader.readAsDataURL(file)
+    }
+  }
+
+  function clearAvatar() {
+    if (inputFileRef.current) {
+      setImage('')
+      inputFileRef.current.value = ''
     }
   }
 
@@ -52,16 +60,27 @@ export default function Register() {
             <label htmlFor="birthdate" className="text-sm text-stone-500 mb-1">Your brth date</label>
             <input required type="date" name="birthdate" className={inputCN} />
           </div>
-          <div className="flex items-center gap-2">
-            {image && (
-              <img alt="" src={image} className="w-16 h-16 rounded-md flex-shrink-0" />
-            )}
+          <div className="relative flex items-end gap-2">
+            <div className="group">
+              <button
+                type="button"
+                title="Clear avatar"
+                onClick={clearAvatar}
+                className="top-0 left-12 absolute group-hover:opacity-100 opacity-0 transition-opacity">
+                <XCircleIcon className="w-5 h-5 text-stone-400 hover:text-stone-500" />
+              </button>
+              <img
+                alt=""
+                src={image || '/img/default.webp'}
+                className="border border-stone-200 w-16 h-16 rounded-md flex-shrink-0"
+              />
+            </div>
             <div className="flex-grow">
-              <label htmlFor="birthdate" className="text-sm text-stone-500 mb-1">Upload your avatar</label>
-              <input required type="file" name="avatar" className={inputCN} onChange={handleFileChange} />
+              <label htmlFor="avatar" className="text-sm text-stone-500 mb-1">Upload your avatar</label>
+              <input ref={inputFileRef} required type="file" name="avatar" className={inputCN} onChange={handleFileChange} />
             </div>
           </div>
-          <button className={`${buttonCN.big} ${buttonCN.primary} w-full block`}>Register</button>
+          <button type="submit" className={`${buttonCN.big} ${buttonCN.primary} w-full block`}>Register</button>
         </Form>
         <p className="text-sm mt-8">
           This site is protected by reCAPTCHA and the Google

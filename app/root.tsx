@@ -1,4 +1,5 @@
-import type { MetaFunction } from "@remix-run/node"
+import type { LoaderFunction, MetaFunction } from "@remix-run/node"
+import { json } from "@remix-run/node"
 import {
   Link,
   Links,
@@ -12,6 +13,7 @@ import { Toaster } from "react-hot-toast"
 import GlobalSpinner from "./components/GlobalSpiner"
 import LiveReload from "./components/LiveReload"
 import Sidebar from "./components/Sidebar"
+import { getSessionData } from "./lib/session.server"
 import tailwind from "./tailwind.css"
 
 export function links() {
@@ -26,6 +28,11 @@ export const meta: MetaFunction = () => ({
   title: 'Wafrn - The social network that respects you',
   viewport: "width=device-width,initial-scale=1",
 })
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const { user } = await getSessionData(request)
+  return json({ user })
+}
 
 export default function App() {
   return (

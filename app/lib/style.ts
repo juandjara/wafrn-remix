@@ -43,8 +43,8 @@ export const checkboxCN = [
 export const labelCN = 'text-slate-500 dark:text-slate-100 text-sm'
 
 const buttonCommon = [
-  // 'rounded-md',
   // 'font-medium',
+  'rounded-md',
   'disabled:opacity-50',
 ].join(' ')
 
