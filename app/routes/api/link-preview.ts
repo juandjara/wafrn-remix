@@ -1,4 +1,5 @@
-import { json, LoaderFunction } from "@remix-run/node"
+import type { LoaderFunction } from "@remix-run/node"
+import { json } from "@remix-run/node"
 
 export type LinkPreviewInfo = {
   url: string

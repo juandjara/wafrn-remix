@@ -1,5 +1,5 @@
 import { linkCN } from "@/lib/style"
-import type { LinkPreviewInfo } from "@/routes/api/linkpreview"
+import type { LinkPreviewInfo } from "@/routes/api/link-preview"
 import { LinkIcon } from "@heroicons/react/24/outline"
 import { useFetcher } from "@remix-run/react"
 import { useEffect } from "react"
@@ -7,7 +7,7 @@ import { useEffect } from "react"
 export default function LinkPreviewCard({ link }: { link: string }) {
   const fetcher = useFetcher<LinkPreviewInfo>()
   useEffect(() => {
-    fetcher.load(`/api/linkpreview?url=${link}`)
+    fetcher.load(`/api/link-preview?url=${link}`)
   }, [])
 
   return fetcher.data ? (
