@@ -1,5 +1,6 @@
+import type { User } from '@/lib/session.server'
 import useUser from '@/lib/useUser'
-import { Menu } from '@headlessui/react'
+import { Menu, Transition } from '@headlessui/react'
 import {
   MagnifyingGlassIcon,
   RectangleGroupIcon,
@@ -12,8 +13,8 @@ import {
   HomeIcon,
   PencilSquareIcon
 } from '@heroicons/react/24/outline'
-import { Link, NavLink } from '@remix-run/react'
-import clsx from 'clsx'
+import { NavLink } from '@remix-run/react'
+import LogoutButton from './LogoutButton'
 
 const linkCN = [
   'flex items-center gap-3',
@@ -37,6 +38,38 @@ const navLinkCNInverse = ({ isActive }: { isActive: boolean }) => [
   linkCNInverse
 ].join(' ')
 
+function UserMenu({ user }: { user: User }) {
+  return (
+    <div className='p-4 flex items-center justify-between'>
+      <NavLink to={`/u/${user.url}`} className='font-medium text-purple-900'>@{user.url}</NavLink>
+      <Menu as='div' className='relative'>
+        {({ open }) => (
+          <>  
+            <Menu.Button className='p-1.5 text-purple-900 bg-purple-50 hover:bg-purple-100 rounded-md'>
+              <EllipsisHorizontalIcon className="h-6 w-6" />
+            </Menu.Button>
+            <Transition
+              show={open}
+              enter="transition transform duration-100 ease-out"
+              enterFrom="scale-x-50 opacity-0"
+              enterTo="scale-x-100 opacity-100"
+              leave="transition transform duration-100 ease-out"
+              leaveFrom="scale-x-100 opacity-100"
+              leaveTo="scale-x-50 opacity-0"
+            >
+              <Menu.Items static as="ul" className='absolute z-10 bottom-full right-full mr-2 p-1 w-40 flex flex-col space-y-2 bg-white shadow-md rounded-md border border-stone-100'>
+                <Menu.Item as="li">
+                  {({ active }) => <LogoutButton active={active} />}
+                </Menu.Item>
+              </Menu.Items>
+            </Transition>
+          </>
+        )}
+      </Menu>
+    </div>
+  )
+}
+
 export default function Sidebar() {
   const user = useUser()
 
@@ -47,26 +80,7 @@ export default function Sidebar() {
           <img src="/img/wafrn-logo.png" alt="WAFRN" />
         </h1>
       </NavLink>
-      {user && (
-        <div className='p-4 flex items-center justify-between'>
-          <NavLink to={`/u/${user.url}`} className='font-medium text-purple-900'>@{user.url}</NavLink>
-          <Menu as='div' className='relative'>
-            <Menu.Button className='p-1.5 text-purple-900 bg-purple-50 hover:bg-purple-100 rounded-md'>
-              <EllipsisHorizontalIcon className="h-6 w-6" />
-            </Menu.Button>
-            <Menu.Items as="ul" className='absolute z-10 -top-1 right-full mr-2 p-1 w-40 flex flex-col space-y-2 bg-white shadow-md rounded-md border border-stone-100'>
-              <Menu.Item as="li">
-                {({ active }) => (
-                  <button className={clsx('w-full flex items-center gap-2 p-1 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
-                    <LockClosedIcon className="w-6 h-6 text-purple-700" />
-                    <p className='flex-grow text-left'>Log out</p> 
-                  </button>
-                )}
-              </Menu.Item>
-            </Menu.Items>
-          </Menu>
-        </div>
-      )}
+      {user && <UserMenu user={user} />}
       <nav className='px-4 py-4'>
         <ul className="space-y-4 text-purple-900">
           {!user && (
