@@ -78,8 +78,12 @@ export default function App() {
       </head>
       <body className="bg-stone-100">
         <GlobalSpinner />
-        <ClientOnly>{() => <Toaster />}</ClientOnly>
-        <FlashMessage message={flashMessage} />
+        <ClientOnly>{() => (
+          <>
+            <Toaster />
+            <FlashMessage message={flashMessage} />
+          </>
+        )}</ClientOnly>
         <div className="flex gap-3">
           <Sidebar />
           <div className="md:pl-80 flex-grow">
