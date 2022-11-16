@@ -136,10 +136,14 @@ export default function Sidebar() {
             </>
           )}
           <li>
-            <NavLink to="/money" className={navLinkCN}>
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href="https://patreon.com/wafrn"
+              className={`${linkCN} bg-stone-50`}>
               <CurrencyEuroIcon className="w-6 h-6 text-purple-700" />
               <span>Give us some money</span>
-            </NavLink>
+            </a>
           </li>
           <li>
             <NavLink to="/source" className={navLinkCN}>
