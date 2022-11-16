@@ -72,10 +72,15 @@ export type UserDetails = {
   NSFW: boolean
 }
 
-export async function getDetails(id: string) {
-  const url = `${API_URL}/user?id=${id}`
+export async function getDetails(userUrl: string) {
+  const url = `${API_URL}/user?id=${userUrl}`
   const res = await fetch(url)
-  const data = await res.json()
+  const text = await res.text()
+  if (!text) {
+    throw new Response(`User "${userUrl}" not found`, { status: 404, statusText: 'Not Found' })
+  }
+
+  const data = JSON.parse(text)
 
   if (data.success === false) {
     throw new Response('Error calling API at /userDetails', { status: 500, statusText: 'Server Error' })
@@ -250,12 +255,6 @@ async function processHTML(post: Post) {
   }
 }
 
-type LoginParams = {
-  email: string
-  password: string
-  captchaResponse: string
-}
-
 export async function login(form: FormData) {
   const url = `${API_URL}/login`
 
@@ -305,3 +304,28 @@ export async function toggleFollow(token: string, { userId, isFollowing }: { use
     throw err
   }
 }
+
+export async function editProfile(token: string, form: FormData) {
+  const url = `${API_URL}/editProfile`
+  const res = await fetch(url, {
+    body: form,
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+
+  try {
+    const data = await res.json()
+
+    if (data.success === false) {
+      throw new Response(`Error calling API at /editProfile`, { status: 500, statusText: 'Server Error' })
+    }
+  
+    return data
+  } catch (err) {
+    throw err
+  }
+}
+
+

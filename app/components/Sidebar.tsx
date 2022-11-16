@@ -12,7 +12,7 @@ import {
   HomeIcon,
   PencilSquareIcon
 } from '@heroicons/react/24/outline'
-import { NavLink } from '@remix-run/react'
+import { Link, NavLink } from '@remix-run/react'
 import clsx from 'clsx'
 
 const navLinkCN = ({ isActive }: { isActive: boolean }) => [
@@ -125,10 +125,10 @@ export default function Sidebar() {
               </Menu.Item>
               <Menu.Item as="li">
                 {({ active }) => (
-                  <button className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
+                  <Link to="/profile" className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
                     <p className='flex-grow text-left'>Edit profile</p> 
                     <UserCircleIcon className='w-6 h-6 text-purple-700' />
-                  </button>
+                  </Link>
                 )}
               </Menu.Item>
             </Menu.Items>

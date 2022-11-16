@@ -40,7 +40,7 @@ export const checkboxCN = [
   focusCN
 ].join(' ')
 
-export const labelCN = 'text-slate-500 dark:text-slate-100 text-sm'
+export const labelCN = 'text-stone-500 text-sm'
 
 const buttonCommon = [
   // 'font-medium',
