@@ -1,23 +1,6 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node"
 import env from "./env.server"
 
-// export async function getFlashMessage(request: Request) {
-//   const cookie = request.headers.get("cookie")
-//   const session = await sessionStorage.getSession(cookie)
-//   const flashMessage = session.get('flashMessage') as string
-//   const newCookie = await sessionStorage.commitSession(session)
-
-//   return { newCookie, flashMessage }
-// }
-
-// export async function setFlashMessage(request: Request, message: string) {
-//   const cookie = request.headers.get("cookie")
-//   const session = await sessionStorage.getSession(cookie)
-//   session.flash('flashMessage', message)
-//   const newCookie = await sessionStorage.commitSession(session)
-//   return newCookie
-// }
-
 export const sessionHandler = createCookieSessionStorage({
   cookie: {
     name: "_session", // use any name you want here
@@ -99,4 +82,21 @@ export async function requireUserSession(
     throw redirect(redirectTo ? `/?redirectTo=${redirectTo}` : '/')
   }
   return { token, user }
+}
+
+export async function getFlashMessage(request: Request) {
+  const cookie = request.headers.get("cookie")
+  const session = await sessionHandler.getSession(cookie)
+  const flashMessage = session.get('flashMessage') as string
+  const newCookie = await sessionHandler.commitSession(session)
+
+  return { newCookie, flashMessage }
+}
+
+export async function setFlashMessage(request: Request, message: string) {
+  const cookie = request.headers.get("cookie")
+  const session = await sessionHandler.getSession(cookie)
+  session.flash('flashMessage', message)
+  const newCookie = await sessionHandler.commitSession(session)
+  return newCookie
 }
