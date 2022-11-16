@@ -28,8 +28,8 @@ export default function Explore() {
   const { posts, params: { startScroll } } = useLoaderData<LoaderData>()
 
   return (
-    <Container>
-      <h1 className='my-4 text-4xl font-medium text-gray-500'>Explore</h1>
+    <Container className='mt-12'>
+      <h1 className='mb-4 text-4xl font-medium text-gray-500'>Explore</h1>
       <PostList
         initialPosts={posts}
         getPageURL={page => `/explore?index&page=${page}&startScroll=${startScroll}`}

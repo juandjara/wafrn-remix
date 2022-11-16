@@ -45,6 +45,7 @@ export default function Dashboard() {
 
   return (
     <Container className='mt-12'>
+      <h1 className='mb-4 text-4xl font-medium text-gray-500'>Dashboard</h1>
       <PostList
         initialPosts={posts}
         getPageURL={page => `/explore?index&page=${page}&startScroll=${startScroll}`}

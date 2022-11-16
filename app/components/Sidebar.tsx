@@ -1,9 +1,29 @@
-import { buttonCN } from '@/lib/style'
 import useUser from '@/lib/useUser'
 import { Menu } from '@headlessui/react'
-import { MagnifyingGlassIcon, RectangleGroupIcon, LockClosedIcon, CurrencyEuroIcon, CodeBracketSquareIcon, EllipsisHorizontalIcon, UserCircleIcon, EllipsisVerticalIcon, UserIcon, HomeIcon, PencilIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
-import { Link } from '@remix-run/react'
+import {
+  MagnifyingGlassIcon,
+  RectangleGroupIcon,
+  LockClosedIcon,
+  CurrencyEuroIcon,
+  CodeBracketSquareIcon,
+  UserCircleIcon,
+  EllipsisVerticalIcon,
+  UserIcon,
+  HomeIcon,
+  PencilSquareIcon
+} from '@heroicons/react/24/outline'
+import { NavLink } from '@remix-run/react'
 import clsx from 'clsx'
+
+const navLinkCN = ({ isActive }: { isActive: boolean }) => [
+  isActive ? 'ring-2 ring-purple-500' : '',
+  linkCN
+].join(' ')
+
+const navLinkCNInverse = ({ isActive }: { isActive: boolean }) => [
+  isActive ? 'ring-2 ring-purple-500' : '',
+  linkCNInverse
+].join(' ')
 
 const linkCN = [
   'flex items-center gap-3',
@@ -19,76 +39,77 @@ const linkCNInverse = [
 
 export default function Sidebar() {
   const user = useUser()
+
   return (
     <aside className="min-h-screen fixed top-0 flex-shrink-0 w-72 bg-white">
-      <Link to="/">
+      <NavLink to="/">
         <h1 className="bg-purple-900 p-4">
           <img src="/img/wafrn-logo.png" alt="WAFRN" />
         </h1>
-      </Link>
+      </NavLink>
       <nav className='px-4 py-4'>
         <ul className="space-y-4 text-purple-900">
           {!user && (
             <li>
-              <Link to="/login" className={linkCN}>
+              <NavLink to="/login" className={navLinkCN}>
                 <LockClosedIcon className="w-6 h-6 text-purple-700" />
                 <span>Log in</span>
-              </Link>
+              </NavLink>
             </li>
           )}
           {user && (
             <>
               <li>
-                <Link to="/write" className={linkCNInverse}>
+                <NavLink to="/write" className={navLinkCNInverse}>
                   <PencilSquareIcon className='w-6 h-6 text-white' />
                   <span>Write new post</span>
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to="/dashboard" className={linkCN}>
+                <NavLink to="/dashboard" className={navLinkCN}>
                   <HomeIcon className='w-6 h-6 text-purple-700' />
                   <span>Dashboard</span>
-                </Link>
+                </NavLink>
               </li>
             </>
           )}
           <li>
-            <Link to="/explore" className={linkCN}>
+            <NavLink to="/explore" className={navLinkCN}>
               <RectangleGroupIcon className="w-6 h-6 text-purple-700" />
               <span>Explore {user ? '' : 'without login'}</span>
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to="/search" className={linkCN}>
+            <NavLink to="/search" className={navLinkCN}>
               <MagnifyingGlassIcon className="w-6 h-6 text-purple-700" />
               <span>Search a blog</span>
-            </Link>
+            </NavLink>
           </li>
           {user && (
             <li>
-              <Link to={`/u/${user.url}`} className={linkCN}>
+              <NavLink to={`/u/${user.url}`} className={navLinkCN}>
                 <UserIcon className="w-6 h-6 text-purple-700" />
                 <span>My blog</span>
-              </Link>
+              </NavLink>
             </li>
           )}
           <li>
-            <Link to="/money" className={linkCN}>
+            <NavLink to="/money" className={navLinkCN}>
               <CurrencyEuroIcon className="w-6 h-6 text-purple-700" />
               <span>Give us some money</span>
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to="/source" className={linkCN}>
+            <NavLink to="/source" className={navLinkCN}>
               <CodeBracketSquareIcon className="w-6 h-6 text-purple-700" />
               <span>Check the source code</span>
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </nav>
       {user && (
         <div className='p-4 absolute bottom-0 inset-x-0 flex items-center justify-between'>
-          <Link to={`/u/${user.url}`} className='font-medium text-purple-900'>{user.url}</Link>
+          <NavLink to={`/u/${user.url}`} className='font-medium text-purple-900'>{user.url}</NavLink>
           <Menu as='div' className='relative'>
             <Menu.Button className='p-1.5 text-purple-900 bg-purple-50 hover:bg-purple-100 rounded-md'>
               <EllipsisVerticalIcon className="h-6 w-6" />
