@@ -63,3 +63,4 @@ export const buttonCN = {
 }
 
 export const linkCN = 'text-purple-700 hover:underline'
+export const cardCN = 'bg-white rounded-md border border-stone-300 p-4'

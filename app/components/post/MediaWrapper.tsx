@@ -16,7 +16,7 @@ export default function MediaWrapper({ nsfw, type, src, alt }: MediaWrapperProps
       <button className="block" onClick={() => setOpen(true)}>
         <img
           src="/img/nsfw.webp"
-          className="rounded-md"
+          className="rounded-md my-2"
           alt="this media is nsfw. click to display"
         />
       </button>
@@ -24,8 +24,8 @@ export default function MediaWrapper({ nsfw, type, src, alt }: MediaWrapperProps
   )
 
   const content = type === 'image'
-    ? <img loading="lazy" src={src} alt={alt} className="rounded-md" />
-    : <video controls src={src} className="rounded-md" />
+    ? <img loading="lazy" src={src} alt={alt} className="rounded-md my-2" />
+    : <video controls src={src} className="rounded-md my-2" />
 
   return open ? content : placeholder
 }

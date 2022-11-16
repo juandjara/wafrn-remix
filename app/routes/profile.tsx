@@ -4,7 +4,7 @@ import { editProfile } from "@/lib/api.server"
 import { getDetails } from "@/lib/api.server"
 import { MEDIA_URL } from "@/lib/config"
 import { requireUserSession } from "@/lib/session.server"
-import { buttonCN, inputCN, labelCN, linkCN } from "@/lib/style"
+import { buttonCN, cardCN, inputCN, labelCN, linkCN } from "@/lib/style"
 import { XCircleIcon } from "@heroicons/react/20/solid"
 import type { ActionFunction, LoaderFunction} from "@remix-run/node"
 import { unstable_createMemoryUploadHandler, unstable_parseMultipartFormData } from "@remix-run/node"
@@ -67,12 +67,12 @@ export default function Profile() {
   }
 
   return (
-    <Container className="mt-12">
+    <Container>
       <h1 className='mb-4 text-4xl font-medium text-gray-500'>Profile edit</h1>
       <Form
         method="post"
         encType="multipart/form-data"
-        className="bg-white rounded-md border border-stone-300 p-4">
+        className={cardCN}>
         <div className="relative flex items-end gap-2">
           <div className="group">
             <button

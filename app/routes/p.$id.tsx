@@ -25,7 +25,7 @@ export const loader: LoaderFunction = async ({ params }) => {
 export default function PostDetail() {
   const { post } = useLoaderData<LoaderData>()
   return (
-    <Container className="mt-8">
+    <Container>
       <PostCard root post={post} />
     </Container>
   )  

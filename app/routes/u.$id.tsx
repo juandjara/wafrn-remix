@@ -44,7 +44,7 @@ export default function Blog() {
 
   return (
     <Container>
-      <div className='bg-white border border-stone-300 rounded-md p-4 my-8 flex flex-col items-center'>
+      <div className='bg-white border border-stone-300 rounded-md p-4 mb-8 flex flex-col items-center'>
         <img alt="" src={MEDIA_URL.concat(detail.avatar)} className="h-40 rounded-md border-stone-300" />
         <p className='mt-2 text-xl text-purple-900 font-medium'>{detail.url}</p>
         <p className='my-8'>{detail.description}</p>

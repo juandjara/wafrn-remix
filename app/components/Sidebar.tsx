@@ -16,7 +16,7 @@ import { Link, NavLink } from '@remix-run/react'
 import clsx from 'clsx'
 
 const navLinkCN = ({ isActive }: { isActive: boolean }) => [
-  isActive ? 'ring-2 ring-purple-500' : '',
+  isActive ? 'bg-purple-50 border border-stone-200' : '',
   linkCN
 ].join(' ')
 

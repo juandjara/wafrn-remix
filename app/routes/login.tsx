@@ -68,7 +68,7 @@ export default function Login() {
 
   return (
     <Container>
-      <div className="mt-6 bg-white rounded-md shadow-sm px-3 pb-6">
+      <div className="bg-white rounded-md shadow-sm px-3 pb-6">
         <div className="bg-purple-900 p-4 -mx-3 rounded-t-md">
           <img src="/img/wafrn-logo.png" alt="WAFRN" className="h-16 mx-auto" />
         </div>

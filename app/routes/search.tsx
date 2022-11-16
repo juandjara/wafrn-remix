@@ -4,7 +4,7 @@ import Spinner from '@/components/Spinner'
 import type { Post, PostUser} from '@/lib/api.server'
 import { searchPosts } from '@/lib/api.server'
 import { MEDIA_URL } from '@/lib/config'
-import { buttonCN } from '@/lib/style'
+import { buttonCN, cardCN } from '@/lib/style'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
@@ -44,15 +44,13 @@ export default function Search() {
 
   return (
     <Container>
-      <header className='mt-6 mb-8'>
-        <h1 className='text-4xl font-medium text-gray-500'>
-          {query ? `Searching for "${query}"` : 'Search'}
-        </h1>
-        <p className='mt-4'>
+      <h1 className='mb-4 text-4xl font-medium text-gray-500'>
+        {query ? `Searching for "${query}"` : 'Search'}
+      </h1>  
+      <Form className={cardCN}>
+        <p className='mt-4 mb-8'>
           You can search for users by url and description, and posts by tags. No need to add # to your search. Have fun!
         </p>
-      </header>
-      <Form className='my-4'>
         <label htmlFor="q" className='text-stone-500 mb-1 block text-xs'>Search term</label>
         <div className='flex items-center gap-2'>
           <input className='border-stone-200 border rounded-md flex-grow py-1 px-2' name="q" defaultValue={query} />
