@@ -40,7 +40,7 @@ const navLinkCNInverse = ({ isActive }: { isActive: boolean }) => [
 
 function UserMenu({ user }: { user: User }) {
   return (
-    <div className='p-4 flex items-center justify-between'>
+    <div className='p-4 pb-0 flex items-center justify-between'>
       <NavLink to={`/u/${user.url}`} className='font-medium text-purple-900'>@{user.url}</NavLink>
       <Menu as='div' className='relative'>
         {({ open }) => (
