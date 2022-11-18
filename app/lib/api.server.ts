@@ -1,4 +1,4 @@
-import { MEDIA_URL } from './config'
+import { MEDIA_URL, API_URL } from './config'
 
 export type PostTag = {
   tagName: string
@@ -49,8 +49,6 @@ export type Post = {
   ancestors?: Omit<Post, 'ancestors'>[]
   notes: number
 }
-
-const API_URL = 'https://api.wafrn.net'
 
 export async function getPost(id: string) {
   const url = `${API_URL}/singlePost/${id}`
@@ -272,6 +270,33 @@ export async function login(form: FormData) {
     }
   
     return data.token
+  } catch (err) {
+    throw err
+  }
+}
+
+export async function register(form: FormData) {
+  const url = `${API_URL}/register`
+
+  const res = await fetch(url, {
+    body: form,
+    method: 'POST',
+  })
+
+  if (!res.ok) {
+    debugger
+    throw new Response('Error calling API at /register - bad status code', { status: res.status, statusText: res.statusText })
+  }
+
+  try {
+    const text = await res.text()
+    const data = JSON.parse(text)
+
+    if (data.success === false) {
+      throw new Response('Error calling API at /register - bad success response', { status: 500, statusText: 'Server Error' })
+    }
+  
+    return data
   } catch (err) {
     throw err
   }

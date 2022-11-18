@@ -13,7 +13,7 @@ import { useRef } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
 
 type LoaderData = {
-  env: typeof env
+  recaptchaKey: string
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -23,7 +23,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     throw redirect('/dashboard')
   }
 
-  return json({ env })
+  return json({
+    recaptchaKey: env.recaptchaKey
+  })
 }
 
 export const action: ActionFunction = async ({ request }) => {
@@ -49,14 +51,14 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function Login() {
-  const { env } = useLoaderData<LoaderData>()
+  const { recaptchaKey } = useLoaderData<LoaderData>()
   const actionData = useActionData<{ error: Error }>()
   const recaptchaRef = useRef<ReCAPTCHA>(null)
   const submit = useSubmit()
   const transition = useTransition()
   const busy = transition.state !== 'idle'
 
-  async function handleReCaptcha(ev: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
     await recaptchaRef.current?.executeAsync()
     const fd = new FormData(ev.target as HTMLFormElement)
@@ -75,29 +77,36 @@ export default function Login() {
         <h1 className="text-center mt-8 mb-4 font-bold text-2xl">Welcome back!</h1>
         <Form
           method="post"
-          onSubmit={handleReCaptcha}
+          onSubmit={handleSubmit}
           encType="multipart/form-data"
           className="space-y-4 my-8">
+          {actionData?.error && (
+            <p className="text-red-600 text-sm">
+              Incorrect email or password. Check those or if you have received the activation email
+            </p>
+          )}
           <div>
             <label htmlFor="email" className="text-sm text-stone-500 mb-1">Email</label>
-            <input required type="email" name="email" className={inputCN} />
+            <input autoFocus required type="email" name="email" className={inputCN} />
           </div>
           <div>
             <label htmlFor="password" className="text-sm text-stone-500 mb-1">Password</label>
             <input required type="password" name="password" className={inputCN} />
           </div>
-          {actionData?.error && (
-            <p className="text-red-600 pt-6 text-sm">Incorrect email or password</p>
-          )}
           <button disabled={busy} className={`${buttonCN.big} ${buttonCN.primary} w-full block`}>
             Log in
           </button>
           <ReCAPTCHA
             ref={recaptchaRef}
             size="invisible"
-            sitekey={env.recaptchaKey}
+            sitekey={recaptchaKey}
           />
         </Form>
+        <p className="text-sm my-4">
+          This site is protected by reCAPTCHA and the Google
+          {' '}<a className={linkCN} href="https://policies.google.com/privacy">Privacy Policy</a> and 
+          {' '}<a className={linkCN} href="https://policies.google.com/terms">Terms of Service</a> apply. 
+        </p>
         <p>Don't have an account? <Link to='/register' className={`${linkCN} text-lg`}>Register now!</Link> </p>
         <p>If you have any issue please check your spam folder!</p>
         <p>Still having problems? Send us an email at info @ wafrn.net</p>
