@@ -353,4 +353,26 @@ export async function editProfile(token: string, form: FormData) {
   }
 }
 
+export async function activate({ email, code }: { email: string; code: string }) {
+  const url = `${API_URL}/activateUser`
+  const form = new FormData()
+  form.set('email', email)
+  form.set('code', code)
 
+  const res = await fetch(url, {
+    body: form,
+    method: 'POST'
+  })
+
+  try {
+    const data = await res.json()
+
+    if (data.success === false) {
+      throw new Response(`Error calling API at /activateUser`, { status: 500, statusText: 'Server Error' })
+    }
+  
+    return data
+  } catch (err) {
+    throw err
+  }
+}
