@@ -80,15 +80,15 @@ export default function ForgotPW() {
         <label htmlFor="email" className='text-stone-500 mb-1 block text-xs'>
           Email
         </label>
-        <div className='flex items-center gap-2'>
-          <input autoFocus name="email" className={`${inputCN} flex-grow`} />
+        <div>
+          <input autoFocus required type="email" name="email" className={`${inputCN} mb-4 flex-grow`} />
           <button
             type='submit'
             disabled={busy}
-            className={`${buttonCN.normal} ${buttonCN.primary} ${buttonCN.iconLeft} border border-purple-200`}
+            className={`${buttonCN.normal} ${buttonCN.primary} ${buttonCN.iconLeft} w-full border border-purple-200`}
           >
-            {busy ? <Spinner size='w-4 h-4' /> : <PaperAirplaneIcon className='w-4 h-4' />}
-            <p>Request</p>
+            {busy ? <Spinner size='w-5 h-5' /> : <PaperAirplaneIcon className='w-5 h-5' />}
+            <p className="flex-grow text-center">Request</p>
           </button>
         </div>
         <ReCAPTCHA

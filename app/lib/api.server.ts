@@ -402,3 +402,27 @@ export async function requestPasswordChange(form: FormData) {
   }
 }
 
+export async function changePassword({ email, password, code }: { email: string; password: string; code: string }) {
+  const url = `${API_URL}/resetPassword`
+  const form = new FormData()
+  form.set('email', email)
+  form.set('password', password)
+  form.set('code', code)
+
+  const res = await fetch(url, {
+    body: form,
+    method: 'POST'
+  })
+
+  try {
+    const data = await res.json()
+
+    if (data.success === false) {
+      throw new Response(`Error calling API at /resetPassword`, { status: 500, statusText: 'Server Error' })
+    }
+  
+    return data
+  } catch (err) {
+    throw err
+  }
+}

@@ -59,7 +59,7 @@ export default function Search() {
             disabled={busy}
             className={`${buttonCN.normal} ${buttonCN.primary} ${buttonCN.iconLeft} border border-purple-200`}
           >
-            {busy ? <Spinner size='w-4 h-4' /> : <MagnifyingGlassIcon className='w-4 h-4' />}
+            {busy ? <Spinner size='w-5 h-5' /> : <MagnifyingGlassIcon className='w-5 h-5' />}
             <p>Search</p>
           </button>
         </div>
