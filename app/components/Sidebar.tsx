@@ -19,7 +19,7 @@ import LogoutButton from './LogoutButton'
 const linkCN = [
   'flex items-center gap-3',
   'font-medium',
-  'hover:bg-purple-100 rounded-lg p-2'
+  'bg-stone-50 hover:bg-purple-100 rounded-lg p-2'
 ].join(' ')
 
 const linkCNInverse = [
@@ -29,7 +29,7 @@ const linkCNInverse = [
 ].join(' ')
 
 const navLinkCN = ({ isActive }: { isActive: boolean }) => [
-  isActive ? 'bg-purple-50 border border-stone-200' : 'bg-stone-50',
+  isActive ? 'border-2 border-purple-200' : '',
   linkCN
 ].join(' ')
 
