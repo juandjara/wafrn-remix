@@ -1,8 +1,10 @@
 import Container from "@/components/Container"
+import Spinner from "@/components/Spinner"
 import { login } from '@/lib/api.server'
 import env from "@/lib/env.server"
 import { getSessionData, setSessionData } from "@/lib/session.server"
 import { buttonCN, inputCN, linkCN } from "@/lib/style"
+import { LockClosedIcon } from "@heroicons/react/24/outline"
 import type { ActionFunction, LoaderFunction} from "@remix-run/node"
 import { unstable_createMemoryUploadHandler, unstable_parseMultipartFormData} from "@remix-run/node"
 import { redirect } from "@remix-run/node"
@@ -96,8 +98,13 @@ export default function Login() {
             </div>
             <input required type="password" name="password" className={inputCN} />
           </div>
-          <button disabled={busy} className={`${buttonCN.big} ${buttonCN.primary} w-full block`}>
-            Log in
+          <button
+            type='submit'
+            disabled={busy}
+            className={`${buttonCN.big} ${buttonCN.primary} ${buttonCN.iconLeft} w-full border border-purple-200`}
+          >
+            {busy ? <Spinner size='w-6 h-6' /> : <LockClosedIcon className='w-6 h-6' />}
+            <p className="flex-grow text-center">Log in</p>
           </button>
           <ReCAPTCHA
             ref={recaptchaRef}

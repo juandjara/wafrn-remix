@@ -1,9 +1,11 @@
 import Container from "@/components/Container"
+import Spinner from "@/components/Spinner"
 import { register } from "@/lib/api.server"
 import env from "@/lib/env.server"
 import { getSessionData } from "@/lib/session.server"
 import { buttonCN, inputCN, linkCN } from "@/lib/style"
 import { XCircleIcon } from "@heroicons/react/20/solid"
+import { LockClosedIcon } from "@heroicons/react/24/outline"
 import type { ActionFunction, LoaderFunction} from "@remix-run/node"
 import { json, redirect, unstable_createMemoryUploadHandler, unstable_parseMultipartFormData } from "@remix-run/node"
 import { Form, Link, useActionData, useLoaderData, useSubmit, useTransition } from "@remix-run/react"
@@ -107,7 +109,7 @@ export default function Register() {
           method="post"
           onSubmit={handleSubmit}
           encType="multipart/form-data"
-          className="space-y-4 my-8">
+          className="space-y-6 my-8">
           {actionData?.error && (
             <p className="text-red-600 text-sm">Email or URL already in use</p>
           )}
@@ -152,11 +154,12 @@ export default function Register() {
             </div>
           </div>
           <button
-            type="submit"
+            type='submit'
             disabled={busy}
-            className={`${buttonCN.big} ${buttonCN.primary} w-full block`}
+            className={`${buttonCN.big} ${buttonCN.primary} ${buttonCN.iconLeft} w-full border border-purple-200`}
           >
-            Register
+            {busy ? <Spinner size='w-6 h-6' /> : <LockClosedIcon className='w-6 h-6' />}
+            <p className="flex-grow text-center">Register</p>
           </button>
           <ReCAPTCHA
             ref={recaptchaRef}
