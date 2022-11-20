@@ -62,7 +62,9 @@ export default function PostList({ initialPosts, getPageURL }: PostListProps) {
           {posts.map((p) => <PostCard root key={p.id} post={p} />)}
         </ul>
       </AnimatePresence>
-      {isLastPage ? null : (
+      {isLastPage ? (
+        <p className="text-stone-500 font-medium mt-4">No more posts</p>
+      ) : (
         <div ref={intersectionRef}>
           <Spinner className='my-8 mx-auto' size='h-12 w-12' />
         </div>
