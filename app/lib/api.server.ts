@@ -284,7 +284,6 @@ export async function register(form: FormData) {
   })
 
   if (!res.ok) {
-    debugger
     throw new Response('Error calling API at /register - bad status code', { status: res.status, statusText: res.statusText })
   }
 
@@ -376,3 +375,30 @@ export async function activate({ email, code }: { email: string; code: string })
     throw err
   }
 }
+
+export async function requestPasswordChange(form: FormData) {
+  const url = `${API_URL}/forgotPassword`
+
+  const res = await fetch(url, {
+    body: form,
+    method: 'POST',
+  })
+
+  if (!res.ok) {
+    throw new Response('Error calling API at /forgotPassword - bad status code', { status: res.status, statusText: res.statusText })
+  }
+
+  try {
+    const text = await res.text()
+    const data = JSON.parse(text)
+
+    if (data.success === false) {
+      throw new Response('Error calling API at /forgotPassword - bad success response', { status: 500, statusText: 'Server Error' })
+    }
+  
+    return data
+  } catch (err) {
+    throw err
+  }
+}
+
