@@ -7,7 +7,7 @@ export default function MailSent() {
   const [sp] = useSearchParams()
   const messages = {
     register: 'activate your account',
-    recover_pw: 'recover your password'
+    changepw: 'change your password'
   }
   const action = sp.get('action') as keyof typeof messages
   const actionMessage = messages[action]

@@ -79,7 +79,7 @@ export default function Login() {
           method="post"
           onSubmit={handleSubmit}
           encType="multipart/form-data"
-          className="space-y-4 my-8">
+          className="space-y-6 my-8">
           {actionData?.error && (
             <p className="text-red-600 text-sm">
               Incorrect email or password. Check those or if you have received the activation email
@@ -90,7 +90,10 @@ export default function Login() {
             <input autoFocus required type="email" name="email" className={inputCN} />
           </div>
           <div>
-            <label htmlFor="password" className="text-sm text-stone-500 mb-1">Password</label>
+            <div className="flex items-center justify-between mb-1">
+              <label htmlFor="password" className="text-sm text-stone-500">Password</label>
+              <Link className={`${linkCN} text-sm`} to="/forgotpw">Forgot password?</Link>
+            </div>
             <input required type="password" name="password" className={inputCN} />
           </div>
           <button disabled={busy} className={`${buttonCN.big} ${buttonCN.primary} w-full block`}>

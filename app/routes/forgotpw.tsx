@@ -1,0 +1,102 @@
+import Container from "@/components/Container"
+import Spinner from "@/components/Spinner"
+import { requestPasswordChange } from "@/lib/api.server"
+import env from "@/lib/env.server"
+import { buttonCN, cardCN, inputCN } from "@/lib/style"
+import { PaperAirplaneIcon } from "@heroicons/react/24/outline"
+import type { ActionFunction, LoaderFunction} from "@remix-run/node"
+import { redirect, unstable_createMemoryUploadHandler, unstable_parseMultipartFormData } from "@remix-run/node"
+import { json } from "@remix-run/node"
+import { Form, useLoaderData, useSubmit, useTransition } from "@remix-run/react"
+import type { FormEvent} from "react"
+import { useRef } from "react"
+import ReCAPTCHA from "react-google-recaptcha"
+
+type LoaderData = {
+  recaptchaKey: string
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  return json<LoaderData>({
+    recaptchaKey: env.recaptchaKey
+  })
+}
+
+export const action: ActionFunction = async ({ request }) => {
+  const uploadHandler = unstable_createMemoryUploadHandler()
+  const formData = await unstable_parseMultipartFormData(
+    request,
+    uploadHandler
+  )
+
+  formData.set('captchaResponse', formData.get('g-recaptcha-response') as string)
+  formData.delete('g-recaptcha-response')
+
+  try {
+    const data = await requestPasswordChange(formData)
+    if (data.success) {
+      return redirect('/mail-sent?action=changepw')
+    }
+  } catch(err) {
+    console.error('ERROR', err)
+    return json({ error: err })
+  }
+}
+
+
+export default function ForgotPW() {
+  const { recaptchaKey } = useLoaderData<LoaderData>()
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
+  const submit = useSubmit()
+  const transition = useTransition()
+  const busy = transition.state !== 'idle'
+
+  async function handleSubmit(ev: FormEvent<HTMLFormElement>) {
+    ev.preventDefault()
+    await recaptchaRef.current?.executeAsync()
+    const fd = new FormData(ev.target as HTMLFormElement)
+    submit(fd, {
+      method: 'post',
+      encType: 'multipart/form-data'
+    })
+  }
+
+  return (
+    <Container>
+      <h1 className='mb-4 text-4xl font-medium text-gray-500'>
+        Password change request
+      </h1>
+      <Form 
+        method="post"
+        className={cardCN}
+        onSubmit={handleSubmit}
+        encType="multipart/form-data"
+      >
+        <p className="mt-4 mb-8 text-stone-500">
+          Forgot your password? Don't worry. Happens to the best of us.
+          <br />
+          Enter your email here and we will send you a link to the passowrd reset page
+        </p>
+        <label htmlFor="email" className='text-stone-500 mb-1 block text-xs'>
+          Email
+        </label>
+        <div className='flex items-center gap-2'>
+          <input autoFocus name="email" className={`${inputCN} flex-grow`} />
+          <button
+            type='submit'
+            disabled={busy}
+            className={`${buttonCN.normal} ${buttonCN.primary} ${buttonCN.iconLeft} border border-purple-200`}
+          >
+            {busy ? <Spinner size='w-4 h-4' /> : <PaperAirplaneIcon className='w-4 h-4' />}
+            <p>Request</p>
+          </button>
+        </div>
+        <ReCAPTCHA
+          ref={recaptchaRef}
+          size="invisible"
+          sitekey={recaptchaKey}
+        />
+      </Form>
+    </Container>
+  )
+}
