@@ -3,12 +3,14 @@ import { cardCN } from "@/lib/style"
 import { Transition } from "@headlessui/react"
 import { useSearchParams } from "@remix-run/react"
 
+const messages = {
+  register: 'activate your account',
+  changepw: 'change your password'
+}
+
 export default function MailSent() {
   const [sp] = useSearchParams()
-  const messages = {
-    register: 'activate your account',
-    changepw: 'change your password'
-  }
+  const email = sp.get('email') as string
   const action = sp.get('action') as keyof typeof messages
   const actionMessage = messages[action]
 
@@ -41,7 +43,9 @@ export default function MailSent() {
           </Transition>
           <p className="text-stone-500 mt-4 mb-2 text-xl font-medium">You have an e-mail!</p>
           <p className="text-base">
-            Please check your inbox to find the link that we sent you and <strong>{actionMessage}</strong>
+            {' '}Please check your inbox to find the link that we sent you and <strong>{actionMessage}</strong>.
+            {' '}If you cannot find the email, please, check your spam folder.
+            {' '}The email was sent to <strong>{email}</strong>.
           </p>
         </div>
       </div>

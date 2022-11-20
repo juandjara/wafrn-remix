@@ -36,11 +36,12 @@ export const action: ActionFunction = async ({ request }) => {
 
   formData.set('captchaResponse', formData.get('g-recaptcha-response') as string)
   formData.delete('g-recaptcha-response')
+  const email = formData.get('email') as string
 
   try {
     const data = await register(formData)
     if (data.success) {
-      return redirect('/mail-sent?action=register')
+      return redirect(`/mail-sent?action=register&email=${email}`)
     }
   } catch(err) {
     if (err instanceof Response) {

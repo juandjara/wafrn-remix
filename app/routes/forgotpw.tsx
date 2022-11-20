@@ -31,11 +31,12 @@ export const action: ActionFunction = async ({ request }) => {
 
   formData.set('captchaResponse', formData.get('g-recaptcha-response') as string)
   formData.delete('g-recaptcha-response')
+  const email = formData.get('email') as string
 
   try {
     const data = await requestPasswordChange(formData)
     if (data.success) {
-      return redirect('/mail-sent?action=changepw')
+      return redirect(`/mail-sent?action=changepw&email=${email}`)
     }
   } catch(err) {
     console.error('ERROR', err)
