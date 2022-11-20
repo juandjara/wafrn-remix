@@ -84,7 +84,7 @@ export default function App() {
             <FlashMessage message={flashMessage} />
           </>
         )}</ClientOnly>
-        <div className="flex gap-3">
+        <div className="md:flex md:gap-3">
           <Sidebar />
           <div className="md:pl-80 flex-grow">
             <Outlet />

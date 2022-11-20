@@ -16,6 +16,7 @@ export const focusCN = [
 export const inputCN = [
   'block',
   'w-full',
+  'min-w-0',
   'px-2 py-2',
   'rounded-md',
   'shadow-sm',

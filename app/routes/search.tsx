@@ -4,7 +4,7 @@ import Spinner from '@/components/Spinner'
 import type { Post, PostUser} from '@/lib/api.server'
 import { searchPosts } from '@/lib/api.server'
 import { MEDIA_URL } from '@/lib/config'
-import { buttonCN, cardCN } from '@/lib/style'
+import { buttonCN, cardCN, inputCN } from '@/lib/style'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
@@ -53,11 +53,11 @@ export default function Search() {
         </p>
         <label htmlFor="q" className='text-stone-500 mb-1 block text-xs'>Search term</label>
         <div className='flex items-center gap-2'>
-          <input autoFocus type="search" className='border-stone-200 border rounded-md flex-grow py-1 px-2' name="q" defaultValue={query} />
+          <input autoFocus type="search" className={`${inputCN} flex-grow`} name="q" defaultValue={query} />
           <button
             type='submit'
             disabled={busy}
-            className={`${buttonCN.small} ${buttonCN.primary} ${buttonCN.iconLeft} rounded-md border border-purple-200`}
+            className={`${buttonCN.normal} ${buttonCN.primary} ${buttonCN.iconLeft} border border-purple-200`}
           >
             {busy ? <Spinner size='w-4 h-4' /> : <MagnifyingGlassIcon className='w-4 h-4' />}
             <p>Search</p>
