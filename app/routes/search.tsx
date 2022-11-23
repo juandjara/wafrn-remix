@@ -6,7 +6,7 @@ import { searchPosts } from '@/lib/api.server'
 import { MEDIA_URL } from '@/lib/config'
 import { buttonCN, cardCN, inputCN } from '@/lib/style'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import type { LoaderFunction } from '@remix-run/node'
+import type { ActionFunction, LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, useLoaderData, useTransition } from '@remix-run/react'
 

@@ -85,9 +85,9 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
           <button className='p-1.5 hover:bg-purple-50 rounded-md' title="Quick Reblog">
             <QuickReblogIcon className="w-5 h-5" />
           </button>
-          <button className='p-1.5 hover:bg-purple-50 rounded-md' title="Reblog">
+          <Link to={`/write?parent=${post.id}`} className='p-1.5 hover:bg-purple-50 rounded-md' title="Reblog">
             <ReblogIcon className="w-5 h-5" />
-          </button>
+          </Link>
           <button className='p-1.5 hover:bg-purple-50 rounded-md' title="Report">
             <ReportIcon className="w-5 h-5" />
           </button>
@@ -153,10 +153,13 @@ function PostActions({ post }: { post: Post }) {
         </Menu.Item>
         <Menu.Item as="li">
           {({ active }) => (
-            <button className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
+            <Link
+              to={`/write?parent=${post.id}`} 
+              className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}
+            >
               <ReblogIcon className="w-5 h-5" />           
               <p>Reblog</p>
-            </button>
+            </Link>
           )}
         </Menu.Item>
         <Menu.Item as="li">

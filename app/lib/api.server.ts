@@ -11,6 +11,7 @@ export type PostTag = {
 }
 
 export type PostUser = {
+  id: string
   avatar: string
   url: string
   description: string
@@ -238,6 +239,7 @@ async function processHTML(post: Post) {
       .use(rehypeParse, {fragment: true})
       .use(rehypeSanitize.default, {
         ...rehypeSanitize.defaultSchema,
+        tagNames: [...(rehypeSanitize.defaultSchema.tagNames || []), 'marquee'],
         attributes: {
           ...rehypeSanitize.defaultSchema.attributes,
           '*': ['data*', 'className', 'style', ...(rehypeSanitize.defaultSchema.attributes?.['*'] || [])],
@@ -419,6 +421,35 @@ export async function changePassword({ email, password, code }: { email: string;
 
     if (data.success === false) {
       throw new Response(`Error calling API at /resetPassword`, { status: 500, statusText: 'Server Error' })
+    }
+  
+    return data
+  } catch (err) {
+    throw err
+  }
+}
+
+export async function createPost(token: string, form: FormData) {
+  const url = `${API_URL}/createPost`
+
+  const res = await fetch(url, {
+    body: form,
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+
+  if (!res.ok) {
+    throw new Response('Error calling API at /createPost - bad status code', { status: res.status, statusText: res.statusText })
+  }
+
+  try {
+    const text = await res.text()
+    const data = JSON.parse(text)
+
+    if (data.success === false) {
+      throw new Response('Error calling API at /createPost - bad success response', { status: 500, statusText: 'Server Error' })
     }
   
     return data

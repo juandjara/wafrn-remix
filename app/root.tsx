@@ -21,10 +21,11 @@ import { getUserRelations } from "./lib/api.server"
 import type { User } from "./lib/session.server"
 import { getFlashMessage, getSessionData } from "./lib/session.server"
 import tailwind from "./tailwind.css"
+import quillCSS from 'quill/dist/quill.snow.css'
 
 export function links() {
   return [
-    { rel: "stylesheet", href: 'https://cdn.quilljs.com/1.3.6/quill.core.css' },
+    { rel: "stylesheet", href: quillCSS },
     { rel: "stylesheet", href: tailwind },
   ]
 }
