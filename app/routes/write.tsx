@@ -1,6 +1,7 @@
 import Container from "@/components/Container"
+import PostCard from "@/components/post/PostCard"
 import Spinner from "@/components/Spinner"
-import { createPost } from "@/lib/api.server"
+import { createPost, getPost, Post } from "@/lib/api.server"
 import env from "@/lib/env.server"
 import { requireUserSession } from "@/lib/session.server"
 import { buttonCN, cardCN, inputCN, labelCN } from "@/lib/style"
@@ -13,14 +14,23 @@ import { lazy, useEffect, useRef } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
 import { ClientOnly } from "remix-utils"
 
-const PostEditor = lazy(() => import('@/components/post/PostEditor'))
+const PostEditor = lazy(() => import('@/components/editor/PostEditor'))
 
 type LoaderData = {
+  reblog: Post | null
   recaptchaKey: string
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const sp = new URL(request.url).searchParams
+  const reblogId = sp.get('parent')
+  let reblog = null
+  if (reblogId) {
+    reblog = await getPost(reblogId)
+  }
+
   return json<LoaderData>({
+    reblog,
     recaptchaKey: env.recaptchaKey
   })
 }
@@ -44,7 +54,7 @@ export const action: ActionFunction = async ({ request }) => {
 export default function Write() {
   const [sp] = useSearchParams()
   const parent = sp.get('parent') as string
-  const { recaptchaKey } = useLoaderData<LoaderData>()
+  const { reblog, recaptchaKey } = useLoaderData<LoaderData>()
   const recaptchaRef = useRef<ReCAPTCHA>(null)
   const navigate = useNavigate()
   const fetcher = useFetcher()
@@ -70,8 +80,13 @@ export default function Write() {
   return (
     <Container>
       <h1 className='mb-4 text-4xl font-medium text-gray-500'>
-        Write new post        
+        {reblog ? 'Reblog post' : 'Write new post'}  
       </h1>
+      {reblog && (
+        <div className="my-4">
+          <PostCard root post={reblog} />
+        </div>
+      )}
       <div className={`${cardCN} relative`}>
         <div id="portal-root"></div>
         <Form method="post" onSubmit={handleSubmit}>
@@ -90,7 +105,7 @@ export default function Write() {
             className={`${buttonCN.normal} ${buttonCN.primary} ${buttonCN.iconLeft} mt-6`}
           >
             {busy ? <Spinner size='w-5 h-5' /> : <PaperAirplaneIcon className='w-5 h-5' />}
-            <p className="flex-grow text-center">Send</p>
+            <p className="flex-grow text-center">Publish</p>
           </button>
           <ReCAPTCHA
             ref={recaptchaRef}
