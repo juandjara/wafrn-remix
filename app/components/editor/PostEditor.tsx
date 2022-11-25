@@ -8,7 +8,9 @@ import { MentionBlot, Mention } from "@thesocialdev/quill-mention"
 import MagicUrl from 'quill-magic-url'
 import { MEDIA_URL } from '@/lib/config'
 import MarqueeBlot from './Marquee'
+import type { UploadedMedia } from './ImageUpload'
 import ImageUpload from './ImageUpload'
+import RawVideoBlot from './RawVideo'
 
 function EditorToolbar() {
   return (
@@ -30,7 +32,6 @@ function EditorToolbar() {
 
         <button className="ql-link"></button>
         <button className='ql-marquee'>M</button>
-        <ImageUpload />
       </span>
     </div>
   )
@@ -45,8 +46,18 @@ async function searchUsers(q: string) {
   return json.users.map((u: PostUser) => ({ ...u, value: u.url })).slice(0, 10) as PostUser[]
 }
 
+export type PostEditorMention = {
+  denotationChar: '@' | '#'
+  id: string
+  value: string
+  index: string
+  html: string
+}
+
 export default function PostEditor() {
   const [value, setValue] = useState('')
+  const [files, setFiles] = useState([] as UploadedMedia[])
+  const [mentions, setMentions] = useState([] as PostEditorMention[])
   const { Quill, quill, quillRef } = useQuill({
     theme: 'snow',
     placeholder: 'Write your post here',
@@ -75,9 +86,19 @@ export default function PostEditor() {
           const users = await searchUsers(searchTerm)
           renderList(users, searchTerm)
         },
-        onSelect: (item: DOMStringMap, insertItem: (item: DOMStringMap) => void) => {
-          console.log(item)
+        onSelect: (item: PostEditorMention, insertItem: (item: PostEditorMention) => void) => {
           insertItem(item)
+          setMentions(prev => prev.concat({
+            ...item,
+            html: [
+              `<span class="mention" data-index="${item.index}" data-denotation-char="${item.denotationChar}" data-id="${item.id}" data-value="${item.value}">`,
+                '<span contenteditable="false">',
+                  '<span class="ql-mention-denotation-char">',item.denotationChar,'</span>',
+                  item.value,
+                '</span>',
+              '</span>',
+            ].join('')
+          }))
         },
         renderLoading: () => 'Loading...',
         renderItem: (item: PostUser, searchTerm: string) => `
@@ -101,7 +122,8 @@ export default function PostEditor() {
     Quill.register('modules/blotFormatter', BlotFormatter)
     Quill.register(MentionBlot)
     Quill.register("modules/mention", Mention)
-    Quill.register(MarqueeBlot)
+    Quill.register(MarqueeBlot(Quill))
+    Quill.register(RawVideoBlot(Quill))
   }
 
   useEffect(() => {
@@ -113,6 +135,24 @@ export default function PostEditor() {
       })
     }
   }, [quill, Quill])
+
+  function handleUpload(files: UploadedMedia[]) {
+    setFiles(prev => prev.concat(files))
+    if (quill) {
+      for (const file of files) {
+        const { url, description, nsfw } = file
+        const sel = quill.getSelection(true)
+        if (url.startsWith('data:image') || (url.startsWith('http') && url.endsWith('.webp'))) {
+          quill.insertEmbed(sel.index, 'image', { src: url, alt: description, 'data-nsfw': String(nsfw) }, 'user')
+        }
+        if (url.startsWith('data:video') || (url.startsWith('http') && url.endsWith('.mp4'))) {
+          quill.insertEmbed(sel.index, 'rawvideo', url, 'user')
+        }
+        quill.insertText(sel.index + 1, '\n', 'user')
+        quill.setSelection(sel.index + 2, 0, 'silent')
+      }
+    }
+  }
 
   return (
     <div className='ql-wrapper'>
@@ -190,8 +230,11 @@ export default function PostEditor() {
         }   
       `}</style>
       <EditorToolbar />
+      <ImageUpload onUpload={handleUpload} />
       <div ref={quillRef}></div>
       <input type="hidden" name="content" value={value} />
+      <input type="hidden" name="mentions" value={JSON.stringify(mentions)} />
+      <input type="hidden" name="files" value={JSON.stringify(files)} />
     </div>
   )
 }

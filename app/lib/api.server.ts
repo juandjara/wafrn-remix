@@ -239,11 +239,12 @@ async function processHTML(post: Post) {
       .use(rehypeParse, {fragment: true})
       .use(rehypeSanitize.default, {
         ...rehypeSanitize.defaultSchema,
-        tagNames: [...(rehypeSanitize.defaultSchema.tagNames || []), 'marquee'],
+        tagNames: [...(rehypeSanitize.defaultSchema.tagNames || []), 'marquee', 'video'],
         attributes: {
           ...rehypeSanitize.defaultSchema.attributes,
           '*': ['data*', 'className', 'style', ...(rehypeSanitize.defaultSchema.attributes?.['*'] || [])],
           'img': ['loading', ...(rehypeSanitize.defaultSchema.attributes?.['img'] || [])],
+          'video': ['src', 'controls', ...(rehypeSanitize.defaultSchema.attributes?.['video'] || [])],
         }
       })
       .use(rehypeStringify)

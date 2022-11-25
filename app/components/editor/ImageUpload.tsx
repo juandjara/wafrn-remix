@@ -1,12 +1,11 @@
+import { API_URL, MEDIA_URL } from "@/lib/config"
 import { buttonCN, cardCN, checkboxCN, inputCN, labelCN } from "@/lib/style"
 import { Popover } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
-import { Form } from "@remix-run/react"
+import { useLoaderData } from "@remix-run/react"
 import type { ChangeEvent} from "react"
 import { useRef, useState } from "react"
 import { createPortal } from "react-dom"
-
-const portalRoot = document.getElementById('portal-root')
 
 async function readFile(file: File) {
   return new Promise((resolve, reject) => {
@@ -20,25 +19,123 @@ async function readFile(file: File) {
   }) as Promise<string>
 }
 
-export default function ImageUpload() {
+type uploadMediaParams = {
+  files: File[]
+  description: string
+  nsfw: boolean
+}
+
+async function uploadMedia(token: string, { files, description, nsfw }: uploadMediaParams) {
+  const fd = new FormData()
+  fd.set('description', description)
+  fd.set('nsfw', nsfw ? 'true' : 'false')
+  for (const f of files) {
+    fd.append('image', f)
+  }
+
+  const url = `${API_URL}/uploadMedia`
+
+  const res = await fetch(url, {
+    body: fd,
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+
+  if (!res.ok) {
+    throw new Error('Error calling API at /uploadMedia - bad status code')
+  }
+
+  const data = await res.json()
+
+  if (data.success === false) {
+    throw new Error('Error calling API at /uploadMedia - bad success response')
+  }
+
+  return data
+}
+
+
+export type UploadedMedia = {
+  id: string
+  url: string
+  description: string
+  nsfw: boolean
+  html: string
+}
+
+export default function ImageUpload({ onUpload }: { onUpload: (files: UploadedMedia[]) => void }) {
+  const portalRoot = document.getElementById('portal-root')
+  const { token } = useLoaderData()
+
   const inputRef = useRef<HTMLInputElement>(null)
-  const [urls, setUrls] = useState([] as string[])
+  const toggleButtonRef = useRef<HTMLButtonElement>(null)
+
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const [form, setForm] = useState({
+    description: '',
+    nsfw: false,
+    files: [] as File[],
+    urls: [] as string[]
+  })
+
+  function update(key: keyof typeof form, value: any) {
+    setForm(form => ({ ...form, [key]: value }))
+  }
+
+  function resetForm() {
+    setForm({
+      description: '',
+      nsfw: false,
+      files: [],
+      urls: []
+    })
+  }
 
   async function handleFileChange(ev: ChangeEvent<HTMLInputElement>) {
     if (ev.target.files) {
+      update('files', ev.target.files)
       const urls = [] as string[]
       for (const file of ev.target.files) {
         const url = await readFile(file)
         urls.push(url)
       }
 
-      setUrls(urls)
+      update('urls', urls)
     }
+  }
+
+  async function handleSubmit() {
+    setError('')
+    setLoading(true)
+    const { files, nsfw, description } = form
+    try {
+      const data = await uploadMedia(token, { files, nsfw, description }) as Pick<UploadedMedia, 'id' | 'url'>[]
+      const medias = data.map((d) => ({
+        id: d.id,
+        url: MEDIA_URL.concat(d.url),
+        description,
+        nsfw,
+        html: description
+          ? `<img src="${MEDIA_URL.concat(d.url)}" alt="${description}" data-nsfw="${nsfw}" />`
+          : `<img src="${MEDIA_URL.concat(d.url)}" alt="${description}" data-nsfw="${nsfw}" />`
+      }))
+      onUpload(medias)
+      resetForm()
+    } catch (err) {
+      const msg = (err as Error).message
+      console.error('Error uploading files', msg)
+      setError(msg)
+    }
+    setLoading(false)
   }
 
   return portalRoot && createPortal(
     <Popover className="absolute top-6 right-6">
-      <Popover.Button title='Upload image or video' aria-label='Upload image or video'>
+      <Popover.Button ref={toggleButtonRef} title='Upload image or video' aria-label='Upload image or video'>
         <svg viewBox="0 0 18 18" height='18px'>
           <rect stroke='currentColor' fill='none' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' height="10" width="12" x="3" y="4"></rect>
           <circle fill='currentColor' cx="6" cy="7" r="1"></circle>
@@ -46,66 +143,80 @@ export default function ImageUpload() {
         </svg>
       </Popover.Button>
       <Popover.Panel className={`absolute top-full right-0 z-10 w-80 shadow-md ${cardCN}`}>
-        <Form method='post' action='/api/image-upload' encType='multipart/form-data'>
-          <input multiple onChange={handleFileChange} accept='image/*, video/*' type="file" className='hidden' ref={inputRef} />  
-          {urls.length > 0 ? (
+        <div>
+          <input
+            multiple
+            name="files"
+            onChange={handleFileChange}
+            accept='image/*, video/*'
+            type="file"
+            className='hidden'
+            ref={inputRef}
+          />
+          {form.urls.length > 0 ? (
             <>
-              <label className={`${labelCN} mb-4 flex items-center gap-2`}>
-                <input name="nsfw" type="checkbox" className={checkboxCN} />
+              <label className={`mb-4 flex items-center gap-2`}>
+                <input
+                  checked={form.nsfw}
+                  onChange={ev => update('nsfw', ev.target.checked)}
+                  name="nsfw"
+                  type="checkbox"
+                  className={checkboxCN} 
+                />
                 <span>Mark these files as NSFW</span>
               </label>
               <div>
                 <label htmlFor='description' className={labelCN}>Description</label>
-                <input type="text" name="description" className={inputCN} />
+                <input
+                  value={form.description}
+                  onChange={ev => update('description', ev.target.value)}
+                  type="text"
+                  name="description"
+                  className={inputCN}
+                />
               </div>
-              {urls.map(url => {
+              {form.urls.map(url => {
+                let media = null
                 if (url.startsWith('data:image')) {
-                  return (
-                    <div className='my-4 flex items-start gap-2' key={url}>
-                      <div><img src={url} alt="" /></div>
-                      <button
-                        title='Delete file'
-                        aria-label='Delete file'
-                        onClick={() => setUrls(urls => urls.filter(u => u !== url))}
-                        className={`p-1 rounded-md ${buttonCN.delete}`}>
-                        <XMarkIcon className='w-5 h-5' />
-                      </button>
-                    </div>
-                  )
+                  media = <img src={url} alt="" />
                 }
                 if (url.startsWith('data:video')) {
-                  return (
-                    <div className='my-4 flex items-start gap-2' key={url}>
-                      <div><video src={url} controls /></div>
-                      <button
-                        title='Delete file'
-                        aria-label='Delete file'
-                        onClick={() => setUrls(urls => urls.filter(u => u !== url))}
-                        className={`p-1 rounded-md ${buttonCN.delete}`}>
-                        <XMarkIcon className='w-5 h-5' />
-                      </button>
-                    </div>
-                  )
+                  media = <video src={url} controls />
                 }
-                return null
+                return (
+                  <div className='my-4 flex items-start gap-2' key={url}>
+                    <div>{media}</div>
+                    <button
+                      type="button"
+                      title='Delete file'
+                      aria-label='Delete file'
+                      onClick={() => update('urls', form.urls.filter(u => u !== url))}
+                      className={`p-1 rounded-md ${buttonCN.delete}`}>
+                      <XMarkIcon className='w-5 h-5' />
+                    </button>
+                  </div>
+                )
               })}
               <button
-                className='text-purple-700'
-                style={{ width: '100%' }}
-                type='submit'>
-                Confirm upload
+                disabled={loading}
+                type='button'
+                onClick={handleSubmit}
+                className={`w-full ${buttonCN.normal} ${buttonCN.primary}`}>
+                {loading ? 'Uploading...' : 'Confirm upload'}
               </button>
             </>
           ) : (
             <button
               type='button'
-              style={{ width: '100%' }}
               onClick={() => inputRef.current?.click()}
-              className={`${buttonCN.normal} ${buttonCN.primary}`}>
+              className={`w-full ${buttonCN.normal} ${buttonCN.primary}`}>
               Click here to upload files
             </button>
           )}
-        </Form>
+          {error && (
+            <p className="text-red-600 text-sm mt-4">There was an error uploading your files</p>
+          )}
+        </div>
       </Popover.Panel>
     </Popover>,
     portalRoot

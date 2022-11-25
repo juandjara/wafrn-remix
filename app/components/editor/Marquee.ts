@@ -11,4 +11,6 @@ export default function MarqueeBlot(quill: typeof Quill) {
   }
   Marquee.blotName = 'marquee'
   Marquee.tagName = 'marquee'
+
+  return Marquee
 }

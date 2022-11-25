@@ -1,14 +1,17 @@
 import Container from "@/components/Container"
+import type { UploadedMedia } from "@/components/editor/ImageUpload"
+import type { PostEditorMention } from "@/components/editor/PostEditor"
 import PostCard from "@/components/post/PostCard"
 import Spinner from "@/components/Spinner"
-import { createPost, getPost, Post } from "@/lib/api.server"
+import type { Post } from "@/lib/api.server"
+import { createPost, getPost } from "@/lib/api.server"
 import env from "@/lib/env.server"
 import { requireUserSession } from "@/lib/session.server"
 import { buttonCN, cardCN, inputCN, labelCN } from "@/lib/style"
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline"
 import type { ActionFunction, LoaderFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { Form, useFetcher, useLoaderData, useNavigate, useSearchParams, useSubmit, useTransition } from "@remix-run/react"
+import { Form, useFetcher, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react"
 import type { FormEvent} from "react"
 import { lazy, useEffect, useRef } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
@@ -17,11 +20,13 @@ import { ClientOnly } from "remix-utils"
 const PostEditor = lazy(() => import('@/components/editor/PostEditor'))
 
 type LoaderData = {
+  token: string
   reblog: Post | null
   recaptchaKey: string
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const { token } = await requireUserSession(request)
   const sp = new URL(request.url).searchParams
   const reblogId = sp.get('parent')
   let reblog = null
@@ -30,6 +35,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   return json<LoaderData>({
+    token,
     reblog,
     recaptchaKey: env.recaptchaKey
   })
@@ -41,6 +47,25 @@ export const action: ActionFunction = async ({ request }) => {
 
   formData.set('captchaKey', formData.get('g-recaptcha-response') as string)
   formData.delete('g-recaptcha-response')
+
+  let content = formData.get('content') as string
+  content = content.replaceAll('﻿', '')
+
+  let files = JSON.parse(formData.get('files') as string || '[]') as UploadedMedia[]
+  for (const file of files) {
+    if (content.includes(file.html)) {
+      content = content.replace(file.html, `[wafrnmediaid="${file.id}"]`)
+    }
+  }
+
+  const mentions = JSON.parse(formData.get('mentions') as string || '[]') as PostEditorMention[]
+  for (const mention of mentions) {
+    if (content.includes(mention.html)) {
+      content = content.replace(mention.html, `[mentionuserid="${mention.id}"]`)
+    }
+  }
+
+  formData.set('content', content)
 
   try {
     await createPost(token, formData)
@@ -63,6 +88,7 @@ export default function Write() {
 
   useEffect(() => {
     if (fetcher.data?.success) {
+      // @ts-ignore
       navigate(-1, { replace: true })
     }
   }, [fetcher, navigate])
@@ -82,11 +108,6 @@ export default function Write() {
       <h1 className='mb-4 text-4xl font-medium text-gray-500'>
         {reblog ? 'Reblog post' : 'Write new post'}  
       </h1>
-      {reblog && (
-        <div className="my-4">
-          <PostCard root post={reblog} />
-        </div>
-      )}
       <div className={`${cardCN} relative`}>
         <div id="portal-root"></div>
         <Form method="post" onSubmit={handleSubmit}>
@@ -114,6 +135,11 @@ export default function Write() {
           />
         </Form>
       </div>
+      {reblog && (
+        <div className="my-4">
+          <PostCard root post={reblog} />
+        </div>
+      )}
     </Container>
   )
 }

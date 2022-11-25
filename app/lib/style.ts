@@ -34,7 +34,7 @@ export const inputCN = [
 
 export const checkboxCN = [
   'rounded',
-  `text-slate-600`,
+  `text-stone-600`,
   'border-gray-300',
   'shadow-sm',
   'disabled:opacity-50',
