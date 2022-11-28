@@ -1,7 +1,7 @@
 import type { Post } from "@/lib/api.server"
 import { useFetcher } from "@remix-run/react"
 import { AnimatePresence } from "framer-motion"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import PostCard from "./PostCard"
 import Spinner from "../Spinner"
@@ -55,11 +55,13 @@ export default function PostList({ initialPosts, getPageURL }: PostListProps) {
     }
   }
 
+  const withoutDuplicates = useMemo(() => removeDuplicates(posts), [posts])
+
   return (
     <>
       <AnimatePresence>
         <ul className='space-y-6'>
-          {posts.map((p) => <PostCard root key={p.id} post={p} />)}
+          {withoutDuplicates.map((p) => <PostCard root key={p.id} post={p} />)}
         </ul>
       </AnimatePresence>
       {isLastPage ? (
@@ -71,4 +73,28 @@ export default function PostList({ initialPosts, getPageURL }: PostListProps) {
       )}
     </>
   )  
+}
+
+function removeDuplicates(posts: Post[]) {
+  return posts
+    .map((post) => {
+      const children = (post.ancestors || [])
+        .filter(p => p.content || p.tags.length)
+        .sort((a, b) => {
+          const aDate = new Date(a.updatedAt).getTime()
+          const bDate = new Date(b.updatedAt).getTime()
+          return aDate - bDate
+        })
+      const idChain = [...children.map(c => c.id), post.id].join('---')
+      return {
+        ...post,
+        idChain
+      }
+    })
+    .reduce((acum, post) => {
+      if (!acum.some(p => p.idChain.includes(post.idChain))) {
+        acum.push(post)
+      }
+      return acum
+    }, [] as (Post & { idChain: string })[])
 }
