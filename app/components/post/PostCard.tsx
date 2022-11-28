@@ -8,8 +8,13 @@ import PostContent from "./PostContent"
 import { motion } from 'framer-motion'
 import { MEDIA_URL } from "@/lib/config"
 import FollowButton from "../FollowButton"
+import { useState } from "react"
+import { buttonCN } from "@/lib/style"
+
+const POST_COMPACT_LIMIT = 2
 
 export default function PostCard({ post, root = false }: { post: Post, root?: boolean }) {
+  const [expanded, setExpanded] = useState(false)
   const children = (post.ancestors || [])
     .filter(p => p.content || p.tags.length)
     .sort((a, b) => {
@@ -40,9 +45,26 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
         </div>
       ) : null}
       {!!children.length && (
-        <ul className='divide-y divide-gray-300 border-t border-gray-300'>
-          {children.map((p) => <PostCard key={p.id} post={p} />)}
-        </ul>
+        <>
+          {children.length > POST_COMPACT_LIMIT && (
+            <button
+              onClick={() => setExpanded(flag => !flag)}
+              className={`my-6 mx-auto block ${buttonCN.normal} ${buttonCN.primary}`}>
+              {expanded ? 'Close thread' : (
+                <span>
+                  Expand thread <span className="text-xs">
+                    ({children.length - POST_COMPACT_LIMIT} more post{children.length - POST_COMPACT_LIMIT === 1 ? '' : 's'})
+                  </span>
+                </span>
+              )}
+            </button>
+          )}
+          <ul className='divide-y divide-gray-300 border-t border-gray-300'>
+            {children
+              .slice(expanded ? undefined : -1 * POST_COMPACT_LIMIT)
+              .map((p) => <PostCard key={p.id} post={p} />)}
+          </ul>
+        </>
       )}
       {post.content || post.tags.length ? (
         <>
@@ -62,17 +84,18 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
             <PostActions post={post} />
           </div>
           <PostContent post={post} />
-          {post.tags.length ? (
-            <div className='mt-2 flex items-center gap-1 flex-wrap'>
-              {post.tags.map(({ tagName }, i) => (
-                <Link 
-                  key={i}
-                  to={`/search?q=${tagName}`}
-                  className='bg-purple-500 text-white py-1 px-1.5 text-xs font-bold rounded-md'
-                >#{tagName}</Link>
-              ))}
-            </div>
-          ) : null}
+          <div className='mt-2 flex items-center gap-1 flex-wrap'>
+            <span className="text-xs font-medium text-stone-500">
+              {new Date(post.createdAt).toLocaleString('en', { dateStyle: 'short' })}
+            </span>
+            {post.tags.map(({ tagName }, i) => (
+              <Link 
+                key={i}
+                to={`/search?q=${tagName}`}
+                className='bg-purple-500 text-white py-1 px-1.5 text-xs font-bold rounded-md'
+              >#{tagName}</Link>
+            ))}
+          </div>
         </>
       ) : null}
       {root && (
