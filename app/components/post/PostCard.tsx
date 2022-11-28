@@ -161,7 +161,7 @@ function PostActions({ post }: { post: Post }) {
       <Menu.Button className='p-1.5 text-purple-900 bg-purple-100 hover:bg-purple-200 rounded-md'>
         <EllipsisHorizontalIcon className="h-5 w-5" />
       </Menu.Button>
-      <Menu.Items as="ul" className='absolute z-10 top-full right-0 mt-2 p-1 space-y-2 w-40 flex flex-col bg-white border border-stone-100 shadow-lg rounded-md'>
+      <Menu.Items as="ul" className='absolute z-10 top-full right-0 mt-2 p-1 space-y-2 w-44 flex flex-col bg-white border border-stone-100 shadow-md rounded-md'>
         <Menu.Item as="li">
           {({ active }) => (
             <button 
@@ -170,7 +170,7 @@ function PostActions({ post }: { post: Post }) {
               <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M13 4.5a2.5 2.5 0 11.702 1.737L6.97 9.604a2.518 2.518 0 010 .792l6.733 3.367a2.5 2.5 0 11-.671 1.341l-6.733-3.367a2.5 2.5 0 110-3.475l6.733-3.366A2.52 2.52 0 0113 4.5z" />
               </svg>
-              <p>Share post</p> 
+              <p>Copy post link</p> 
             </button>
           )}
         </Menu.Item>
