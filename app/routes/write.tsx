@@ -6,12 +6,12 @@ import Spinner from "@/components/Spinner"
 import type { Post } from "@/lib/api.server"
 import { createPost, getPost } from "@/lib/api.server"
 import env from "@/lib/env.server"
-import { requireUserSession } from "@/lib/session.server"
+import { requireUserSession, setFlashMessage } from "@/lib/session.server"
 import { buttonCN, cardCN, inputCN, labelCN } from "@/lib/style"
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline"
-import type { ActionFunction, LoaderFunction } from "@remix-run/node"
+import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { Form, useFetcher, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react"
+import { useFetcher, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react"
 import type { FormEvent} from "react"
 import { lazy, useEffect, useRef } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
@@ -69,7 +69,12 @@ export const action: ActionFunction = async ({ request }) => {
 
   try {
     await createPost(token, formData)
-    return json({ success: true, error: null })
+    const cookie = await setFlashMessage(request, 'Yay! :D Your post has been published!')
+    return redirect('/', {
+      headers: {
+        'Set-Cookie': cookie
+      }
+    })
   } catch(err) {
     console.error('ERROR', err)
     return json({ success: false, error: err })
@@ -110,7 +115,7 @@ export default function Write() {
       </h1>
       <div className={`${cardCN} relative`}>
         <div id="portal-root"></div>
-        <Form method="post" onSubmit={handleSubmit}>
+        <fetcher.Form method="post" onSubmit={handleSubmit}>
           <ClientOnly>{() => <PostEditor />}</ClientOnly>
           <input type="hidden" name="parent" value={parent || ''} />
           <div className="mt-6">
@@ -133,7 +138,7 @@ export default function Write() {
             size="invisible"
             sitekey={recaptchaKey}
           />
-        </Form>
+        </fetcher.Form>
       </div>
       {reblog && (
         <div className="my-4">

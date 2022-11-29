@@ -458,3 +458,63 @@ export async function createPost(token: string, form: FormData) {
     throw err
   }
 }
+
+export async function blockUser(token: string, userId: string) {
+  const url = `${API_URL}/block`
+
+  const form = new FormData()
+  form.set('userId', userId)
+  const res = await fetch(url, {
+    body: form,
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+
+  if (!res.ok) {
+    throw new Response('Error calling API at /block - bad status code', { status: res.status, statusText: res.statusText })
+  }
+
+  try {
+    const text = await res.text()
+    const data = JSON.parse(text)
+
+    if (data.success === false) {
+      throw new Response('Error calling API at /block - bad success response', { status: 500, statusText: 'Server Error' })
+    }
+  
+    return data
+  } catch (err) {
+    throw err
+  }
+}
+
+export async function reportPost(token: string, form: FormData) {
+  const url = `${API_URL}/reportPost`
+  const res = await fetch(url, {
+    body: form,
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+
+  if (!res.ok) {
+    throw new Response('Error calling API at /reportPost - bad status code', { status: res.status, statusText: res.statusText })
+  }
+
+  try {
+    const text = await res.text()
+    const data = JSON.parse(text)
+
+    if (data.success === false) {
+      throw new Response('Error calling API at /reportPost - bad success response', { status: 500, statusText: 'Server Error' })
+    }
+  
+    return data
+  } catch (err) {
+    throw err
+  }
+}
+

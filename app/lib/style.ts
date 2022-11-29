@@ -33,9 +33,8 @@ export const inputCN = [
 ].join(' ')
 
 export const checkboxCN = [
-  'rounded',
-  `text-stone-600`,
-  'border-gray-300',
+  `text-purple-600`,
+  'border-stone-500',
   'shadow-sm',
   'disabled:opacity-50',
   focusCN

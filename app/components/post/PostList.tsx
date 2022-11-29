@@ -9,9 +9,10 @@ import Spinner from "../Spinner"
 type PostListProps = {
   initialPosts: Post[]
   getPageURL: (page: number) => string
+  noMoreMessage?: string
 }
 
-export default function PostList({ initialPosts, getPageURL }: PostListProps) {
+export default function PostList({ initialPosts, getPageURL, noMoreMessage = 'No more posts' }: PostListProps) {
   const [intersectionRef, triggerIsInView] =  useInView()
   const [posts, setPosts] = useState(initialPosts)
   const fetcher = useFetcher<{ posts: Post[]; params: { page: number } }>()
@@ -65,7 +66,7 @@ export default function PostList({ initialPosts, getPageURL }: PostListProps) {
         </ul>
       </AnimatePresence>
       {isLastPage ? (
-        <p className="text-stone-500 font-medium mt-4">No more posts</p>
+        <p className="text-stone-500 font-medium mt-4">{noMoreMessage}</p>
       ) : (
         <div ref={intersectionRef}>
           <Spinner className='my-8 mx-auto' size='h-12 w-12' />

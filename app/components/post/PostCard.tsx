@@ -111,9 +111,9 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
           <Link to={`/write?parent=${post.id}`} className='p-1.5 hover:bg-purple-50 rounded-md' title="Reblog">
             <ReblogIcon className="w-5 h-5" />
           </Link>
-          <button className='p-1.5 hover:bg-purple-50 rounded-md' title="Report">
+          <Link to={`/report/${post.id}`} className='p-1.5 hover:bg-purple-50 rounded-md' title="Report">
             <ReportIcon className="w-5 h-5" />
-          </button>
+          </Link>
         </div>
       )}
     </motion.li>
@@ -187,10 +187,10 @@ function PostActions({ post }: { post: Post }) {
         </Menu.Item>
         <Menu.Item as="li">
           {({ active }) => (
-            <button className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
+            <Link to={`/report/${post.id}`} className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
               <ReportIcon className="w-5 h-5" />
               <p>Report</p>
-            </button>
+            </Link>
           )}
         </Menu.Item>
       </Menu.Items>
