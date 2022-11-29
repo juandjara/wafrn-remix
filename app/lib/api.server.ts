@@ -518,3 +518,29 @@ export async function reportPost(token: string, form: FormData) {
   }
 }
 
+export async function deletePost(token: string, postId: string) {
+  const url = `${API_URL}/deletePost?id=${postId}`
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+
+  if (!res.ok) {
+    throw new Response('Error calling API at /deletePost - bad status code', { status: res.status, statusText: res.statusText })
+  }
+
+  try {
+    const text = await res.text()
+    const data = JSON.parse(text)
+
+    if (data.success === false) {
+      throw new Response('Error calling API at /deletePost - bad success response', { status: 500, statusText: 'Server Error' })
+    }
+  
+    return data
+  } catch (err) {
+    throw err
+  }
+}

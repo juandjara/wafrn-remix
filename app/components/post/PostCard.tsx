@@ -11,6 +11,7 @@ import FollowButton from "../FollowButton"
 import { useState } from "react"
 import { buttonCN } from "@/lib/style"
 import useUser from "@/lib/useUser"
+import DeleteForm from "../DeleteForm"
 
 const POST_COMPACT_LIMIT = 2
 
@@ -128,9 +129,11 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
             <ReportIcon className="w-5 h-5" />
           </Link>
           {user?.userId === post.userId && (
-            <button className='p-1.5 hover:bg-purple-50 rounded-md' title="Quick Reblog">
-              <TrashIcon className="w-5 h-5" />
-            </button>
+            <DeleteForm postId={post.id}>
+              <button className='p-1.5 hover:bg-purple-50 rounded-md' title="Quick Reblog">
+                <TrashIcon className="w-5 h-5" />
+              </button>
+            </DeleteForm>
           )}
         </div>
       )}
@@ -216,10 +219,12 @@ function PostActions({ post }: { post: Post }) {
         {user?.userId === post.userId && (
           <Menu.Item as="li">
             {({ active }) => (
-              <button className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
-                <TrashIcon className="w-5 h-5" />
-                <p>Delete post</p>
-              </button>
+              <DeleteForm postId={post.id}>
+                <button className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
+                  <TrashIcon className="w-5 h-5" />
+                  <p>Delete post</p>
+                </button>
+              </DeleteForm>
             )}
           </Menu.Item>
         )}
