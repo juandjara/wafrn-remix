@@ -1,6 +1,6 @@
 import type { Post } from "@/lib/api.server"
 import { Menu } from "@headlessui/react"
-import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline"
+import { ArrowPathRoundedSquareIcon, ChatBubbleLeftIcon, EllipsisHorizontalIcon, TrashIcon } from "@heroicons/react/24/outline"
 import { Link } from "@remix-run/react"
 import clsx from "clsx"
 import toast from "react-hot-toast"
@@ -10,10 +10,13 @@ import { MEDIA_URL } from "@/lib/config"
 import FollowButton from "../FollowButton"
 import { useState } from "react"
 import { buttonCN } from "@/lib/style"
+import useUser from "@/lib/useUser"
 
 const POST_COMPACT_LIMIT = 2
 
 export default function PostCard({ post, root = false }: { post: Post, root?: boolean }) {
+  const user = useUser()
+  const isEmptyReblog = !post.content && !post.tags.length
   const [expanded, setExpanded] = useState(false)
   const children = (post.ancestors || [])
     .filter(p => p.content || p.tags.length)
@@ -29,18 +32,27 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
       animate={{ opacity: 1 }}
       className={clsx('bg-white block', root ? 'border border-gray-300 rounded-md p-4' : 'py-4')}>
       {root && children.length > 0 ? (
-        <div className='flex items-center gap-2 my-2'>        
-          <img
-            alt='avatar'
-            loading='lazy'
-            className='w-8 h-8 rounded-lg'
-            src={MEDIA_URL.concat(post.user.avatar)}
-          />
+        <div className='flex items-center gap-2 my-2'>
+          <div className="relative">
+            <img
+              alt='avatar'
+              loading='lazy'
+              className='w-8 h-8 rounded-lg border border-gray-300'
+              src={MEDIA_URL.concat(post.user.avatar)}
+            />
+            <span className="rounded-lg absolute -top-2 -right-2 bg-white">
+              {isEmptyReblog ? (
+                <ArrowPathRoundedSquareIcon className="w-5 h-5 text-green-500" />
+              ) : (
+                <ChatBubbleLeftIcon className="w-5 h-5 text-sky-500" />
+              )}
+            </span>
+          </div>
           <div className="flex-grow truncate">
             <Link className='text-purple-700 hover:underline' to={`/u/${post.user.url}`}>
               {post.user.url}
             </Link>
-            <span> rebloged</span>
+            <span>{isEmptyReblog ? ' rebloged' : ' replied'}</span>
           </div>
         </div>
       ) : null}
@@ -114,6 +126,11 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
           <Link to={`/report/${post.id}`} className='p-1.5 hover:bg-purple-50 rounded-md' title="Report">
             <ReportIcon className="w-5 h-5" />
           </Link>
+          {user?.userId === post.userId && (
+            <button className='p-1.5 hover:bg-purple-50 rounded-md' title="Quick Reblog">
+              <TrashIcon className="w-5 h-5" />
+            </button>
+          )}
         </div>
       )}
     </motion.li>
@@ -149,6 +166,8 @@ function ReportIcon(props: React.ComponentProps<'svg'>) {
 }
 
 function PostActions({ post }: { post: Post }) {
+  const user = useUser()
+
   function copyLink() {
     const url = new URL(window.location.origin)
     url.pathname = `/p/${post.id}`
@@ -193,6 +212,16 @@ function PostActions({ post }: { post: Post }) {
             </Link>
           )}
         </Menu.Item>
+        {user?.userId === post.userId && (
+          <Menu.Item as="li">
+            {({ active }) => (
+              <button className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
+                <TrashIcon className="w-5 h-5" />
+                <p>Delete post</p>
+              </button>
+            )}
+          </Menu.Item>
+        )}
       </Menu.Items>
     </Menu>
   )
