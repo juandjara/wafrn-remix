@@ -10,7 +10,7 @@ import MediaWrapper from "./MediaWrapper"
 
 export default function PostContent({ post }: { post: Post }) {
   return (
-    <div className='ql-editor' style={{ padding: '16px 0' }}>
+    <div className='ql-editor' style={{ padding: '8px 0 24px 0' }}>
       {useProcessor(post.content)}
     </div>
   )

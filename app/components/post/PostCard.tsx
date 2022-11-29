@@ -30,21 +30,21 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
     <motion.li
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className={clsx('bg-white block', root ? 'border border-gray-300 rounded-md p-4' : 'py-4')}>
+      className={clsx('bg-white block', root ? 'border border-gray-300 rounded-md p-4' : '')}>
       {root && children.length > 0 ? (
-        <div className='flex items-center gap-2 my-2'>
+        <div id="root-header" className='flex items-center gap-2 mb-2 text-sm'>
           <div className="relative">
             <img
               alt='avatar'
               loading='lazy'
-              className='w-8 h-8 rounded-lg border border-gray-300'
+              className='w-6 h-6 rounded-lg border border-gray-300'
               src={MEDIA_URL.concat(post.user.avatar)}
             />
             <span className="rounded-lg absolute -top-2 -right-2 bg-white">
               {isEmptyReblog ? (
-                <ArrowPathRoundedSquareIcon className="w-5 h-5 text-green-500" />
+                <ArrowPathRoundedSquareIcon className="w-4 h-4 text-green-500" />
               ) : (
-                <ChatBubbleLeftIcon className="w-5 h-5 text-sky-500" />
+                <ChatBubbleLeftIcon className="w-4 h-4 text-sky-500" />
               )}
             </span>
           </div>
@@ -60,6 +60,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
         <>
           {children.length > POST_COMPACT_LIMIT && (
             <button
+              id="thread-expand-button"
               onClick={() => setExpanded(flag => !flag)}
               className={`my-6 mx-auto block ${buttonCN.normal} ${buttonCN.primary}`}>
               {expanded ? 'Close thread' : (
@@ -71,16 +72,16 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
               )}
             </button>
           )}
-          <ul className='divide-y divide-gray-300 border-t border-gray-300'>
+          <ul id="post-chidlren-list" className='divide-y divide-gray-300 border-t border-gray-300'>
             {children
               .slice(expanded ? undefined : -1 * POST_COMPACT_LIMIT)
               .map((p) => <PostCard key={p.id} post={p} />)}
           </ul>
         </>
       )}
-      {post.content || post.tags.length ? (
-        <>
-          <div className={clsx('flex items-center gap-2 my-2', { 'pt-6 mt-0 border-t border-gray-300': root && post.ancestors?.length })}>
+      {isEmptyReblog ? null : (
+        <article id="post-content" className={root ? 'pb-4' : 'pt-2 pb-4'}>
+          <div className={clsx('flex items-center gap-2 my-2', { 'mt-0': root, 'pt-4 border-t border-gray-300': root && post.ancestors?.length })}>
             <img
               alt='avatar'
               loading='lazy'
@@ -96,7 +97,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
             <PostActions post={post} />
           </div>
           <PostContent post={post} />
-          <div className='mt-2 flex items-center gap-1 flex-wrap'>
+          <div className='mt-2 flex items-center gap-2 flex-wrap'>
             <span className="text-xs font-medium text-stone-500">
               {new Date(post.createdAt).toLocaleString('en', { dateStyle: 'short' })}
             </span>
@@ -108,10 +109,10 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
               >#{tagName}</Link>
             ))}
           </div>
-        </>
-      ) : null}
+        </article>
+      )}
       {root && (
-        <div className='flex justify-end gap-2 border-t border-gray-300 pt-2 mt-4 text-purple-900'>
+        <div id="post-toolbar" className='flex justify-end gap-2 border-t border-gray-300 pt-4 text-purple-900'>
           <Link to={`/p/${post.id}`} className="text-stone-700 font-medium text-sm">
             <span>Notes: </span>
             <span className="text-lg">{post.notes}</span>
@@ -122,7 +123,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
           </button>
           <Link to={`/write?parent=${post.id}`} className='p-1.5 hover:bg-purple-50 rounded-md' title="Reblog">
             <ReblogIcon className="w-5 h-5" />
-          </Link>
+          </Link> 
           <Link to={`/report/${post.id}`} className='p-1.5 hover:bg-purple-50 rounded-md' title="Report">
             <ReportIcon className="w-5 h-5" />
           </Link>
