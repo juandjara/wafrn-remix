@@ -11,7 +11,7 @@ import FollowButton from "../FollowButton"
 import { useState } from "react"
 import { buttonCN } from "@/lib/style"
 import useUser from "@/lib/useUser"
-import DeleteForm from "../DeleteForm"
+import DeleteModal from "../DeleteModal"
 
 const POST_COMPACT_LIMIT = 2
 
@@ -19,6 +19,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
   const user = useUser()
   const isEmptyReblog = !post.content && !post.tags.length
   const [expanded, setExpanded] = useState(false)
+  const [deleteModalOpen, setDeleteModalOpen] = useState<string>('')
   const children = (post.ancestors || [])
     .filter(p => p.content || p.tags.length)
     .sort((a, b) => {
@@ -95,12 +96,17 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
               </Link>
             </div>
             <FollowButton userId={post.userId} size='small' hideWhenFollowing />
-            <PostActions post={post} />
+            <PostActions post={post} onDelete={() => {
+              console.log('opening modal for ', post.id)
+              setDeleteModalOpen(post.id)
+            }} />
           </div>
           <PostContent post={post} />
           <div className='mt-2 flex items-center gap-2 flex-wrap'>
             <span className="text-xs font-medium text-stone-500">
-              {new Date(post.createdAt).toLocaleString('en', { dateStyle: 'short' })}
+              {post.createdAt && (
+                new Date(post.createdAt).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })
+              )}
             </span>
             {post.tags.map(({ tagName }, i) => (
               <Link 
@@ -129,14 +135,17 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
             <ReportIcon className="w-5 h-5" />
           </Link>
           {user?.userId === post.userId && (
-            <DeleteForm postId={post.id}>
-              <button className='p-1.5 hover:bg-purple-50 rounded-md' title="Quick Reblog">
-                <TrashIcon className="w-5 h-5" />
-              </button>
-            </DeleteForm>
+            <button
+              onClick={() => setDeleteModalOpen(post.id)}
+              className='p-1.5 hover:bg-purple-50 rounded-md'
+              title="Delete Post"
+            >
+              <TrashIcon className="w-5 h-5" />
+            </button>
           )}
         </div>
       )}
+      <DeleteModal postId={deleteModalOpen} open={!!deleteModalOpen} onClose={() => setDeleteModalOpen('')} />
     </motion.li>
   )
 }
@@ -169,10 +178,11 @@ function ReportIcon(props: React.ComponentProps<'svg'>) {
   )
 }
 
-function PostActions({ post }: { post: Post }) {
+function PostActions({ post, onDelete }: { post: Post; onDelete: () => void }) {
   const user = useUser()
 
   function copyLink() {
+    console.log('copying link for ', post.id)
     const url = new URL(window.location.origin)
     url.pathname = `/p/${post.id}`
     navigator.clipboard.writeText(url.toString())
@@ -219,12 +229,10 @@ function PostActions({ post }: { post: Post }) {
         {user?.userId === post.userId && (
           <Menu.Item as="li">
             {({ active }) => (
-              <DeleteForm postId={post.id}>
-                <button className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
-                  <TrashIcon className="w-5 h-5" />
-                  <p>Delete post</p>
-                </button>
-              </DeleteForm>
+              <button onClick={onDelete} className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
+                <TrashIcon className="w-5 h-5" />
+                <p>Delete post</p>
+              </button>
             )}
           </Menu.Item>
         )}
