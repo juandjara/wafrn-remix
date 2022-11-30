@@ -22,6 +22,7 @@ import type { User } from "./lib/session.server"
 import { getFlashMessage, getSessionData } from "./lib/session.server"
 import tailwind from "./tailwind.css"
 import quillCSS from 'quill/dist/quill.snow.css'
+import env from "./lib/env.server"
 
 export function links() {
   return [
@@ -45,9 +46,11 @@ export function CatchBoundary() {
 }
 
 export type RootLoaderData = {
+  token: string | null
   user: User | null
   relations: UserRelations
   flashMessage: string
+  recaptchaKey: string
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -62,7 +65,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const { flashMessage, newCookie } = await getFlashMessage(request)
 
-  return json<RootLoaderData>({ user, relations, flashMessage }, {
+  return json<RootLoaderData>({ token, user, relations, flashMessage, recaptchaKey: env.recaptchaKey }, {
     headers: {
       'Set-Cookie': newCookie
     }

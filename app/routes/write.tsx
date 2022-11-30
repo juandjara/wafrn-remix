@@ -48,7 +48,7 @@ export const action: ActionFunction = async ({ request }) => {
   formData.set('captchaKey', formData.get('g-recaptcha-response') as string)
   formData.delete('g-recaptcha-response')
 
-  let content = formData.get('content') as string
+  let content = formData.get('content') as string || ''
   content = content.replaceAll('﻿', '')
 
   let files = JSON.parse(formData.get('files') as string || '[]') as UploadedMedia[]
