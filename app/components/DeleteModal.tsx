@@ -1,7 +1,7 @@
 import { buttonCN, cardCN } from "@/lib/style"
 import { Dialog } from "@headlessui/react"
 import { useFetcher } from "@remix-run/react"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 
 type DeleteModalProps = {
   postId: string
@@ -10,6 +10,7 @@ type DeleteModalProps = {
 }
 
 export default function DeleteModal({ postId, open, onClose }: DeleteModalProps) {
+  const buttonRef = useRef<HTMLButtonElement>(null)
   const fetcher = useFetcher()
   const busy = fetcher.state !== 'idle'
 
@@ -22,7 +23,7 @@ export default function DeleteModal({ postId, open, onClose }: DeleteModalProps)
   }, [fetcher.data])
 
   return (
-    <Dialog open={open} onClose={onClose} className="relative z-50">
+    <Dialog initialFocus={buttonRef} open={open} onClose={onClose} className="relative z-50">
       <div id="dialog-backdrop" className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel
@@ -42,6 +43,7 @@ export default function DeleteModal({ postId, open, onClose }: DeleteModalProps)
               Cancel
             </button>
             <button
+              ref={buttonRef}
               disabled={busy}
               type="submit"
               className={`${buttonCN.normal} ${buttonCN.delete}`}
