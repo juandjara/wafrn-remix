@@ -4,6 +4,7 @@ import { Menu } from "@headlessui/react"
 import { EllipsisHorizontalIcon, TrashIcon } from "@heroicons/react/24/outline"
 import { Link } from "@remix-run/react"
 import clsx from "clsx"
+import { motion } from "framer-motion"
 import toast from "react-hot-toast"
 import { ReblogIcon } from "./ReblogMenu"
 
@@ -32,7 +33,12 @@ export default function PostActions({ post, onDelete }: { post: Post; onDelete: 
       <Menu.Button className='p-1.5 text-purple-900 bg-purple-100 hover:bg-purple-200 rounded-md'>
         <EllipsisHorizontalIcon className="h-5 w-5" />
       </Menu.Button>
-      <Menu.Items as="ul" className='absolute z-10 top-full right-0 mt-2 p-1 space-y-2 w-44 flex flex-col bg-white border border-stone-100 shadow-md rounded-md'>
+      <Menu.Items
+        as={motion.ul}
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className='absolute z-10 top-full right-0 mt-2 p-1 space-y-2 w-44 flex flex-col bg-white border border-stone-100 shadow-md rounded-md'
+      >
         <Menu.Item as="li">
           {({ active }) => (
             <button 
