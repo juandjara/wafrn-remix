@@ -30,7 +30,7 @@ export default function PostActions({ post, onDelete }: { post: Post; onDelete: 
   
   return (
     <Menu as='div' className='relative'>
-      <Menu.Button className='p-1.5 text-purple-900 bg-purple-100 hover:bg-purple-200 rounded-md'>
+      <Menu.Button className='p-1.5 text-purple-900 bg-purple-50 hover:bg-purple-100 hover:shadow-md rounded-md'>
         <EllipsisHorizontalIcon className="h-5 w-5" />
       </Menu.Button>
       <Menu.Items

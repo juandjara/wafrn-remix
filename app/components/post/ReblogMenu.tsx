@@ -62,7 +62,7 @@ export default function ReblogMenu({ post }: { post: Post }) {
 
   return (
     <Menu as='div' className='relative'>
-      <Menu.Button className='p-1.5 text-purple-900 hover:bg-purple-50 rounded-md'>
+      <Menu.Button className='p-1.5 text-purple-900 hover:shadow-md hover:bg-purple-50 rounded-md'>
         <QuickReblogIcon className="w-5 h-5" />
       </Menu.Button>
       <ReCAPTCHA

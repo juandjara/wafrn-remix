@@ -123,13 +123,13 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
           </Link>
           <div className="flex-grow"></div>
           <ReblogMenu post={post} />
-          <Link to={`/report/${post.id}`} className='p-1.5 hover:bg-purple-50 rounded-md' title="Report">
+          <Link to={`/report/${post.id}`} className='p-1.5 hover:bg-purple-50 hover:shadow-md rounded-md' title="Report">
             <ReportIcon className="w-5 h-5" />
           </Link>
           {user?.userId === post.userId && (
             <button
               onClick={() => setDeleteModalOpen(post.id)}
-              className='p-1.5 hover:bg-purple-50 rounded-md'
+              className='p-1.5 hover:bg-purple-50 hover:shadow-md rounded-md'
               title="Delete Post"
             >
               <TrashIcon className="w-5 h-5" />

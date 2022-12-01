@@ -41,6 +41,8 @@ const navLinkCNInverse = ({ isActive }: { isActive: boolean }) => [
   linkCNInverse
 ].join(' ')
 
+const sidebarCN = 'w-80'
+
 export default function Sidebar() {
   const user = useUser()
   const [open, setOpen] = useState(false)
@@ -127,16 +129,16 @@ export default function Sidebar() {
   )
 
   return (
-    <>
+    <div id='sidebar-wrapper'>
       <button onClick={() => setOpen(true)} className='p-2 bg-purple-100 rounded-full fixed top-2 left-2'>
         <Bars3Icon className='w-6 h-6 text-purple-700' />
         <span className='sr-only'>Open menu</span>
       </button>
       <Drawer open={open} setOpen={setOpen}>{sidebarContent}</Drawer>
-      <aside className="hidden md:block w-80 sticky top-0 self-start bg-white min-h-screen">
+      <aside className={`hidden md:block ${sidebarCN} sticky top-0 self-start bg-white min-h-screen`}>
         {sidebarContent}
       </aside>
-    </>
+    </div>
   )
 }
 
@@ -149,7 +151,8 @@ function Drawer({ open, setOpen, children }: { open: boolean, setOpen: (b: boole
   ].join(' ')
 
   const contentCN = [
-    'left-0 absolute bg-white h-full shadow-xl w-80',
+    sidebarCN,
+    'left-0 absolute bg-white h-full shadow-xl',
     'delay-400 duration-500 ease-in-out transition-all transform',
     open ? "translate-x-0" : "-translate-x-full"
   ].join(' ')
@@ -178,7 +181,7 @@ function UserMenu({ user }: { user: User }) {
       <Menu as='div' className='relative'>
         {({ open }) => (
           <>  
-            <Menu.Button className='p-1.5 text-purple-900 bg-purple-50 hover:bg-purple-100 rounded-md'>
+            <Menu.Button className='p-1.5 text-purple-900 bg-purple-50 hover:bg-purple-100 hover:shadow-md rounded-md'>
               <EllipsisHorizontalIcon className="h-6 w-6" />
             </Menu.Button>
             <Transition
