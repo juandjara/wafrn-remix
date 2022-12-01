@@ -160,6 +160,7 @@ export default function PostEditor() {
         .ql-toolbar.ql-snow {
           border-radius: 4px 4px 0 0;
           border-bottom: none;
+          padding: 8px 2px;
         }
         .ql-container {
           border-radius: 0 0 4px 4px;
@@ -175,6 +176,11 @@ export default function PostEditor() {
           font-size: 16px;
           border-radius: 0 0 4px 4px;
           outline: none;
+          padding: 4px 12px;
+        }
+        .ql-wrapper .ql-editor.ql-blank::before {
+          left: 8px;
+          color: rgba(0, 0, 0, 0.3);
         }
         .ql-marquee {
           line-height: 18px;
