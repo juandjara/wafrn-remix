@@ -29,7 +29,7 @@ const linkCNInverse = [
 ].join(' ')
 
 const navLinkCN = ({ isActive }: { isActive: boolean }) => [
-  isActive ? 'shadow-md' : '',
+  isActive ? 'shadow-md ring-1 ring-purple-400' : '',
   linkCN
 ].join(' ')
 
@@ -42,7 +42,7 @@ export default function Sidebar() {
   const user = useUser()
 
   return (
-    <aside className="w-72 sticky top-0 self-start bg-white min-h-screen">
+    <aside className="w-80 sticky top-0 self-start bg-white min-h-screen">
       <Link to="/">
         <img src="/img/wafrn-logo.png" alt="WAFRN" className='bg-purple-900 p-4' />
       </Link>
@@ -59,10 +59,10 @@ export default function Sidebar() {
           )}
           {user && (
             <>
-              <li>
+              <li className='border-b border-stone-300 pb-4 mb-4'>
                 <NavLink to="/write" className={navLinkCNInverse}>
                   <PencilSquareIcon className='w-6 h-6 text-white' />
-                  <span>Write new post</span>
+                  <span>Write</span>
                 </NavLink>
               </li>
               <li>
