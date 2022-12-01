@@ -46,7 +46,6 @@ export function CatchBoundary() {
 }
 
 export type RootLoaderData = {
-  token: string | null
   user: User | null
   relations: UserRelations
   flashMessage: string
@@ -65,11 +64,15 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const { flashMessage, newCookie } = await getFlashMessage(request)
 
-  return json<RootLoaderData>({ token, user, relations, flashMessage, recaptchaKey: env.recaptchaKey }, {
-    headers: {
-      'Set-Cookie': newCookie
-    }
-  })
+  return json<RootLoaderData>(
+    {
+      user,
+      relations,
+      flashMessage, 
+      recaptchaKey: env.recaptchaKey 
+    },
+    { headers: { 'Set-Cookie': newCookie } }
+  )
 }
 
 export default function App() {
