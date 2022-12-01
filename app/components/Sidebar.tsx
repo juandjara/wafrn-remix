@@ -11,9 +11,12 @@ import {
   EllipsisHorizontalIcon,
   UserIcon,
   HomeIcon,
-  PencilSquareIcon
+  PencilSquareIcon,
+  Bars3Icon,
+  XMarkIcon
 } from '@heroicons/react/24/outline'
 import { Link, NavLink } from '@remix-run/react'
+import { useState } from 'react'
 import LogoutButton from './LogoutButton'
 
 const linkCN = [
@@ -40,9 +43,10 @@ const navLinkCNInverse = ({ isActive }: { isActive: boolean }) => [
 
 export default function Sidebar() {
   const user = useUser()
+  const [open, setOpen] = useState(false)
 
-  return (
-    <aside className="w-80 sticky top-0 self-start bg-white min-h-screen">
+  const sidebarContent = (
+    <>
       <Link to="/">
         <img src="/img/wafrn-logo.png" alt="WAFRN" className='bg-purple-900 p-4' />
       </Link>
@@ -106,7 +110,7 @@ export default function Sidebar() {
               target="_blank"
               rel="noreferrer"
               href="https://patreon.com/wafrn"
-              className={`${linkCN} bg-stone-50`}>
+              className={linkCN}>
               <CurrencyEuroIcon className="w-6 h-6 text-purple-500" />
               <span>Give us some money</span>
             </a>
@@ -119,7 +123,51 @@ export default function Sidebar() {
           </li>
         </ul>
       </nav>
-    </aside>
+    </>
+  )
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)} className='p-2 bg-purple-100 rounded-full fixed top-2 left-2'>
+        <Bars3Icon className='w-6 h-6 text-purple-700' />
+        <span className='sr-only'>Open menu</span>
+      </button>
+      <Drawer open={open} setOpen={setOpen}>{sidebarContent}</Drawer>
+      <aside className="hidden md:block w-80 sticky top-0 self-start bg-white min-h-screen">
+        {sidebarContent}
+      </aside>
+    </>
+  )
+}
+
+function Drawer({ open, setOpen, children }: { open: boolean, setOpen: (b: boolean) => void; children: JSX.Element }) {
+  const drawerCN = [
+    'fixed overflow-hidden z-10 bg-gray-900 bg-opacity-25 inset-0 transform',
+    open
+      ? "transition-opacity opacity-100 duration-200"
+      : "transition-opacity delay-200 opacity-0 pointer-events-none"
+  ].join(' ')
+
+  const contentCN = [
+    'left-0 absolute bg-white h-full shadow-xl w-80',
+    'delay-400 duration-500 ease-in-out transition-all transform',
+    open ? "translate-x-0" : "-translate-x-full"
+  ].join(' ')
+
+  return (
+    <div className={drawerCN}>
+      <aside className={contentCN}>
+        <button onClick={() => setOpen(false)} className='p-1 rounded-md bg-white bg-opacity-10 fixed top-2 right-2'>
+          <XMarkIcon className='w-5 h-5 text-white' />
+          <span className='sr-only'>Close menu</span>
+        </button>
+        {children}
+      </aside>
+      <section
+        className="w-screen h-full cursor-pointer"
+        onClick={() => setOpen(false)}
+      ></section>
+    </div>
   )
 }
 

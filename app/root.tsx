@@ -82,6 +82,11 @@ export default function App() {
       <head>
         <Meta />
         <Links />
+        <style>{`
+          .grecaptcha-badge {
+            visibility: hidden;
+          }
+        `}</style>
       </head>
       <body className="bg-stone-100">
         <GlobalSpinner />
@@ -91,7 +96,7 @@ export default function App() {
             <FlashMessage message={flashMessage} />
           </>
         )}</ClientOnly>
-        <div className="grid gap-3" style={{ gridTemplateColumns: 'min-content 1fr' }}>
+        <div className="md:grid gap-3" style={{ gridTemplateColumns: 'min-content 1fr' }}>
           <Sidebar />
           <Outlet />
         </div>
