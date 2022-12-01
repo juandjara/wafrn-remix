@@ -75,14 +75,12 @@ export default function Report() {
           <textarea required name="description" className={`${inputCN}`} />
         </div>
           <p className={`${labelCN} mt-8`}>What do you think is wrong with this post?</p>
-        <div className="mt-4 mx-1">
+        <div className="mt-2 mx-1">
           {severityOptions.map((opt) => (
-            <div key={opt.value} className="flex items-center mb-4">
+            <label key={opt.value} className="flex items-center py-2">
               <input required type="radio" name="severity" value={opt.value} className={checkboxCN} />
-              <label htmlFor="severity" className={`block ml-3 font-medium text-stone-900`}>
-                {opt.label}
-              </label>
-            </div>
+              <span className="block ml-3 font-medium text-stone-900">{opt.label}</span>
+            </label>
           ))}
         </div>
         <p className={`${labelCN} mt-6`}>Do you want to block the user?</p>
