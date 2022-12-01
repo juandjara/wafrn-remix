@@ -1,10 +1,10 @@
-import { Post } from "@/lib/api.server"
-import { RootLoaderData } from "@/root"
+import type { Post } from "@/lib/api.server"
+import useCaptchaKey from "@/lib/UseCaptchaKey"
 import { Menu } from "@headlessui/react"
-import { Link, useMatches } from "@remix-run/react"
+import { Link, useFetcher } from "@remix-run/react"
 import clsx from "clsx"
 import { motion } from "framer-motion"
-import { useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
 import toast from "react-hot-toast"
 
@@ -28,14 +28,18 @@ export function ReblogIcon(props: React.ComponentProps<'svg'>) {
 }
 
 export default function ReblogMenu({ post }: { post: Post }) {
-  const m = useMatches()
-  const { recaptchaKey, token } = m[0].data as RootLoaderData
-
+  const recaptchaKey = useCaptchaKey()
   const recaptchaRef = useRef<ReCAPTCHA>(null)
-  const [loading, setLoading] = useState(false)
+  const fetcher = useFetcher()
+  const loading = fetcher.state !== 'idle'
+
+  useEffect(() => {
+    if (fetcher.data?.error) {
+      toast.error(fetcher.data?.error)
+    }
+  }, [fetcher.data])
 
   async function submitReblog() {
-    setLoading(true)
     try {
       const captcha = await recaptchaRef.current?.executeAsync()
       const formData = new FormData()
@@ -43,27 +47,17 @@ export default function ReblogMenu({ post }: { post: Post }) {
       formData.set('tags', '')
       formData.set('content', '')
       formData.set('parent', post.id)
-  
-      const res = await fetch('/write', {
-        body: formData,
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-  
-      if (!res.ok) {
-        toast.error('Error posting reblog - bad status code')
-      }
 
-      toast.success('Yay! You rebloged the post successfully')
+      fetcher.submit(formData, {
+        action: '/api/write',
+        method: 'post',
+      })
     } catch (err) {
       console.error(err)
       if (err instanceof Error) {
         toast.error(err.message)
       }
     }
-    setLoading(false)
   }
 
   return (
@@ -76,8 +70,12 @@ export default function ReblogMenu({ post }: { post: Post }) {
         size="invisible"
         sitekey={recaptchaKey}
       />
-      <Menu.Items as={motion.ul} initial={{ opacity: 1 }} exit={{ opacity: 1 }}
-        className='absolute z-10 bottom-full -right-1 mb-2 p-1 space-y-2 w-40 flex flex-col bg-white border border-stone-100 shadow-md rounded-md'>
+      <Menu.Items
+        as={motion.ul}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className='absolute z-10 bottom-full -right-1 mb-2 p-1 space-y-2 w-40 flex flex-col bg-white border border-stone-100 shadow-md rounded-md'
+      >
         <Menu.Item as="li">
           {({ active }) => (
             <Link
