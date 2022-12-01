@@ -33,7 +33,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   if (query) {
     data = await searchPosts(params)
   }
-
+  
   return json<LoaderData>({ posts: data.posts, users: data.users, params })
 }
 
@@ -64,9 +64,11 @@ export default function Search() {
           </button>
         </div>
       </Form>
-      <p className='mt-8 mb-1'>
-        Found {users.length >= 20 ? '20+' : users.length} user{users.length === 1 ? '' : 's'}
-      </p>
+      {query && (
+        <p className='mt-8 mb-1'>
+          {users.length >= 20 ? '20+' : users.length} user{users.length === 1 ? '' : 's'}
+        </p>
+      )}
       <ul className='space-y-4'>
         {users.map((user) => (
           <li key={user.url} className="flex items-start gap-4 bg-white px-4 py-3 rounded-md border border-stone-300">
@@ -85,9 +87,11 @@ export default function Search() {
           </li>
         ))}
       </ul>
-      <p className='mt-8 mb-1'>
-        Found {posts.length >= 20 ? '20+' : posts.length} post{posts.length === 1 ? '' : 's'}
-      </p>
+      {query && (
+        <p className='mt-8 mb-1'>
+          {posts.length >= 20 ? '20+' : posts.length} post{posts.length === 1 ? '' : 's'}
+        </p>
+      )}
       <PostList
         initialPosts={posts}
         getPageURL={page => `/search?index&q=${query}&page=${page}`}
