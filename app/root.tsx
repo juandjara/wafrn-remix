@@ -87,15 +87,13 @@ export default function App() {
         <GlobalSpinner />
         <ClientOnly>{() => (
           <>
-            <Toaster />
+            <Toaster containerClassName="toast-container" />
             <FlashMessage message={flashMessage} />
           </>
         )}</ClientOnly>
-        <div className="md:flex md:gap-3">
+        <div className="grid gap-3" style={{ gridTemplateColumns: 'min-content 1fr' }}>
           <Sidebar />
-          <div className="md:pl-80 flex-grow">
-            <Outlet />
-          </div>
+          <Outlet />
         </div>
         <ScrollRestoration />
         <Scripts />
