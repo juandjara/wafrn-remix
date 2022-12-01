@@ -72,9 +72,9 @@ export default function ReblogMenu({ post }: { post: Post }) {
       />
       <Menu.Items
         as={motion.ul}
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className='absolute z-10 bottom-full -right-1 mb-2 p-1 space-y-2 w-40 flex flex-col bg-white border border-stone-100 shadow-md rounded-md'
+        className='absolute z-10 top-full -right-1 mt-2 p-1 space-y-2 w-40 flex flex-col bg-white border border-stone-100 shadow-md rounded-md'
       >
         <Menu.Item as="li">
           {({ active }) => (
