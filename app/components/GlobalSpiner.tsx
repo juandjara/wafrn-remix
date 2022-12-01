@@ -10,6 +10,11 @@ export default function GlobalSpinner() {
     active ? 'translate-y-full' : 'translate-y-0'
   ].join(' ')
 
+  const innerCN = [
+    'w-full h-full bg-gradient-to-r from-purple-500 to-pink-500',
+    active ? 'animate-nprogress' : ''
+  ].join('')
+
   return (
     <div
       role="progressbar"
@@ -17,9 +22,7 @@ export default function GlobalSpinner() {
       aria-valuetext={active ? "Loading" : undefined}
       className={containerCN}
     >
-      <div
-        className="w-full h-full bg-gradient-to-r from-purple-500 to-pink-500 linearloading"
-      />
+      <div className={innerCN} />
     </div>
   )
 }

@@ -3,7 +3,21 @@ module.exports = {
   // darkMode: 'media',
   content: ["./app/**/*.{ts,tsx,js,jsx}"],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        nprogress: {
+          from: {
+            transform: 'translateX(-100%)'
+          },
+          to: {
+            transform: 'translateX(100%)'
+          }
+        },
+      },
+      animation: {
+        nprogress: 'nprogress 1.5s ease-out infinite'
+      }
+    },
   },
   plugins: [
     require('@tailwindcss/forms'),
