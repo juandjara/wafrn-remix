@@ -3,7 +3,7 @@ import PostList from '@/components/post/PostList'
 import type { Post } from '@/lib/api.server'
 import { getDashboard } from '@/lib/api.server'
 import { requireUserSession } from '@/lib/session.server'
-import { linkCN } from '@/lib/style'
+import { cardCN, linkCN } from '@/lib/style'
 import useUser from '@/lib/useUser'
 import useUserRelations from '@/lib/useUserRelations'
 import type { LoaderFunction} from '@remix-run/node'
@@ -37,9 +37,8 @@ export default function Dashboard() {
   
   return (
     <Container>
-      <h1 className='mb-4 text-4xl font-medium text-gray-500'>Dashboard</h1>
       {followingNoOne && (
-        <div className='mb-2'>
+        <div className={`mb-4 ${cardCN}`}>
           <p>
             You are following no one, so only your posts will be shown here.
             <br />

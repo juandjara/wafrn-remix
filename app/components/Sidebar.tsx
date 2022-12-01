@@ -29,7 +29,7 @@ const linkCNInverse = [
 ].join(' ')
 
 const navLinkCN = ({ isActive }: { isActive: boolean }) => [
-  isActive ? 'border-2 border-purple-200' : '',
+  isActive ? 'shadow-md' : '',
   linkCN
 ].join(' ')
 
@@ -86,7 +86,7 @@ export default function Sidebar() {
           {!user && (
             <li>
               <NavLink to="/login" className={navLinkCN}>
-                <LockClosedIcon className="w-6 h-6 text-purple-700" />
+                <LockClosedIcon className="w-6 h-6 text-purple-500" />
                 <span>Log in</span>
               </NavLink>
             </li>
@@ -101,21 +101,21 @@ export default function Sidebar() {
               </li>
               <li>
                 <NavLink to="/dashboard" className={navLinkCN}>
-                  <HomeIcon className='w-6 h-6 text-purple-700' />
-                  <span>Dashboard</span>
+                  <HomeIcon className='w-6 h-6 text-purple-500' />
+                  <span>Home</span>
                 </NavLink>
               </li>
             </>
           )}
           <li>
             <NavLink to="/explore" className={navLinkCN}>
-              <RectangleGroupIcon className="w-6 h-6 text-purple-700" />
+              <RectangleGroupIcon className="w-6 h-6 text-purple-500" />
               <span>Explore {user ? '' : 'without login'}</span>
             </NavLink>
           </li>
           <li>
             <NavLink to="/search" className={navLinkCN}>
-              <MagnifyingGlassIcon className="w-6 h-6 text-purple-700" />
+              <MagnifyingGlassIcon className="w-6 h-6 text-purple-500" />
               <span>Search a blog</span>
             </NavLink>
           </li>
@@ -123,13 +123,13 @@ export default function Sidebar() {
             <>
               <li>
                 <NavLink to={`/u/${user.url}`} className={navLinkCN}>
-                  <UserIcon className="w-6 h-6 text-purple-700" />
+                  <UserIcon className="w-6 h-6 text-purple-500" />
                   <span>My blog</span>
                 </NavLink>
               </li>
               <li>
                 <NavLink to={`/profile`} className={navLinkCN}>
-                  <UserCircleIcon className="w-6 h-6 text-purple-700" />
+                  <UserCircleIcon className="w-6 h-6 text-purple-500" />
                   <span>Edit Profile</span>
                 </NavLink>
               </li>
@@ -141,13 +141,13 @@ export default function Sidebar() {
               rel="noreferrer"
               href="https://patreon.com/wafrn"
               className={`${linkCN} bg-stone-50`}>
-              <CurrencyEuroIcon className="w-6 h-6 text-purple-700" />
+              <CurrencyEuroIcon className="w-6 h-6 text-purple-500" />
               <span>Give us some money</span>
             </a>
           </li>
           <li>
             <NavLink to="/source" className={navLinkCN}>
-              <CodeBracketSquareIcon className="w-6 h-6 text-purple-700" />
+              <CodeBracketSquareIcon className="w-6 h-6 text-purple-500" />
               <span>Check the source code</span>
             </NavLink>
           </li>

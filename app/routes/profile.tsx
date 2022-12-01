@@ -68,7 +68,7 @@ export default function Profile() {
 
   return (
     <Container>
-      <h1 className='mb-4 text-4xl font-medium text-gray-500'>Profile edit</h1>
+      <h1 className='mb-4 text-4xl font-medium text-gray-500'>Edit profile</h1>
       <Form
         method="post"
         encType="multipart/form-data"
