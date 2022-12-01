@@ -65,37 +65,37 @@ export default function Search() {
         </div>
       </Form>
       {query && (
-        <p className='mt-8 mb-1'>
-          {users.length >= 20 ? '20+' : users.length} user{users.length === 1 ? '' : 's'}
-        </p>
+        <>
+          <p className='mt-8 mb-1'>
+            {users.length >= 20 ? '20+' : users.length} user{users.length === 1 ? '' : 's'}
+          </p>
+          <ul className='space-y-4'>
+            {users.map((user) => (
+              <li key={user.url} className="flex items-start gap-4 bg-white px-4 py-3 rounded-md border border-stone-300">
+                <img
+                  alt='avatar'
+                  loading='lazy'
+                  className='w-12 h-12 rounded-lg flex-shrink-0 my-1'
+                  src={MEDIA_URL.concat(user.avatar)}
+                />
+                <div className="flex-grow">
+                  <Link className='text-purple-700 text-lg hover:underline' to={`/u/${user.url}`}>
+                    {user.url}
+                  </Link>
+                  <p className='mt-1'>{user.description}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <p className='mt-8 mb-1'>
+            {posts.length >= 20 ? '20+' : posts.length} post{posts.length === 1 ? '' : 's'}
+          </p>
+          <PostList
+            initialPosts={posts}
+            getPageURL={page => `/search?index&q=${query}&page=${page}`}
+          />  
+        </>
       )}
-      <ul className='space-y-4'>
-        {users.map((user) => (
-          <li key={user.url} className="flex items-start gap-4 bg-white px-4 py-3 rounded-md border border-stone-300">
-            <img
-              alt='avatar'
-              loading='lazy'
-              className='w-12 h-12 rounded-lg flex-shrink-0 my-1'
-              src={MEDIA_URL.concat(user.avatar)}
-            />
-            <div className="flex-grow">
-              <Link className='text-purple-700 text-lg hover:underline' to={`/u/${user.url}`}>
-                {user.url}
-              </Link>
-              <p className='mt-1'>{user.description}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
-      {query && (
-        <p className='mt-8 mb-1'>
-          {posts.length >= 20 ? '20+' : posts.length} post{posts.length === 1 ? '' : 's'}
-        </p>
-      )}
-      <PostList
-        initialPosts={posts}
-        getPageURL={page => `/search?index&q=${query}&page=${page}`}
-      />
     </Container>
   )
 }
