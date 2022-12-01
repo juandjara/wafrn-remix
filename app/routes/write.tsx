@@ -1,19 +1,17 @@
 import Container from "@/components/Container"
-import type { UploadedMedia } from "@/components/editor/ImageUpload"
-import type { PostEditorMention } from "@/components/editor/PostEditor"
 import PostCard from "@/components/post/PostCard"
 import Spinner from "@/components/Spinner"
 import type { Post } from "@/lib/api.server"
-import { createPost, getPost } from "@/lib/api.server"
+import { getPost } from "@/lib/api.server"
 import env from "@/lib/env.server"
-import { requireUserSession, setFlashMessage } from "@/lib/session.server"
+import { requireUserSession } from "@/lib/session.server"
 import { buttonCN, cardCN, inputCN, labelCN } from "@/lib/style"
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline"
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node"
+import type { LoaderFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { useFetcher, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react"
+import { useFetcher, useLoaderData, useSearchParams } from "@remix-run/react"
 import type { FormEvent} from "react"
-import { lazy, useEffect, useRef } from "react"
+import { lazy, useRef } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
 import { ClientOnly } from "remix-utils"
 
@@ -41,68 +39,21 @@ export const loader: LoaderFunction = async ({ request }) => {
   })
 }
 
-export const action: ActionFunction = async ({ request }) => {
-  const { token } = await requireUserSession(request)
-  const formData = await request.formData()
-
-  formData.set('captchaKey', formData.get('g-recaptcha-response') as string)
-  formData.delete('g-recaptcha-response')
-
-  let content = formData.get('content') as string || ''
-  content = content.replaceAll('﻿', '')
-
-  let files = JSON.parse(formData.get('files') as string || '[]') as UploadedMedia[]
-  for (const file of files) {
-    if (content.includes(file.html)) {
-      content = content.replace(file.html, `[wafrnmediaid="${file.id}"]`)
-    }
-  }
-
-  const mentions = JSON.parse(formData.get('mentions') as string || '[]') as PostEditorMention[]
-  for (const mention of mentions) {
-    if (content.includes(mention.html)) {
-      content = content.replace(mention.html, `[mentionuserid="${mention.id}"]`)
-    }
-  }
-
-  formData.set('content', content)
-
-  try {
-    await createPost(token, formData)
-    const cookie = await setFlashMessage(request, 'Yay! :D Your post has been published!')
-    return redirect('/', {
-      headers: {
-        'Set-Cookie': cookie
-      }
-    })
-  } catch(err) {
-    console.error('ERROR', err)
-    return json({ success: false, error: err })
-  }
-}
-
 export default function Write() {
   const [sp] = useSearchParams()
   const parent = sp.get('parent') as string
   const { reblog, recaptchaKey } = useLoaderData<LoaderData>()
   const recaptchaRef = useRef<ReCAPTCHA>(null)
-  const navigate = useNavigate()
   const fetcher = useFetcher()
   const busy = fetcher.state !== 'idle'
   const hasError = fetcher.data?.error
-
-  useEffect(() => {
-    if (fetcher.data?.success) {
-      // @ts-ignore
-      navigate(-1, { replace: true })
-    }
-  }, [fetcher, navigate])
 
   async function handleSubmit(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
     await recaptchaRef.current?.executeAsync()
     const fd = new FormData(ev.target as HTMLFormElement)
     fetcher.submit(fd, {
+      action: '/api/write',
       method: 'post',
       encType: 'multipart/form-data'
     })
@@ -115,7 +66,7 @@ export default function Write() {
       </h1>
       <div className={`${cardCN} relative`}>
         <div id="portal-root"></div>
-        <fetcher.Form method="post" onSubmit={handleSubmit}>
+        <fetcher.Form action="/api/write" method="post" onSubmit={handleSubmit}>
           <ClientOnly>{() => <PostEditor />}</ClientOnly>
           <input type="hidden" name="parent" value={parent || ''} />
           <div className="mt-6">
