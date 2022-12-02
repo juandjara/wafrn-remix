@@ -38,7 +38,7 @@ export default function DeleteModal({ postId, open, onClose }: DeleteModalProps)
             <button
               type="button"
               onClick={onClose}
-              className={`${buttonCN.normal} ${buttonCN.cancel}`}
+              className={`hover:shadow-md ${buttonCN.normal} ${buttonCN.cancel}`}
             >
               Cancel
             </button>
@@ -46,7 +46,7 @@ export default function DeleteModal({ postId, open, onClose }: DeleteModalProps)
               ref={buttonRef}
               disabled={busy}
               type="submit"
-              className={`${buttonCN.normal} ${buttonCN.delete}`}
+              className={`hover:shadow-md ${buttonCN.normal} ${buttonCN.delete}`}
             >
               Delete
             </button>
