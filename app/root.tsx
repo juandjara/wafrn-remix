@@ -113,7 +113,7 @@ export default function App() {
           </>
         )}</ClientOnly>
         <NotificationCount notifications={notifications} />
-        <div className="md:grid gap-3" style={{ gridTemplateColumns: 'min-content 1fr' }}>
+        <div className="md:grid gap-8" style={{ gridTemplateColumns: 'min-content 1fr' }}>
           <Sidebar />
           <Outlet />
         </div>

@@ -38,7 +38,7 @@ export default function Dashboard() {
   return (
     <Container>
       {followingNoOne && (
-        <div className={`mb-4 ${cardCN}`}>
+        <div className={`mb-6 ${cardCN}`}>
           <p>
             You are following no one, so only your posts will be shown here.
             <br />
