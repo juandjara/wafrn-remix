@@ -21,7 +21,6 @@ export default function PostActions({ post, onDelete }: { post: Post; onDelete: 
   const user = useUser()
 
   function copyLink() {
-    console.log('copying link for ', post.id)
     const url = new URL(window.location.origin)
     url.pathname = `/p/${post.id}`
     navigator.clipboard.writeText(url.toString())
