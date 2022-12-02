@@ -27,6 +27,13 @@ export default function PostActions({ post, onDelete }: { post: Post; onDelete: 
     navigator.clipboard.writeText(url.toString())
     toast.success('Post link copied to your clipboard', { duration: 5000 })
   }
+
+  function itemCN(active: boolean) {
+    return clsx(
+      'w-full flex items-center gap-3 py-1 px-2 rounded-md',
+      { 'dark:bg-stone-600 bg-purple-100': active }
+    )
+  }
   
   return (
     <Menu as='div' className='relative'>
@@ -37,14 +44,14 @@ export default function PostActions({ post, onDelete }: { post: Post; onDelete: 
         as={motion.ul}
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className='absolute z-10 top-full right-0 mt-2 p-1 space-y-2 w-44 flex flex-col bg-white border border-stone-100 shadow-md rounded-md'
+        className='absolute z-10 top-full right-0 mt-2 p-1 space-y-2 w-44 flex flex-col bg-white dark:bg-stone-700 border dark:border-stone-500 border-stone-100 text-purple-900 dark:text-purple-50 shadow-md rounded-md'
       >
         <Menu.Item as="li">
           {({ active }) => (
             <button 
               onClick={copyLink}
-              className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
-              <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+              className={itemCN(active)}>
+              <svg className="w-5 h-5 text-purple-500 dark:text-purple-300" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M13 4.5a2.5 2.5 0 11.702 1.737L6.97 9.604a2.518 2.518 0 010 .792l6.733 3.367a2.5 2.5 0 11-.671 1.341l-6.733-3.367a2.5 2.5 0 110-3.475l6.733-3.366A2.52 2.52 0 0113 4.5z" />
               </svg>
               <p>Copy post link</p> 
@@ -55,17 +62,17 @@ export default function PostActions({ post, onDelete }: { post: Post; onDelete: 
           {({ active }) => (
             <Link
               to={`/write?parent=${post.id}`} 
-              className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}
+              className={itemCN(active)}
             >
-              <ReblogIcon className="w-5 h-5" />           
+              <ReblogIcon className="w-5 h-5 text-purple-500 dark:text-purple-300" />           
               <p>Reblog</p>
             </Link>
           )}
         </Menu.Item>
         <Menu.Item as="li">
           {({ active }) => (
-            <Link to={`/report/${post.id}`} className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
-              <ReportIcon className="w-5 h-5" />
+            <Link to={`/report/${post.id}`} className={itemCN(active)}>
+              <ReportIcon className="w-5 h-5 text-purple-500 dark:text-purple-300" />
               <p>Report</p>
             </Link>
           )}
@@ -73,8 +80,8 @@ export default function PostActions({ post, onDelete }: { post: Post; onDelete: 
         {user?.userId === post.userId && (
           <Menu.Item as="li">
             {({ active }) => (
-              <button onClick={onDelete} className={clsx('w-full flex items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}>
-                <TrashIcon className="w-5 h-5" />
+              <button onClick={onDelete} className={itemCN(active)}>
+                <TrashIcon className="w-5 h-5 text-purple-500 dark:text-purple-300" />
                 <p>Delete post</p>
               </button>
             )}

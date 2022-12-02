@@ -1,5 +1,4 @@
 import type { Post } from "@/lib/api.server"
-import { shadowCN } from "@/lib/style"
 import useCaptchaKey from "@/lib/UseCaptchaKey"
 import { Menu } from "@headlessui/react"
 import { Link, useFetcher } from "@remix-run/react"
@@ -61,9 +60,16 @@ export default function ReblogMenu({ post }: { post: Post }) {
     }
   }
 
+  function itemCN(active: boolean) {
+    return clsx(
+      'w-full flex justify-end items-center gap-3 py-1 px-2 rounded-md',
+      { 'dark:bg-stone-600 bg-purple-100': active }
+    )
+  }
+
   return (
     <Menu as='div' className='relative'>
-      <Menu.Button className={`p-1.5 dark:text-purple-400 text-purple-900 ${shadowCN} hover:bg-purple-50 rounded-md`}>
+      <Menu.Button className={`p-1.5 dark:hover:bg-stone-600 hover:bg-purple-50 hover:shadow-md rounded-md`}>
         <QuickReblogIcon className="w-5 h-5" />
       </Menu.Button>
       <ReCAPTCHA
@@ -75,16 +81,16 @@ export default function ReblogMenu({ post }: { post: Post }) {
         as={motion.ul}
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className='absolute z-10 top-full -right-1 mt-2 p-1 space-y-2 w-40 flex flex-col bg-white border border-stone-100 shadow-md rounded-md'
+        className='absolute z-10 top-full -right-1 mt-2 p-1 space-y-2 w-40 flex flex-col bg-white dark:bg-stone-700 border dark:border-stone-500 border-stone-100 text-purple-900 dark:text-purple-50 shadow-md rounded-md'
       >
         <Menu.Item as="li">
           {({ active }) => (
             <Link
               to={`/write?parent=${post.id}`} 
-              className={clsx('w-full flex justify-end items-center gap-2 py-1 px-2 text-purple-900 rounded-md', { 'bg-purple-100': active })}
+              className={itemCN(active)}
             >
               <p className="text-right">Reblog</p>
-              <ReblogIcon className="w-5 h-5" />           
+              <ReblogIcon className="w-5 h-5 text-purple-500 dark:text-purple-300" />           
             </Link>
           )}
         </Menu.Item>
@@ -93,13 +99,10 @@ export default function ReblogMenu({ post }: { post: Post }) {
             <button
               disabled={loading}
               onClick={submitReblog}
-              className={clsx(
-                'w-full flex justify-end items-center gap-2 py-1 px-2 text-purple-900 rounded-md',
-                { 'bg-purple-100': active }
-              )}
+              className={itemCN(active)}
             >
               <p className="text-right">Quick Reblog</p>
-              <QuickReblogIcon className="w-5 h-5" />           
+              <QuickReblogIcon className="w-5 h-5 text-purple-500 dark:text-purple-300" />           
             </button>
           )}
         </Menu.Item>

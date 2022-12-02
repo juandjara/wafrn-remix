@@ -125,14 +125,14 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
           <ReblogMenu post={post} />
           <Link 
             to={`/report/${post.id}`}
-            className={`p-1.5 hover:bg-purple-50 ${shadowCN} rounded-md`}
+            className={`p-1.5 dark:hover:bg-stone-600 hover:bg-purple-50 hover:shadow-md rounded-md`}
             title="Report">
             <ReportIcon className="w-5 h-5" />
           </Link>
           {user?.userId === post.userId && (
             <button
               onClick={() => setDeleteModalOpen(post.id)}
-              className={`p-1.5 hover:bg-purple-50 ${shadowCN} rounded-md`}
+              className={`p-1.5 dark:hover:bg-stone-600 hover:bg-purple-50 hover:shadow-md rounded-md`}
               title="Delete Post"
             >
               <TrashIcon className="w-5 h-5" />
