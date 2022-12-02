@@ -1,4 +1,3 @@
-import type { Post } from "@/lib/api.server"
 import { linkCN } from "@/lib/style"
 import { Link } from "@remix-run/react"
 import type { HTMLProps} from 'react'
@@ -8,10 +7,10 @@ import { createElement, Fragment, useEffect, useState } from 'react'
 import Embed from "../embed/Embed"
 import MediaWrapper from "./MediaWrapper"
 
-export default function PostContent({ post }: { post: Post }) {
+export default function PostContent({ content }: { content: string }) {
   return (
     <div className='ql-editor' style={{ padding: '8px 0 24px 0' }}>
-      {useProcessor(post.content)}
+      {useProcessor(content)}
     </div>
   )
 }

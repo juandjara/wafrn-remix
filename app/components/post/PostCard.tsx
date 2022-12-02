@@ -98,7 +98,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
             <FollowButton userId={post.userId} size='small' hideWhenFollowing />
             <PostActions post={post} onDelete={() => setDeleteModalOpen(post.id)} />
           </div>
-          <PostContent post={post} />
+          <PostContent content={post.content} />
           <div className='mt-2 flex items-center gap-2 flex-wrap'>
             <span className="text-xs font-medium text-stone-500">
               {post.createdAt && (
