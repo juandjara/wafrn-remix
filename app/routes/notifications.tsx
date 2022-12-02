@@ -1,14 +1,35 @@
 import Container from "@/components/Container"
+import { readNotifications } from "@/lib/api.server"
 import { MEDIA_URL } from "@/lib/config"
+import { requireUserSession } from "@/lib/session.server"
 import { buttonCN, headingCN, linkCN } from "@/lib/style"
 import type { RootLoaderData } from "@/root"
 import { ArrowPathRoundedSquareIcon, AtSymbolIcon, ChatBubbleLeftIcon, UserPlusIcon } from "@heroicons/react/24/outline"
-import { Link, useMatches } from "@remix-run/react"
+import { ActionFunction, json, LoaderFunction } from "@remix-run/node"
+import { Form, Link, useLoaderData, useMatches, useTransition } from "@remix-run/react"
 import { motion } from 'framer-motion'
+
+type LoaderData = { time: number }
+
+export const loader: LoaderFunction = () => {
+  return json<LoaderData>({
+    time: new Date().getTime()
+  })
+}
+
+export const action: ActionFunction = async ({ request }) => {
+  const { token } = await requireUserSession(request)
+  const form = await request.formData()
+  await readNotifications(token, form)
+  return json({ success: true })
+}
 
 export default function Notifications() {
   const m = useMatches()
   const { notifications } = m[0].data as RootLoaderData
+  const { time } = useLoaderData<LoaderData>()
+  const transition = useTransition()
+  const loading = transition.state !== 'idle'
 
   const mentions = notifications.mentions.map((m) => ({
     type: 'mention',
@@ -46,10 +67,16 @@ export default function Notifications() {
   return (
     <Container>
       <h1 className={headingCN}>Notifications</h1>
-      <button className={`${buttonCN.normal} ${buttonCN.primary}`}>
-        Clear all notifications
-      </button>
+      <Form method="post">
+        <input type="hidden" name="time" value={time} />
+        <button type="submit" disabled={loading} className={`mb-8 ${buttonCN.normal} ${buttonCN.primary}`}>
+          Mark all as read
+        </button>
+      </Form>
       <ul className="divide-y divide-stone-300">
+        {items.length === 0 && (
+          <p>Nothing to show here</p>
+        )}
         {items.map((item) => (
           <motion.li 
             key={item.id}

@@ -563,3 +563,31 @@ export async function getNotifications(token: string) {
 
   return data
 }
+
+export async function readNotifications(token: string, form: FormData) {
+  const url = `${API_URL}/readNotifications`
+  const res = await fetch(url, {
+    body: form,
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+
+  if (!res.ok) {
+    throw new Response('Error calling API at /readNotifications - bad status code', { status: res.status, statusText: res.statusText })
+  }
+
+  try {
+    const text = await res.text()
+    const data = JSON.parse(text)
+
+    if (data.success === false) {
+      throw new Response('Error calling API at /readNotifications - bad success response', { status: 500, statusText: 'Server Error' })
+    }
+  
+    return data
+  } catch (err) {
+    throw err
+  }
+}
