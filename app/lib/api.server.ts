@@ -544,3 +544,22 @@ export async function deletePost(token: string, postId: string) {
     throw err
   }
 }
+
+export async function getNotifications(token: string) {
+  const res = await fetch(`${API_URL}/notifications`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+
+  if (!res.ok) {
+    throw new Response('Error calling API at /notifications - bad status code', { status: res.status, statusText: res.statusText })
+  }
+
+  const data = await res.json()
+  if (data.success === false) {
+    throw new Response('Error calling API at /deletePost - bad success response', { status: 500, statusText: 'Server Error' })
+  }
+
+  return data
+}

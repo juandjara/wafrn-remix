@@ -17,12 +17,15 @@ import GlobalSpinner from "./components/GlobalSpiner"
 import LiveReload from "./components/LiveReload"
 import Sidebar from "./components/Sidebar"
 import type { UserRelations } from "./lib/api.server"
+import { getNotifications } from "./lib/api.server"
 import { getUserRelations } from "./lib/api.server"
 import type { User } from "./lib/session.server"
 import { getFlashMessage, getSessionData } from "./lib/session.server"
 import tailwind from "./tailwind.css"
 import quillCSS from 'quill/dist/quill.snow.css'
 import env from "./lib/env.server"
+import type { Notifications } from "./components/NotificationCount"
+import NotificationCount from "./components/NotificationCount"
 
 export function links() {
   return [
@@ -50,6 +53,7 @@ export type RootLoaderData = {
   relations: UserRelations
   flashMessage: string
   recaptchaKey: string
+  notifications: Notifications
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -58,8 +62,19 @@ export const loader: LoaderFunction = async ({ request }) => {
     followedUsers: [] as string[],
     blockedUsers: [] as string[]
   }
+  let notifications = {
+    follows: [],
+    mentions: [],
+    reblogs: []
+  }
   if (user && token) {
-    relations = await getUserRelations(token)
+    const data = await Promise.all([
+      getUserRelations(token),
+      getNotifications(token)
+    ])
+
+    relations = data[0]
+    notifications = data[1]
   }
 
   const { flashMessage, newCookie } = await getFlashMessage(request)
@@ -68,7 +83,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     {
       user,
       relations,
-      flashMessage, 
+      flashMessage,
+      notifications,
       recaptchaKey: env.recaptchaKey 
     },
     { headers: { 'Set-Cookie': newCookie } }
@@ -76,7 +92,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export default function App() {
-  const { flashMessage } = useLoaderData<RootLoaderData>()
+  const { flashMessage, notifications } = useLoaderData<RootLoaderData>()
   return (
     <html lang="en">
       <head>
@@ -96,6 +112,7 @@ export default function App() {
             <FlashMessage message={flashMessage} />
           </>
         )}</ClientOnly>
+        <NotificationCount notifications={notifications} />
         <div className="md:grid gap-3" style={{ gridTemplateColumns: 'min-content 1fr' }}>
           <Sidebar />
           <Outlet />
