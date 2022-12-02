@@ -56,7 +56,7 @@ export default function Sidebar() {
       </Link>
       {user && <UserMenu user={user} />}
       <nav className='px-4 py-4'>
-        <ul className="space-y-4 text-purple-900 dark:text-purple-400">
+        <ul className="space-y-4 text-purple-900 dark:text-purple-200">
           {!user && (
             <li>
               <NavLink to="/login" className={navLinkCN}>
