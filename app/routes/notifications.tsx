@@ -1,6 +1,6 @@
 import Container from "@/components/Container"
 import { MEDIA_URL } from "@/lib/config"
-import { buttonCN } from "@/lib/style"
+import { buttonCN, headingCN, linkCN } from "@/lib/style"
 import type { RootLoaderData } from "@/root"
 import { ArrowPathRoundedSquareIcon, AtSymbolIcon, ChatBubbleLeftIcon, UserPlusIcon } from "@heroicons/react/24/outline"
 import { Link, useMatches } from "@remix-run/react"
@@ -45,7 +45,7 @@ export default function Notifications() {
 
   return (
     <Container>
-      <h1 className='mb-4 text-4xl font-medium text-gray-500'>Notifications</h1>
+      <h1 className={headingCN}>Notifications</h1>
       <button className={`${buttonCN.normal} ${buttonCN.primary}`}>
         Clear all notifications
       </button>
@@ -79,13 +79,13 @@ export default function Notifications() {
               </span>
             </div>
             <div className="flex-grow truncate">
-              <Link className="hover:underline" to={item.type === 'follow' ? `/u/${item.user.url}` : `/p/${item.id}`}>
-                <span className="text-purple-700">@{item.user.url}</span>
+              <Link to={item.type === 'follow' ? `/u/${item.user.url}` : `/p/${item.id}`}>
+                <span className={linkCN}>@{item.user.url}</span>
                 {' '}
-                {item.type === 'follow' && 'is now following you!'}
-                {item.type === 'reply' && 'has replied to your post'}
-                {item.type === 'reblog' && 'has rebloged your post'}
-                {item.type === 'mention' && 'has mentioned you in a post'}
+                {item.type === 'follow' && <span className="hover:underline">is now following you!</span>}
+                {item.type === 'reply' && <span className="hover:underline">has replied to your post</span>}
+                {item.type === 'reblog' && <span className="hover:underline">has rebloged your post</span>}
+                {item.type === 'mention' && <span className="hover:underline">has mentioned you in a post</span>}
               </Link>
               <p className="text-xs mt-1 font-medium text-stone-500">
                 {item.date.toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })}

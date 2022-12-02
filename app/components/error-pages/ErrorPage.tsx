@@ -15,8 +15,8 @@ export default function ErrorPage({ title, details }: { title: React.ReactNode; 
         <Meta />
         <Links />
       </head>
-      <body>
-        <div className="h-screen flex flex-col items-center justify-center text-slate-700 text-center">
+      <body className="dark:text-stone-100 text-stone-700 dark:bg-stone-800 bg-white">
+        <div className="h-screen flex flex-col items-center justify-center dark:text-stone-100 text-stone-700 text-center">
           <p className="text-4xl">
             <span>Whoops!</span>
             <span className="inline-block ml-2" role='img' aria-label='Worried face'>😟</span>

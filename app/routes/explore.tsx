@@ -2,6 +2,7 @@ import Container from '@/components/Container'
 import PostList from '@/components/post/PostList'
 import type { Post } from '@/lib/api.server'
 import { getExplore } from '@/lib/api.server'
+import { headingCN } from '@/lib/style'
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
@@ -29,7 +30,7 @@ export default function Explore() {
 
   return (
     <Container>
-      <h1 className='mb-4 text-4xl font-medium text-gray-500'>Explore</h1>
+      <h1 className={headingCN}>Explore</h1>
       <PostList
         initialPosts={posts}
         getPageURL={page => `/explore?index&page=${page}&startScroll=${startScroll}`}

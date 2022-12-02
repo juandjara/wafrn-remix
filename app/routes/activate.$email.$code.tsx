@@ -1,7 +1,7 @@
 import Container from "@/components/Container"
 import { activate } from "@/lib/api.server"
 import { setFlashMessage } from "@/lib/session.server"
-import { buttonCN, cardCN } from "@/lib/style"
+import { buttonCN, cardCN, headingCN } from "@/lib/style"
 import type { ActionFunction} from "@remix-run/node"
 import { redirect } from "@remix-run/node"
 import { useFetcher } from "@remix-run/react"
@@ -34,7 +34,7 @@ export default function Activate() {
 
   return (
     <Container>
-      <h1 className='mb-4 text-4xl font-medium text-gray-500'>
+      <h1 className={headingCN}>
         Activate account
       </h1>
       <div className={cardCN}>

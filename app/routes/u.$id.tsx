@@ -5,6 +5,7 @@ import type { Post, UserDetails } from '@/lib/api.server'
 import { getDetails } from '@/lib/api.server'
 import { getBlog } from '@/lib/api.server'
 import { MEDIA_URL } from '@/lib/config'
+import { cardCN } from '@/lib/style'
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
@@ -44,9 +45,9 @@ export default function Blog() {
 
   return (
     <Container>
-      <div className='bg-white border border-stone-300 rounded-md p-4 mb-8 flex flex-col items-center'>
+      <div className={`${cardCN} mb-8 flex flex-col items-center`}>
         <img alt="" src={MEDIA_URL.concat(detail.avatar)} className="h-40 rounded-md border-stone-300" />
-        <p className='mt-2 text-xl text-purple-900 font-medium'>{detail.url}</p>
+        <p className='mt-2 text-xl text-purple-900 dark:text-purple-400 font-medium'>{detail.url}</p>
         <p className='my-8'>{detail.description}</p>
         <FollowButton userId={detail.id} />
       </div>

@@ -4,7 +4,7 @@ import Spinner from '@/components/Spinner'
 import type { Post, PostUser} from '@/lib/api.server'
 import { searchPosts } from '@/lib/api.server'
 import { MEDIA_URL } from '@/lib/config'
-import { buttonCN, cardCN, inputCN } from '@/lib/style'
+import { buttonCN, cardCN, headingCN, inputCN, labelCN, linkCN } from '@/lib/style'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import type { ActionFunction, LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
@@ -44,14 +44,14 @@ export default function Search() {
 
   return (
     <Container>
-      <h1 className='mb-4 text-4xl font-medium text-gray-500'>
+      <h1 className={headingCN}>
         {query ? `Searching for "${query}"` : 'Search'}
       </h1>  
       <Form className={cardCN}>
         <p className='mt-4 mb-8'>
           You can search for users by url and description, and posts by tags. No need to add # to your search. Have fun!
         </p>
-        <label htmlFor="q" className='text-stone-500 mb-1 block text-xs'>Search term</label>
+        <label htmlFor="q" className={`${labelCN} mb-1`}>Search term</label>
         <div className='flex items-center gap-2'>
           <input autoFocus type="search" className={`${inputCN} flex-grow`} name="q" defaultValue={query} />
           <button
@@ -71,7 +71,7 @@ export default function Search() {
           </p>
           <ul className='space-y-4'>
             {users.map((user) => (
-              <li key={user.url} className="flex items-start gap-4 bg-white px-4 py-3 rounded-md border border-stone-300">
+              <li key={user.url} className={`flex items-start gap-4 ${cardCN}`}>
                 <img
                   alt='avatar'
                   loading='lazy'
@@ -79,7 +79,7 @@ export default function Search() {
                   src={MEDIA_URL.concat(user.avatar)}
                 />
                 <div className="flex-grow">
-                  <Link className='text-purple-700 text-lg hover:underline' to={`/u/${user.url}`}>
+                  <Link className={`${linkCN} text-lg`} to={`/u/${user.url}`}>
                     {user.url}
                   </Link>
                   <p className='mt-1'>{user.description}</p>

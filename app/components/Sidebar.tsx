@@ -1,4 +1,5 @@
 import type { User } from '@/lib/session.server'
+import { shadowCN } from '@/lib/style'
 import useUser from '@/lib/useUser'
 import { Menu, Transition } from '@headlessui/react'
 import {
@@ -22,7 +23,7 @@ import LogoutButton from './LogoutButton'
 const linkCN = [
   'flex items-center gap-3',
   'font-medium',
-  'bg-stone-50 hover:bg-purple-100 rounded-lg p-2'
+  'bg-stone-50 dark:bg-stone-600 hover:bg-purple-100 dark:hover:bg-stone-500 rounded-lg p-2'
 ].join(' ')
 
 const linkCNInverse = [
@@ -32,7 +33,7 @@ const linkCNInverse = [
 ].join(' ')
 
 const navLinkCN = ({ isActive }: { isActive: boolean }) => [
-  isActive ? 'shadow-md ring-1 ring-purple-400' : '',
+  isActive ? 'shadow-md dark:shadow dark:shadow-purple-300 ring-1 ring-purple-400' : '',
   linkCN
 ].join(' ')
 
@@ -41,7 +42,8 @@ const navLinkCNInverse = ({ isActive }: { isActive: boolean }) => [
   linkCNInverse
 ].join(' ')
 
-const sidebarCN = 'w-80'
+const sidebarCN = 'w-80 bg-white dark:bg-stone-700'
+const iconCN = 'w-6 h-6 text-purple-500 dark:text-purple-300'
 
 export default function Sidebar() {
   const user = useUser()
@@ -54,11 +56,11 @@ export default function Sidebar() {
       </Link>
       {user && <UserMenu user={user} />}
       <nav className='px-4 py-4'>
-        <ul className="space-y-4 text-purple-900">
+        <ul className="space-y-4 text-purple-900 dark:text-purple-400">
           {!user && (
             <li>
               <NavLink to="/login" className={navLinkCN}>
-                <LockClosedIcon className="w-6 h-6 text-purple-500" />
+                <LockClosedIcon className={iconCN} />
                 <span>Log in</span>
               </NavLink>
             </li>
@@ -73,7 +75,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <NavLink to="/dashboard" className={navLinkCN}>
-                  <HomeIcon className='w-6 h-6 text-purple-500' />
+                  <HomeIcon className={iconCN} />
                   <span>Home</span>
                 </NavLink>
               </li>
@@ -81,13 +83,13 @@ export default function Sidebar() {
           )}
           <li>
             <NavLink to="/explore" className={navLinkCN}>
-              <RectangleGroupIcon className="w-6 h-6 text-purple-500" />
+              <RectangleGroupIcon className={iconCN} />
               <span>Explore {user ? '' : 'without login'}</span>
             </NavLink>
           </li>
           <li>
             <NavLink to="/search" className={navLinkCN}>
-              <MagnifyingGlassIcon className="w-6 h-6 text-purple-500" />
+              <MagnifyingGlassIcon className={iconCN} />
               <span>Search</span>
             </NavLink>
           </li>
@@ -95,13 +97,13 @@ export default function Sidebar() {
             <>
               <li>
                 <NavLink to={`/u/${user.url}`} className={navLinkCN}>
-                  <UserIcon className="w-6 h-6 text-purple-500" />
+                  <UserIcon className={iconCN} />
                   <span>My blog</span>
                 </NavLink>
               </li>
               <li>
                 <NavLink to={`/profile`} className={navLinkCN}>
-                  <UserCircleIcon className="w-6 h-6 text-purple-500" />
+                  <UserCircleIcon className={iconCN} />
                   <span>Edit Profile</span>
                 </NavLink>
               </li>
@@ -113,13 +115,13 @@ export default function Sidebar() {
               rel="noreferrer"
               href="https://patreon.com/wafrn"
               className={linkCN}>
-              <CurrencyEuroIcon className="w-6 h-6 text-purple-500" />
+              <CurrencyEuroIcon className={iconCN} />
               <span>Give us some money</span>
             </a>
           </li>
           <li>
             <NavLink to="/source" className={navLinkCN}>
-              <CodeBracketSquareIcon className="w-6 h-6 text-purple-500" />
+              <CodeBracketSquareIcon className={iconCN} />
               <span>Check the source code</span>
             </NavLink>
           </li>
@@ -135,7 +137,7 @@ export default function Sidebar() {
         <span className='sr-only'>Open menu</span>
       </button>
       <Drawer open={open} setOpen={setOpen}>{sidebarContent}</Drawer>
-      <aside className={`hidden md:block ${sidebarCN} sticky top-0 self-start bg-white min-h-screen`}>
+      <aside className={`hidden md:block ${sidebarCN} sticky top-0 self-start min-h-screen`}>
         {sidebarContent}
       </aside>
     </div>
@@ -177,11 +179,11 @@ function Drawer({ open, setOpen, children }: { open: boolean, setOpen: (b: boole
 function UserMenu({ user }: { user: User }) {
   return (
     <div className='p-4 pb-0 flex items-center justify-between'>
-      <NavLink to={`/u/${user.url}`} className='font-medium text-purple-900'>@{user.url}</NavLink>
+      <NavLink to={`/u/${user.url}`} className='font-medium text-purple-900 dark:text-purple-400'>@{user.url}</NavLink>
       <Menu as='div' className='relative'>
         {({ open }) => (
           <>  
-            <Menu.Button className='p-1.5 text-purple-900 bg-purple-50 hover:bg-purple-100 hover:shadow-md rounded-md'>
+            <Menu.Button className={`p-1.5 text-purple-900 bg-purple-50 dark:bg-purple-200 hover:bg-purple-100 ${shadowCN} rounded-md`}>
               <EllipsisHorizontalIcon className="h-6 w-6" />
             </Menu.Button>
             <Transition

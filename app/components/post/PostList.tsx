@@ -66,7 +66,7 @@ export default function PostList({ initialPosts, getPageURL, noMoreMessage = 'No
         </ul>
       </AnimatePresence>
       {isLastPage ? (
-        <p className="text-stone-500 font-medium mt-4">{noMoreMessage}</p>
+        <p className="text-stone-500 dark:text-stone-300 font-medium mt-4">{noMoreMessage}</p>
       ) : (
         <div ref={intersectionRef}>
           <Spinner className='my-8 mx-auto' size='h-12 w-12' />

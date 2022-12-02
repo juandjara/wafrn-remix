@@ -5,7 +5,7 @@ import type { Post } from "@/lib/api.server"
 import { getPost } from "@/lib/api.server"
 import env from "@/lib/env.server"
 import { requireUserSession } from "@/lib/session.server"
-import { buttonCN, cardCN, inputCN, labelCN } from "@/lib/style"
+import { buttonCN, cardCN, headingCN, inputCN, labelCN } from "@/lib/style"
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline"
 import type { LoaderFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
@@ -61,7 +61,7 @@ export default function Write() {
 
   return (
     <Container>
-      <h1 className='mb-4 text-4xl font-medium text-gray-500'>
+      <h1 className={headingCN}>
         {reblog ? 'Reblog post' : 'Write new post'}  
       </h1>
       <div className={`${cardCN} relative`}>

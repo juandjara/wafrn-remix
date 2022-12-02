@@ -104,7 +104,7 @@ export default function App() {
           }
         `}</style>
       </head>
-      <body className="bg-stone-100">
+      <body className="dark:text-stone-100 text-stone-700 dark:bg-stone-800 bg-stone-100">
         <GlobalSpinner />
         <ClientOnly>{() => (
           <>

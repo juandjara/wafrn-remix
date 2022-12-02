@@ -1,5 +1,5 @@
 import Container from "@/components/Container"
-import { cardCN } from "@/lib/style"
+import { cardCN, headingCN } from "@/lib/style"
 import { Transition } from "@headlessui/react"
 import { useSearchParams } from "@remix-run/react"
 
@@ -16,7 +16,7 @@ export default function MailSent() {
 
   return (
     <Container>
-      <h1 className='mb-4 text-4xl font-medium text-gray-500'>Email sent!</h1>
+      <h1 className={headingCN}>Email sent!</h1>
       <div className={cardCN}>
         <div className="flex flex-col justify-center p-2 text-center">
           <Transition

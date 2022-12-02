@@ -2,7 +2,7 @@ import Container from "@/components/Container"
 import Spinner from "@/components/Spinner"
 import { requestPasswordChange } from "@/lib/api.server"
 import env from "@/lib/env.server"
-import { buttonCN, cardCN, inputCN } from "@/lib/style"
+import { buttonCN, cardCN, headingCN, inputCN } from "@/lib/style"
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline"
 import type { ActionFunction, LoaderFunction} from "@remix-run/node"
 import { redirect, unstable_createMemoryUploadHandler, unstable_parseMultipartFormData } from "@remix-run/node"
@@ -64,7 +64,7 @@ export default function ForgotPW() {
 
   return (
     <Container>
-      <h1 className='mb-4 text-4xl font-medium text-gray-500'>
+      <h1 className={headingCN}>
         Password change request
       </h1>
       <Form 

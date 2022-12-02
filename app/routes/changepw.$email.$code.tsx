@@ -3,7 +3,7 @@ import Spinner from "@/components/Spinner"
 import { changePassword } from "@/lib/api.server"
 import env from "@/lib/env.server"
 import { setFlashMessage } from "@/lib/session.server"
-import { buttonCN, cardCN, inputCN } from "@/lib/style"
+import { buttonCN, cardCN, headingCN, inputCN } from "@/lib/style"
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline"
 import type { ActionFunction, LoaderFunction} from "@remix-run/node"
 import { redirect} from "@remix-run/node"
@@ -51,7 +51,7 @@ export default function ChangePW() {
 
   return (
     <Container>
-      <h1 className='mb-4 text-4xl font-medium text-gray-500'>
+      <h1 className={headingCN}>
         Password change
       </h1>
       <Form 

@@ -40,7 +40,6 @@ export const checkboxCN = [
   focusCN
 ].join(' ')
 
-export const labelCN = 'text-stone-500 text-sm'
 
 const buttonCommon = [
   // 'font-medium',
@@ -62,5 +61,8 @@ export const buttonCN = {
   delete: 'text-red-700 bg-red-50 hover:bg-red-100'
 }
 
-export const linkCN = 'text-purple-700 hover:underline'
-export const cardCN = 'bg-white rounded-md border border-stone-300 p-4'
+export const labelCN = 'text-stone-500 dark:text-stone-300 text-sm'
+export const linkCN = 'text-purple-700 dark:text-purple-400 hover:underline'
+export const cardCN = 'bg-white dark:bg-stone-700 rounded-md border border-stone-300 dark:border-stone-500 p-4'
+export const shadowCN = 'hover:shadow-md dark:hover:shadow hover:dark:shadow-purple-300'
+export const headingCN = 'mb-4 text-4xl font-medium text-gray-500 dark:text-gray-300'

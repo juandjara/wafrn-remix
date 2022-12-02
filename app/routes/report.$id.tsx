@@ -4,7 +4,7 @@ import Spinner from "@/components/Spinner"
 import { blockUser, Post, reportPost } from "@/lib/api.server"
 import { getPost } from "@/lib/api.server"
 import { requireUserSession, setFlashMessage } from "@/lib/session.server"
-import { buttonCN, cardCN, checkboxCN, inputCN, labelCN } from "@/lib/style"
+import { buttonCN, cardCN, checkboxCN, headingCN, inputCN, labelCN } from "@/lib/style"
 import { ShieldExclamationIcon } from "@heroicons/react/24/outline"
 import type { ActionFunction, LoaderFunction} from "@remix-run/node"
 import { json, redirect } from "@remix-run/node"
@@ -66,7 +66,7 @@ export default function Report() {
 
   return (
     <Container>
-      <h1 className='mb-4 text-4xl font-medium text-gray-500'>
+      <h1 className={headingCN}>
         Report post
       </h1>
       <fetcher.Form method="post" className={cardCN}>

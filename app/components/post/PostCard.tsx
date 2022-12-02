@@ -7,7 +7,7 @@ import {  motion } from 'framer-motion'
 import { MEDIA_URL } from "@/lib/config"
 import FollowButton from "../FollowButton"
 import { useState } from "react"
-import { buttonCN } from "@/lib/style"
+import { buttonCN, linkCN, shadowCN } from "@/lib/style"
 import useUser from "@/lib/useUser"
 import DeleteModal from "../DeleteModal"
 import ReblogMenu from "./ReblogMenu"
@@ -32,26 +32,26 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
     <motion.li
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className={clsx('bg-white block', root ? 'border border-gray-300 rounded-md p-4' : '')}>
+      className={clsx('bg-white dark:bg-stone-700 block', root ? 'border dark:border-stone-500 border-stone-300 rounded-md p-4' : '')}>
       {root && children.length > 0 ? (
         <div id="root-header" className='flex items-center gap-2 mb-2 text-sm'>
           <div className="relative">
             <img
               alt='avatar'
               loading='lazy'
-              className='w-6 h-6 rounded-lg border border-gray-300'
+              className='w-6 h-6 rounded-lg border border-stone-300 dark:border-stone-500'
               src={MEDIA_URL.concat(post.user.avatar)}
             />
-            <span className="rounded-lg absolute -top-2 -right-2 bg-white">
+            <span className="rounded-md p-0.5 absolute -top-2 -right-2 bg-white">
               {isEmptyReblog ? (
-                <ArrowPathRoundedSquareIcon className="w-4 h-4 text-green-500" />
+                <ArrowPathRoundedSquareIcon className="w-3 h-3 text-green-500" />
               ) : (
-                <ChatBubbleLeftIcon className="w-4 h-4 text-sky-500" />
+                <ChatBubbleLeftIcon className="w-3 h-3 text-sky-500" />
               )}
             </span>
           </div>
           <div className="flex-grow truncate">
-            <Link className='text-purple-700 hover:underline' to={`/u/${post.user.url}`}>
+            <Link className={linkCN} to={`/u/${post.user.url}`}>
               {post.user.url}
             </Link>
             <span>{isEmptyReblog ? ' rebloged' : ' replied'}</span>
@@ -74,7 +74,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
               )}
             </button>
           )}
-          <ul id="post-chidlren-list" className='divide-y divide-gray-300 border-t border-gray-300'>
+          <ul id="post-chidlren-list" className='divide-y divide-gray-300 border-t border-stone-300 dark:border-stone-500'>
             {children
               .slice(expanded ? undefined : -1 * POST_COMPACT_LIMIT)
               .map((p) => <PostCard key={p.id} post={p} />)}
@@ -83,7 +83,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
       )}
       {isEmptyReblog ? null : (
         <article id="post-content" className={root ? 'pb-4' : 'pt-2 pb-4'}>
-          <div className={clsx('flex items-center gap-2 my-2', { 'mt-0': root, 'pt-4 border-t border-gray-300': root && post.ancestors?.length })}>
+          <div className={clsx('flex items-center gap-2 my-2', { 'mt-0': root, 'pt-4 border-t border-stone-300 dark:border-stone-500': root && post.ancestors?.length })}>
             <img
               alt='avatar'
               loading='lazy'
@@ -91,7 +91,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
               src={MEDIA_URL.concat(post.user.avatar)}
             />
             <div className="flex-grow truncate">
-              <Link className='text-purple-700 hover:underline' to={`/u/${post.user.url}`}>
+              <Link className={linkCN} to={`/u/${post.user.url}`}>
                 {post.user.url}
               </Link>
             </div>
@@ -100,7 +100,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
           </div>
           <PostContent content={post.content} />
           <div className='mt-2 flex items-center gap-2 flex-wrap'>
-            <span className="text-xs font-medium text-stone-500">
+            <span className="text-xs font-medium text-stone-500 dark:text-stone-400">
               {post.createdAt && (
                 new Date(post.createdAt).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })
               )}
@@ -116,20 +116,23 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
         </article>
       )}
       {root && (
-        <div id="post-toolbar" className='flex justify-end gap-1 border-t border-gray-300 pt-4 text-purple-900'>
-          <Link to={`/p/${post.id}`} className="text-stone-700 font-medium text-sm">
+        <div id="post-toolbar" className='flex justify-end gap-1 border-t border-stone-300 dark:border-stone-500 pt-4 dark:text-purple-400 text-purple-900'>
+          <Link to={`/p/${post.id}`} className="text-stone-700 dark:text-stone-100 font-medium text-sm">
             <span>Notes: </span>
             <span className="text-lg">{post.notes}</span>
           </Link>
           <div className="flex-grow"></div>
           <ReblogMenu post={post} />
-          <Link to={`/report/${post.id}`} className='p-1.5 hover:bg-purple-50 hover:shadow-md rounded-md' title="Report">
+          <Link 
+            to={`/report/${post.id}`}
+            className={`p-1.5 hover:bg-purple-50 ${shadowCN} rounded-md`}
+            title="Report">
             <ReportIcon className="w-5 h-5" />
           </Link>
           {user?.userId === post.userId && (
             <button
               onClick={() => setDeleteModalOpen(post.id)}
-              className='p-1.5 hover:bg-purple-50 hover:shadow-md rounded-md'
+              className={`p-1.5 hover:bg-purple-50 ${shadowCN} rounded-md`}
               title="Delete Post"
             >
               <TrashIcon className="w-5 h-5" />

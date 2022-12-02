@@ -1,4 +1,5 @@
 import type { Post } from "@/lib/api.server"
+import { shadowCN } from "@/lib/style"
 import useCaptchaKey from "@/lib/UseCaptchaKey"
 import { Menu } from "@headlessui/react"
 import { Link, useFetcher } from "@remix-run/react"
@@ -62,7 +63,7 @@ export default function ReblogMenu({ post }: { post: Post }) {
 
   return (
     <Menu as='div' className='relative'>
-      <Menu.Button className='p-1.5 text-purple-900 hover:shadow-md hover:bg-purple-50 rounded-md'>
+      <Menu.Button className={`p-1.5 dark:text-purple-400 text-purple-900 ${shadowCN} hover:bg-purple-50 rounded-md`}>
         <QuickReblogIcon className="w-5 h-5" />
       </Menu.Button>
       <ReCAPTCHA

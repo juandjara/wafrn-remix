@@ -11,7 +11,7 @@ export default function LinkPreviewCard({ link }: { link: string }) {
   }, [])
 
   return fetcher.data ? (
-    <div className="flex items-center rounded-md hover:shadow-md transition-shadow border border-stone-300 bg-white">
+    <div className="flex items-center rounded-md hover:shadow-md transition-shadow border border-stone-300 dark:border-stone-500 bg-white">
       <LinkIcon className="w-28 h-28 p-8 text-stone-600 block flex-shrink-0" />
       <div className="p-2 space-y-2">
         <p className="font-bold text-lg text-purple-900 line-clamp-2">
