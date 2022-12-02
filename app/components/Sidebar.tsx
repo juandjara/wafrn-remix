@@ -67,7 +67,7 @@ export default function Sidebar() {
           )}
           {user && (
             <>
-              <li className='border-b border-stone-300 pb-4 mb-4'>
+              <li className='border-b dark:border-stone-500 border-stone-300 pb-4 mb-4'>
                 <NavLink to="/write" className={navLinkCNInverse}>
                   <PencilSquareIcon className='w-6 h-6 text-white' />
                   <span>Write</span>
