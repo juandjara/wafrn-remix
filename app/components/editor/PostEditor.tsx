@@ -155,7 +155,7 @@ export default function PostEditor() {
   }
 
   return (
-    <div className='ql-wrapper border border-stone-300 dark:border-stone-500'>
+    <div className='dark:bg-stone-800 ql-wrapper border border-stone-300 dark:border-stone-500'>
       <style>{`
         .ql-toolbar.ql-snow {
           border: none;

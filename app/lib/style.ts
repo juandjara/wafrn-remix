@@ -23,12 +23,12 @@ export const inputCN = [
   'disabled:opacity-50',
   'border',
   'border-gray-300',
-  // 'dark:border-gray-500',
+  'dark:border-gray-500',
   'text-stone-700',
-  // 'dark:text-stone-100',
-  // 'dark:bg-stone-800',
+  'dark:text-stone-100',
+  'dark:bg-stone-800',
   'placeholder:text-stone-400',
-  // 'dark:placeholder:text-stone-500',
+  'dark:placeholder:text-stone-500',
   focusCN
 ].join(' ')
 
