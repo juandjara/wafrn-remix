@@ -41,7 +41,7 @@ export default function MailSent() {
               </svg>
             </div>
           </Transition>
-          <p className="text-stone-500 mt-4 mb-2 text-xl font-medium">You have an e-mail!</p>
+          <p className="dark:text-purple-200 text-purple-900 mt-4 mb-2 text-xl font-medium">You have an e-mail!</p>
           <p className="text-base">
             {' '}Please check your inbox to find the link that we sent you and <strong>{actionMessage}</strong>.
             {' '}If you cannot find the email, please, check your spam folder.

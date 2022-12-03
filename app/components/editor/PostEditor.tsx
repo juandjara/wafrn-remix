@@ -155,15 +155,26 @@ export default function PostEditor() {
   }
 
   return (
-    <div className='ql-wrapper'>
+    <div className='ql-wrapper border border-stone-300 dark:border-stone-500'>
       <style>{`
         .ql-toolbar.ql-snow {
-          border-radius: 4px 4px 0 0;
-          border-bottom: none;
+          border: none;
           padding: 8px 2px;
         }
-        .ql-container {
-          border-radius: 0 0 4px 4px;
+        .ql-toolbar.ql-snow .ql-picker-options {
+          color: #44403c;
+        }
+        .ql-toolbar.ql-snow .ql-picker {
+          color: currentColor;
+        }
+        .ql-toolbar.ql-snow .ql-stroke {
+          stroke: currentColor;
+        }
+        .ql-toolbar.ql-snow .ql-fill {
+          fill: currentColor;
+        }
+        .ql-container.ql-snow {
+          border: none;
         }
         .ql-wrapper {
           border-radius: 4px;
@@ -178,9 +189,21 @@ export default function PostEditor() {
           outline: none;
           padding: 4px 12px;
         }
+        .ql-wrapper .ql-editor + .ql-tooltip::after {
+          content: '';
+          position: absolute;
+          top: -16px;
+          right: 50%;
+          transform: translateX(-50%);
+          margin-left: -8px;
+          border-width: 8px;
+          border-style: solid;
+          border-color: transparent transparent white transparent;
+        }
         .ql-wrapper .ql-editor.ql-blank::before {
           left: 8px;
-          color: rgba(0, 0, 0, 0.3);
+          color: currentColor;
+          opacity: 0.4;
         }
         .ql-marquee {
           line-height: 18px;

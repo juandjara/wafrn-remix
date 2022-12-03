@@ -70,7 +70,7 @@ export default function Write() {
           <ClientOnly>{() => <PostEditor />}</ClientOnly>
           <input type="hidden" name="parent" value={parent || ''} />
           <div className="mt-6">
-            <label htmlFor="tags" className={labelCN}>Tags</label>
+            <label htmlFor="tags" className={`${labelCN} mb-1 block`}>Tags</label>
             <input type="text" name="tags" className={`${inputCN} max-w-sm`} placeholder="Enter tags separated by commas" />
           </div>
           {hasError && (

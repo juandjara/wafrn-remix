@@ -3,7 +3,7 @@ import Spinner from "@/components/Spinner"
 import { register } from "@/lib/api.server"
 import env from "@/lib/env.server"
 import { getSessionData } from "@/lib/session.server"
-import { buttonCN, inputCN, linkCN } from "@/lib/style"
+import { buttonCN, inputCN, labelCN, linkCN } from "@/lib/style"
 import { XCircleIcon } from "@heroicons/react/20/solid"
 import { LockClosedIcon } from "@heroicons/react/24/outline"
 import type { ActionFunction, LoaderFunction} from "@remix-run/node"
@@ -95,7 +95,7 @@ export default function Register() {
 
   return (
     <Container>
-      <div className="bg-white rounded-md shadow-sm px-3 pb-6">
+      <div className="bg-white dark:bg-stone-700 rounded-md shadow-sm px-3 pb-6">
         <div className="bg-purple-900 p-4 -mx-3 rounded-t-md">
           <img src="/img/wafrn-logo.png" alt="WAFRN" className="h-16 mx-auto" />
         </div>
@@ -114,23 +114,23 @@ export default function Register() {
             <p className="text-red-600 text-sm">Email or URL already in use</p>
           )}
           <div>
-            <label htmlFor="email" className="text-sm text-stone-500 mb-1">Email</label>
+            <label htmlFor="email" className={`${labelCN} mb-1`}>Email</label>
             <input autoFocus required type="email" name="email" className={inputCN} />
           </div>
           <div>
-            <label htmlFor="password" className="text-sm text-stone-500 mb-1">Password</label>
+            <label htmlFor="password" className={`${labelCN} mb-1`}>Password</label>
             <input required type="password" name="password" className={inputCN} />
           </div>
           <div>
-            <label htmlFor="url" className="text-sm text-stone-500 mb-1">Public username (your url)</label>
+            <label htmlFor="url" className={`${labelCN} mb-1`}>Public username (your url)</label>
             <input required type="text" name="url" className={inputCN} />
           </div>
           <div>
-            <label htmlFor="description" className="text-sm text-stone-500 mb-1">Describe yourself in a few words</label>
+            <label htmlFor="description" className={`${labelCN} mb-1`}>Describe yourself in a few words</label>
             <input required type="text" name="description" className={inputCN} />
           </div>
           <div>
-            <label htmlFor="birthDate" className="text-sm text-stone-500 mb-1">Your brth date</label>
+            <label htmlFor="birthDate" className={`${labelCN} mb-1`}>Your brth date</label>
             <input required type="date" name="birthDate" className={inputCN} />
           </div>
           <div className="relative flex items-end gap-2">
@@ -149,7 +149,7 @@ export default function Register() {
               />
             </div>
             <div className="flex-grow">
-              <label htmlFor="avatar" className="text-sm text-stone-500 mb-1">Upload your avatar</label>
+              <label htmlFor="avatar" className={`${labelCN} mb-1`}>Upload your avatar</label>
               <input ref={inputFileRef} type="file" name="avatar" className={inputCN} onChange={handleFileChange} />
             </div>
           </div>

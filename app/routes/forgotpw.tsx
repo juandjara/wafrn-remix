@@ -2,7 +2,7 @@ import Container from "@/components/Container"
 import Spinner from "@/components/Spinner"
 import { requestPasswordChange } from "@/lib/api.server"
 import env from "@/lib/env.server"
-import { buttonCN, cardCN, headingCN, inputCN } from "@/lib/style"
+import { buttonCN, cardCN, headingCN, inputCN, labelCN } from "@/lib/style"
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline"
 import type { ActionFunction, LoaderFunction} from "@remix-run/node"
 import { redirect, unstable_createMemoryUploadHandler, unstable_parseMultipartFormData } from "@remix-run/node"
@@ -73,12 +73,12 @@ export default function ForgotPW() {
         onSubmit={handleSubmit}
         encType="multipart/form-data"
       >
-        <p className="mt-4 mb-8 text-stone-500">
+        <p className="mb-8">
           Forgot your password? Don't worry. Happens to the best of us.
           <br />
           Enter your email here and we will send you a link to the passowrd reset page
         </p>
-        <label htmlFor="email" className='text-stone-500 mb-1 block text-xs'>
+        <label htmlFor="email" className={`mb-1 ${labelCN} block`}>
           Email
         </label>
         <div>

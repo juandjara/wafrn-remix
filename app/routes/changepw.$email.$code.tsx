@@ -3,7 +3,7 @@ import Spinner from "@/components/Spinner"
 import { changePassword } from "@/lib/api.server"
 import env from "@/lib/env.server"
 import { setFlashMessage } from "@/lib/session.server"
-import { buttonCN, cardCN, headingCN, inputCN } from "@/lib/style"
+import { buttonCN, cardCN, headingCN, inputCN, labelCN } from "@/lib/style"
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline"
 import type { ActionFunction, LoaderFunction} from "@remix-run/node"
 import { redirect} from "@remix-run/node"
@@ -58,10 +58,10 @@ export default function ChangePW() {
         method="post"
         className={cardCN}
       >
-        <p className="mt-4 mb-8 text-stone-500">
+        <p className="mb-8">
           Enter your new password here and just log in after that
         </p>
-        <label htmlFor="password" className='text-stone-500 mb-1 block text-xs'>
+        <label htmlFor="password" className={`mb-1 block ${labelCN}`}>
           New Password
         </label>
         <div>

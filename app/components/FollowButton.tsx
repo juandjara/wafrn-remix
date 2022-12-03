@@ -20,7 +20,7 @@ export default function FollowButton({
   const isFollowing = followedUsers.includes(userId)
   const shouldHide = hideWhenFollowing && isFollowing
 
-  if (shouldHide) {
+  if (followedUsers.length === 0 || shouldHide) {
     return null
   }
 
@@ -31,7 +31,7 @@ export default function FollowButton({
       <button
         type="submit"
         disabled={fetcher.state !== 'idle'}
-        className={`${buttonCN[size]} ${isFollowing ? buttonCN.delete : buttonCN.primary}`}>
+        className={`${buttonCN[size]} text-sm ${isFollowing ? buttonCN.delete : buttonCN.primary}`}>
         {isFollowing ? 'Unfollow' : 'Follow'}
       </button>
     </fetcher.Form>

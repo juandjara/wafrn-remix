@@ -3,7 +3,7 @@ import Spinner from "@/components/Spinner"
 import { login } from '@/lib/api.server'
 import env from "@/lib/env.server"
 import { getSessionData, setSessionData } from "@/lib/session.server"
-import { buttonCN, inputCN, linkCN } from "@/lib/style"
+import { buttonCN, inputCN, labelCN, linkCN } from "@/lib/style"
 import { LockClosedIcon } from "@heroicons/react/24/outline"
 import type { ActionFunction, LoaderFunction} from "@remix-run/node"
 import { unstable_createMemoryUploadHandler, unstable_parseMultipartFormData} from "@remix-run/node"
@@ -72,7 +72,7 @@ export default function Login() {
 
   return (
     <Container>
-      <div className="bg-white rounded-md shadow-sm px-3 pb-6">
+      <div className="bg-white dark:bg-stone-700 rounded-md shadow-sm px-3 pb-6">
         <div className="bg-purple-900 p-4 -mx-3 rounded-t-md">
           <img src="/img/wafrn-logo.png" alt="WAFRN" className="h-16 mx-auto" />
         </div>
@@ -88,12 +88,12 @@ export default function Login() {
             </p>
           )}
           <div>
-            <label htmlFor="email" className="text-sm text-stone-500 mb-1">Email</label>
+            <label htmlFor="email" className={`mb-1 ${labelCN}`}>Email</label>
             <input autoFocus required type="email" name="email" className={inputCN} />
           </div>
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label htmlFor="password" className="text-sm text-stone-500">Password</label>
+              <label htmlFor="password" className={labelCN}>Password</label>
               <Link className={`${linkCN} text-sm`} to="/forgotpw">Forgot password?</Link>
             </div>
             <input required type="password" name="password" className={inputCN} />
@@ -120,7 +120,7 @@ export default function Login() {
         <p>Don't have an account? <Link to='/register' className={`${linkCN} text-lg`}>Register now!</Link> </p>
         <p>If you have any issue please check your spam folder!</p>
         <p>Still having problems? Send us an email at info @ wafrn.net</p>
-        <Link to='/explore' className="text-purple-900 text-xl block text-center mt-8">
+        <Link to='/explore' className={`${linkCN} text-xl block text-center mt-8`}>
           Click here to take a look without an account
         </Link>
       </div>

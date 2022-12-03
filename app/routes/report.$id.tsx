@@ -1,7 +1,8 @@
 import Container from "@/components/Container"
 import PostCard from "@/components/post/PostCard"
 import Spinner from "@/components/Spinner"
-import { blockUser, Post, reportPost } from "@/lib/api.server"
+import type { Post} from "@/lib/api.server"
+import { blockUser, reportPost } from "@/lib/api.server"
 import { getPost } from "@/lib/api.server"
 import { requireUserSession, setFlashMessage } from "@/lib/session.server"
 import { buttonCN, cardCN, checkboxCN, headingCN, inputCN, labelCN } from "@/lib/style"
@@ -71,7 +72,7 @@ export default function Report() {
       </h1>
       <fetcher.Form method="post" className={cardCN}>
         <div className="mt-2">
-          <label htmlFor="description" className={labelCN}>Description of your report</label>
+          <label htmlFor="description" className={`${labelCN} mb-1 block`}>Description of your report</label>
           <textarea required name="description" className={`${inputCN}`} />
         </div>
           <p className={`${labelCN} mt-8`}>What do you think is wrong with this post?</p>
@@ -79,7 +80,7 @@ export default function Report() {
           {severityOptions.map((opt) => (
             <label key={opt.value} className="flex items-center py-2">
               <input required type="radio" name="severity" value={opt.value} className={checkboxCN} />
-              <span className="block ml-3 font-medium text-stone-900">{opt.label}</span>
+              <span className="block ml-3 font-medium">{opt.label}</span>
             </label>
           ))}
         </div>
