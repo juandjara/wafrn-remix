@@ -1,4 +1,4 @@
-import type { LoaderFunction, MetaFunction } from "@remix-run/node"
+import type { ActionArgs, LoaderFunction, MetaFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import {
   Links,
@@ -26,6 +26,7 @@ import quillCSS from 'quill/dist/quill.snow.css'
 import env from "./lib/env.server"
 import type { Notifications } from "./components/NotificationCount"
 import NotificationCount from "./components/NotificationCount"
+import { getTheme, toggleTheme } from "./lib/themeCookie.server"
 
 export function links() {
   return [
@@ -50,6 +51,7 @@ export function CatchBoundary() {
 
 export type RootLoaderData = {
   user: User | null
+  theme: string
   relations: UserRelations
   flashMessage: string
   recaptchaKey: string
@@ -77,11 +79,13 @@ export const loader: LoaderFunction = async ({ request }) => {
     notifications = data[1]
   }
 
+  const theme = await getTheme(request)
   const { flashMessage, newCookie } = await getFlashMessage(request)
 
   return json<RootLoaderData>(
     {
       user,
+      theme,
       relations,
       flashMessage,
       notifications,
@@ -91,10 +95,19 @@ export const loader: LoaderFunction = async ({ request }) => {
   )
 }
 
+export async function action({ request }: ActionArgs) {
+  const cookie = await toggleTheme(request)
+  return json({ ok: true }, {
+    headers: {
+      'Set-Cookie': cookie
+    }
+  })
+}
+
 export default function App() {
-  const { flashMessage, notifications } = useLoaderData<RootLoaderData>()
+  const { theme, flashMessage, notifications } = useLoaderData<RootLoaderData>()
   return (
-    <html lang="en">
+    <html lang="en" className={theme}>
       <head>
         <Meta />
         <Links />

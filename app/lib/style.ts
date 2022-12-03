@@ -58,7 +58,7 @@ export const buttonCN = {
     // 'dark:text-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200'
   ].join(' '),
   iconLeft: 'flex items-center gap-2 pl-2',
-  cancel: 'hover:bg-slate-100 dark:hover:bg-slate-100/25',
+  cancel: 'hover:bg-stone-100 dark:hover:bg-stone-100/25',
   delete: 'text-red-700 bg-red-50 hover:bg-red-100'
 }
 

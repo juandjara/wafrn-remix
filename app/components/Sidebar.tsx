@@ -18,6 +18,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { Link, NavLink } from '@remix-run/react'
 import { useState } from 'react'
+import DarkModeToggler from './DarkModeToggler'
 import LogoutButton from './LogoutButton'
 
 const linkCN = [
@@ -54,6 +55,9 @@ export default function Sidebar() {
       <Link to="/">
         <img src="/img/wafrn-logo.png" alt="WAFRN" className='bg-purple-900 p-4' />
       </Link>
+      <div className='m-2'>
+        <DarkModeToggler />
+      </div>
       {user && <UserMenu user={user} />}
       <nav className='px-4 py-4'>
         <ul className="space-y-4 text-purple-900 dark:text-purple-50">
