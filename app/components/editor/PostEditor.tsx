@@ -233,6 +233,7 @@ export default function PostEditor() {
           margin: 0;
           padding: 0;
           overflow: hidden;
+          color: #44403c;
         }
         
         .ql-mention-list-item {
@@ -254,9 +255,9 @@ export default function PostEditor() {
         
         .mention {
           user-select: all;
-          color: #581c87;
+          color: #a855f7;
           text-decoration: underline;
-        }   
+        }
       `}</style>
       <EditorToolbar />
       <ImageUpload onUpload={handleUpload} />
