@@ -102,7 +102,7 @@ export default function Profile() {
         </button>
         <p className="mt-8">
           To change your password, please use
-          {' '}<Link className={linkCN} to='/password-reset'>the password reset form</Link>
+          {' '}<Link className={linkCN} to='/forgotpw'>the password reset form</Link>
         </p>
       </Form>
     </Container>
