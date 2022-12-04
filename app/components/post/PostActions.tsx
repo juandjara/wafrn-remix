@@ -34,7 +34,7 @@ export default function PostActions({ post, onDelete }: { post: Post; onDelete: 
       { 'dark:bg-stone-600 bg-purple-100': active }
     )
   }
-  
+
   return (
     <Menu as='div' className='relative'>
       <Menu.Button className={`p-1.5 text-purple-900 dark:hover:text-purple-900 bg-purple-50 dark:bg-purple-200 hover:bg-purple-100 ${shadowCN} rounded-md`}>
@@ -58,34 +58,38 @@ export default function PostActions({ post, onDelete }: { post: Post; onDelete: 
             </button>
           )}
         </Menu.Item>
-        <Menu.Item as="li">
-          {({ active }) => (
-            <Link
-              to={`/write?parent=${post.id}`} 
-              className={itemCN(active)}
-            >
-              <ReblogIcon className="w-5 h-5 text-purple-500 dark:text-purple-300" />           
-              <p>Reblog</p>
-            </Link>
-          )}
-        </Menu.Item>
-        <Menu.Item as="li">
-          {({ active }) => (
-            <Link to={`/report/${post.id}`} className={itemCN(active)}>
-              <ReportIcon className="w-5 h-5 text-purple-500 dark:text-purple-300" />
-              <p>Report</p>
-            </Link>
-          )}
-        </Menu.Item>
-        {user?.userId === post.userId && (
-          <Menu.Item as="li">
-            {({ active }) => (
-              <button onClick={onDelete} className={itemCN(active)}>
-                <TrashIcon className="w-5 h-5 text-purple-500 dark:text-purple-300" />
-                <p>Delete post</p>
-              </button>
+        {user && (
+          <>
+            <Menu.Item as="li">
+              {({ active }) => (
+                <Link
+                  to={`/write?parent=${post.id}`} 
+                  className={itemCN(active)}
+                >
+                  <ReblogIcon className="w-5 h-5 text-purple-500 dark:text-purple-300" />           
+                  <p>Reblog</p>
+                </Link>
+              )}
+            </Menu.Item>
+            <Menu.Item as="li">
+              {({ active }) => (
+                <Link to={`/report/${post.id}`} className={itemCN(active)}>
+                  <ReportIcon className="w-5 h-5 text-purple-500 dark:text-purple-300" />
+                  <p>Report</p>
+                </Link>
+              )}
+            </Menu.Item>
+            {user?.userId === post.userId && (
+              <Menu.Item as="li">
+                {({ active }) => (
+                  <button onClick={onDelete} className={itemCN(active)}>
+                    <TrashIcon className="w-5 h-5 text-purple-500 dark:text-purple-300" />
+                    <p>Delete post</p>
+                  </button>
+                )}
+              </Menu.Item>
             )}
-          </Menu.Item>
+          </>
         )}
       </Menu.Items>
     </Menu>

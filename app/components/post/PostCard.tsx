@@ -7,7 +7,7 @@ import {  motion } from 'framer-motion'
 import { MEDIA_URL } from "@/lib/config"
 import FollowButton from "../FollowButton"
 import { useState } from "react"
-import { buttonCN, linkCN, shadowCN } from "@/lib/style"
+import { buttonCN, linkCN } from "@/lib/style"
 import useUser from "@/lib/useUser"
 import DeleteModal from "../DeleteModal"
 import ReblogMenu from "./ReblogMenu"
@@ -16,7 +16,6 @@ import PostActions, { ReportIcon } from "./PostActions"
 const POST_COMPACT_LIMIT = 2
 
 export default function PostCard({ post, root = false }: { post: Post, root?: boolean }) {
-  const user = useUser()
   const isEmptyReblog = !post.content && !post.tags.length
   const [expanded, setExpanded] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState<string>('')
@@ -115,32 +114,50 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
           </div>
         </article>
       )}
-      {root && (
-        <div id="post-toolbar" className='flex justify-end gap-1 border-t border-stone-300 dark:border-stone-500 pt-4 dark:text-purple-400 text-purple-900'>
-          <Link to={`/p/${post.id}`} className="text-stone-700 dark:text-stone-100 font-medium text-sm">
-            <span>Notes: </span>
-            <span className="text-lg">{post.notes}</span>
-          </Link>
-          <div className="flex-grow"></div>
-          <ReblogMenu post={post} />
-          <Link 
-            to={`/report/${post.id}`}
-            className={`p-1.5 dark:hover:bg-stone-600 hover:bg-purple-50 hover:shadow-md rounded-md`}
-            title="Report">
-            <ReportIcon className="w-5 h-5" />
-          </Link>
-          {user?.userId === post.userId && (
-            <button
-              onClick={() => setDeleteModalOpen(post.id)}
-              className={`p-1.5 dark:hover:bg-stone-600 hover:bg-purple-50 hover:shadow-md rounded-md`}
-              title="Delete Post"
-            >
-              <TrashIcon className="w-5 h-5" />
-            </button>
-          )}
-        </div>
-      )}
+      {root && <PostToolbar post={post} onDelete={() => setDeleteModalOpen(post.id)} />}
       <DeleteModal postId={deleteModalOpen} open={!!deleteModalOpen} onClose={() => setDeleteModalOpen('')} />
     </motion.li>
+  )
+}
+
+function PostToolbar({ post, onDelete }: { post: Post; onDelete: () => void }) {
+  const user = useUser()
+  if (!user) {
+    return (
+      <div
+        id="post-toolbar"
+        className='flex justify-between gap-1 border-t border-stone-300 dark:border-stone-500 pt-4 dark:text-purple-400 text-purple-900'>
+        <Link to={`/p/${post.id}`} className="text-stone-700 dark:text-stone-100 font-medium text-sm">
+          <span>Notes: </span>
+          <span className="text-lg">{post.notes}</span>
+        </Link>
+      </div>      
+    )
+  }
+
+  return (
+    <div id="post-toolbar" className='flex justify-end gap-1 border-t border-stone-300 dark:border-stone-500 pt-4 dark:text-purple-400 text-purple-900'>
+      <Link to={`/p/${post.id}`} className="text-stone-700 dark:text-stone-100 font-medium text-sm">
+        <span>Notes: </span>
+        <span className="text-lg">{post.notes}</span>
+      </Link>
+      <div className="flex-grow"></div>
+      <ReblogMenu post={post} />
+      <Link 
+        to={`/report/${post.id}`}
+        className={`p-1.5 dark:hover:bg-stone-600 hover:bg-purple-50 hover:shadow-md rounded-md`}
+        title="Report">
+        <ReportIcon className="w-5 h-5" />
+      </Link>
+      {user?.userId === post.userId && (
+        <button
+          onClick={onDelete}
+          className={`p-1.5 dark:hover:bg-stone-600 hover:bg-purple-50 hover:shadow-md rounded-md`}
+          title="Delete Post"
+        >
+          <TrashIcon className="w-5 h-5" />
+        </button>
+      )}
+    </div>
   )
 }
