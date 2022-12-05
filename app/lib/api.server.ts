@@ -248,26 +248,27 @@ async function processHTML(post: Post) {
       content = content.replace(key, value)
     }
 
-    // iterate over media files and replace each ocurrence with the media element or a static version of the media wrapper
-    for (const m of post.medias) {
-      const key = `[wafrnmediaid="${m.id}"]`
-      const extension = m.url.split('.').slice(-1)[0]
-      const isImage = extension === 'webp'
-      const isSensible = m.NSFW || m.adultContent
-      const value = isSensible 
-        ? `<img
-            loading="lazy"
-            src="/img/nsfw.webp"
-            data-src="${MEDIA_URL}${m.url}"
-            data-type="${isImage ? 'image' : 'video'}"
-            data-nsfw="true"
-          />`
-        : isImage
-          ? `<img loading="lazy" src="${MEDIA_URL}${m.url}" alt=${m.description} />`
-          : `<video controls src="${MEDIA_URL}${m.url}" />`
+    // TODO: this is not working now, because html is not replaced ok and [wafrnmediaid] is not written into content
+    // // iterate over media files and replace each ocurrence with the media element or a static version of the media wrapper
+    // for (const m of post.medias) {
+    //   const key = `[wafrnmediaid="${m.id}"]`
+    //   const extension = m.url.split('.').slice(-1)[0]
+    //   const isImage = extension === 'webp'
+    //   const isSensible = m.NSFW || m.adultContent
+    //   const value = isSensible 
+    //     ? `<img
+    //         loading="lazy"
+    //         src="/img/nsfw.webp"
+    //         data-src="${MEDIA_URL}${m.url}"
+    //         data-type="${isImage ? 'image' : 'video'}"
+    //         data-nsfw="true"
+    //       />`
+    //     : isImage
+    //       ? `<img loading="lazy" src="${MEDIA_URL}${m.url}" alt=${m.description} />`
+    //       : `<video controls src="${MEDIA_URL}${m.url}" />`
   
-      content = content.replace(key, value)
-    }
+    //   content = content.replace(key, value)
+    // }
   
     // load the html parsing libraries
     const [ unified, rehypeParse, rehypeSanitize, rehypeStringify ] = await Promise.all([

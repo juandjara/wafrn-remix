@@ -108,6 +108,19 @@ export default function ImageUpload({ onUpload }: { onUpload: (files: UploadedMe
     }
   }
 
+  function getHTMLForFile(props: { url: string; description: string; nsfw: boolean }) {
+    const { url, description, nsfw } = props
+    if (url.startsWith('data:image') || (url.startsWith('http') && url.endsWith('.webp'))) {
+      return description
+        ? `<img src="${url}" alt="${description}" data-nsfw="${nsfw}">`
+        : `<img src="${url}" data-nsfw="${nsfw}">`
+    }
+    if (url.startsWith('data:video') || (url.startsWith('http') && url.endsWith('.mp4'))) {
+      return `<video src="${url}" controls=""></video>`
+    }
+    return ''
+  }
+
   async function handleSubmit() {
     setError('')
     setLoading(true)
@@ -119,9 +132,7 @@ export default function ImageUpload({ onUpload }: { onUpload: (files: UploadedMe
         url: MEDIA_URL.concat(d.url),
         description,
         nsfw,
-        html: description
-          ? `<img src="${MEDIA_URL.concat(d.url)}" alt="${description}" data-nsfw="${nsfw}" />`
-          : `<img src="${MEDIA_URL.concat(d.url)}" alt="${description}" data-nsfw="${nsfw}" />`
+        html: getHTMLForFile({ url: MEDIA_URL.concat(d.url), description, nsfw })
       }))
       onUpload(medias)
       resetForm()
@@ -142,7 +153,7 @@ export default function ImageUpload({ onUpload }: { onUpload: (files: UploadedMe
           <polyline fillRule='evenodd' fill='currentColor' points="5 12 5 11 7 9 8 10 11 7 13 9 13 12 5 12"></polyline>
         </svg>
       </Popover.Button>
-      <Popover.Panel className={`absolute top-full -right-3 z-10 w-80 shadow-md ${cardCN}`}>
+      <Popover.Panel className={`absolute top-full -right-5 z-10 w-80 shadow-md ${cardCN}`}>
         <div>
           <input
             multiple
