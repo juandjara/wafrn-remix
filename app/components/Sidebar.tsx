@@ -124,10 +124,14 @@ export default function Sidebar() {
             </a>
           </li>
           <li>
-            <NavLink to="/source" className={navLinkCN}>
+            <a  
+              target="_blank"
+              rel="noreferrer"
+              href="https://github.com/juandjara/wafrn-remix"
+              className={linkCN}>
               <CodeBracketSquareIcon className={iconCN} />
               <span>Check the source code</span>
-            </NavLink>
+            </a>
           </li>
         </ul>
       </nav>
