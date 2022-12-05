@@ -12,6 +12,7 @@ import { Form, Link, useActionData, useLoaderData, useSubmit, useTransition } fr
 import type { ChangeEvent, FormEvent} from "react"
 import { useRef, useState } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
+import invariant from "tiny-invariant"
 
 type LoaderData = {
   recaptchaKey: string
@@ -39,6 +40,8 @@ export const action: ActionFunction = async ({ request }) => {
   formData.set('captchaResponse', formData.get('g-recaptcha-response') as string)
   formData.delete('g-recaptcha-response')
   const email = formData.get('email') as string
+  const url = formData.get('url') as string
+  invariant(url.match(/^[a-zA-Z0-9_]*$/), '')
 
   try {
     const data = await register(formData)
@@ -50,7 +53,7 @@ export const action: ActionFunction = async ({ request }) => {
       throw err
     }
 
-    console.error('ERROR', err)
+    console.error(err)
     return json({ error: true })
   }
 }
@@ -114,23 +117,25 @@ export default function Register() {
             <p className="text-red-600 text-sm">Email or URL already in use</p>
           )}
           <div>
-            <label htmlFor="email" className={`${labelCN} mb-1`}>Email</label>
+            <label htmlFor="email" className={`${labelCN} mb-1 block`}>Email</label>
             <input autoFocus required type="email" name="email" className={inputCN} />
           </div>
           <div>
-            <label htmlFor="password" className={`${labelCN} mb-1`}>Password</label>
+            <label htmlFor="password" className={`${labelCN} mb-1 block`}>Password</label>
             <input required type="password" name="password" className={inputCN} />
           </div>
           <div>
-            <label htmlFor="url" className={`${labelCN} mb-1`}>Public username (your url)</label>
-            <input required type="text" name="url" className={inputCN} />
+            <label htmlFor="url" className={`${labelCN} mb-1 block`}>Public username (your url)</label>
+            <input required pattern="^[a-zA-Z0-9_]*$" type="text" name="url" className={inputCN} />
+            <p className="text-sm mt-1">Right now we do not allow special characters nor spaces. Only letters, numbers and _</p>
           </div>
           <div>
-            <label htmlFor="description" className={`${labelCN} mb-1`}>Describe yourself in a few words</label>
+            <label htmlFor="description" className={`${labelCN} mb-1 block`}>Describe yourself in a few words</label>
             <input required type="text" name="description" className={inputCN} />
+            <p className="text-sm mt-1">You can write some tags here so you will appear in some searches</p>
           </div>
           <div>
-            <label htmlFor="birthDate" className={`${labelCN} mb-1`}>Your brth date</label>
+            <label htmlFor="birthDate" className={`${labelCN} mb-1 block`}>Your brth date</label>
             <input required type="date" name="birthDate" className={inputCN} />
           </div>
           <div className="relative flex items-end gap-2">

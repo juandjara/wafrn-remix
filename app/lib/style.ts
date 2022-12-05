@@ -50,12 +50,12 @@ const buttonCommon = [
 
 export const buttonCN = {
   common: buttonCommon,
-  small: `px-2 py-1 ${buttonCommon}`,
+  small: `px-2 py-1 text-sm ${buttonCommon}`,
   normal: `px-4 py-2 ${buttonCommon}`,
   big: `px-5 py-3 text-lg ${buttonCommon}`,
   primary: [
     'text-purple-900 bg-purple-100 hover:bg-purple-200',
-    // 'dark:text-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200'
+    'dark:bg-purple-200 dark:hover:bg-purple-300'
   ].join(' '),
   iconLeft: 'flex items-center gap-2 pl-2',
   cancel: 'hover:bg-stone-100 dark:hover:bg-stone-100/25',

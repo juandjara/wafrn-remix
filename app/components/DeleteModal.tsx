@@ -2,6 +2,7 @@ import { buttonCN, cardCN } from "@/lib/style"
 import { Dialog } from "@headlessui/react"
 import { useFetcher } from "@remix-run/react"
 import { useEffect, useRef } from "react"
+import toast from "react-hot-toast"
 
 type DeleteModalProps = {
   postId: string
@@ -16,6 +17,7 @@ export default function DeleteModal({ postId, open, onClose }: DeleteModalProps)
 
   useEffect(() => {
     if (fetcher.data) {
+      toast.success('Post was sucessfully deleted!')
       onClose()
     }
     // do not run on 'onClose' change

@@ -51,6 +51,49 @@ export type Post = {
   notes: number
 }
 
+type postJSONParams = {
+  url: string
+  body: Record<string, unknown>
+  token?: string
+}
+
+async function handleApiResponse(res: Response) {
+  const url = res.url.replace(API_URL, '')
+  if (!res.ok) {
+    let text = await res.text()
+    throw new Error(`Bad status code ${res.status} from API at ${url} - ${text}`)
+  }
+
+  let text
+  let json
+  try {
+    text = await res.text()
+    json = JSON.parse(text)
+  } catch (e) {
+    throw new Error(`Failed parsing JSON response from text "${text}"`)
+  }
+
+  if (json.success === false) {
+    throw new Error(`Bad response from API at ${url} - ${json.errorMessage || 'no success'}`)
+  }
+
+  return json
+}
+
+async function postJSON({ url, body, token }: postJSONParams) {
+  const fullurl = API_URL.concat(url)
+  const res = await fetch(fullurl, {
+    body: JSON.stringify(body),
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token ? `Bearer ${token}` : ''
+    }
+  })
+
+  return handleApiResponse(res)
+}
+
 export async function getPost(id: string) {
   const url = `${API_URL}/singlePost/${id}`
   const res = await fetch(url)
@@ -82,7 +125,7 @@ export async function getDetails(userUrl: string) {
   const data = JSON.parse(text)
 
   if (data.success === false) {
-    throw new Response('Error calling API at /userDetails', { status: 500, statusText: 'Server Error' })
+    throw new Response(`User "${userUrl}" not found`, { status: 404, statusText: 'Not Found' })
   }
 
   return data as UserDetails
@@ -256,26 +299,15 @@ async function processHTML(post: Post) {
   }
 }
 
-export async function login(form: FormData) {
-  const url = `${API_URL}/login`
-
-  const res = await fetch(url, {
-    body: form,
-    method: 'POST',
-  })
-
-  try {
-    const text = await res.text()
-    const data = JSON.parse(text)
-
-    if (data.success === false) {
-      throw new Response('Error calling API at /login', { status: 500, statusText: 'Server Error' })
+export async function login({ email, password, captcha }: { email: string; password: string; captcha: string }) {
+  return postJSON({
+    url: '/login',
+    body: {
+      email,
+      password,
+      captchaResponse: captcha
     }
-  
-    return data.token
-  } catch (err) {
-    throw err
-  }
+  })
 }
 
 export async function register(form: FormData) {
@@ -286,50 +318,15 @@ export async function register(form: FormData) {
     method: 'POST',
   })
 
-  if (!res.ok) {
-    throw new Response('Error calling API at /register - bad status code', { status: res.status, statusText: res.statusText })
-  }
-
-  try {
-    const text = await res.text()
-    const data = JSON.parse(text)
-
-    if (data.success === false) {
-      throw new Response('Error calling API at /register - bad success response', { status: 500, statusText: 'Server Error' })
-    }
-  
-    return data
-  } catch (err) {
-    throw err
-  }
+  return handleApiResponse(res)
 }
 
 export async function toggleFollow(token: string, { userId, isFollowing }: { userId: string; isFollowing: boolean }) {
-  const operation = isFollowing ? 'unfollow' : 'follow'
-  const url = `${API_URL}/${operation}`
-  const form = new FormData()
-  form.set('userId', userId)
-
-  const res = await fetch(url, {
-    body: form,
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
+  return postJSON({
+    token,
+    url: `/${isFollowing ? 'unfollow' : 'follow'}`,
+    body: { userId }
   })
-
-  try {
-    const text = await res.text()
-    const data = JSON.parse(text)
-
-    if (data.success === false) {
-      throw new Response(`Error calling API at /${operation}`, { status: 500, statusText: 'Server Error' })
-    }
-  
-    return data
-  } catch (err) {
-    throw err
-  }
 }
 
 export async function editProfile(token: string, form: FormData) {
@@ -342,180 +339,52 @@ export async function editProfile(token: string, form: FormData) {
     }
   })
 
-  try {
-    const data = await res.json()
-
-    if (data.success === false) {
-      throw new Response(`Error calling API at /editProfile`, { status: 500, statusText: 'Server Error' })
-    }
-  
-    return data
-  } catch (err) {
-    throw err
-  }
+  return handleApiResponse(res)
 }
 
 export async function activate({ email, code }: { email: string; code: string }) {
-  const url = `${API_URL}/activateUser`
-  const form = new FormData()
-  form.set('email', email)
-  form.set('code', code)
-
-  const res = await fetch(url, {
-    body: form,
-    method: 'POST'
+  return postJSON({
+    url: '/activateUser',
+    body: { email, code }
   })
-
-  try {
-    const data = await res.json()
-
-    if (data.success === false) {
-      throw new Response(`Error calling API at /activateUser`, { status: 500, statusText: 'Server Error' })
-    }
-  
-    return data
-  } catch (err) {
-    throw err
-  }
 }
 
-export async function requestPasswordChange(form: FormData) {
-  const url = `${API_URL}/forgotPassword`
-
-  const res = await fetch(url, {
-    body: form,
-    method: 'POST',
+export async function requestPasswordChange({ email, captchaResponse }: { email: string; captchaResponse: string }) {
+  return postJSON({
+    url: '/forgotPassword',
+    body: { email, captchaResponse }
   })
-
-  if (!res.ok) {
-    throw new Response('Error calling API at /forgotPassword - bad status code', { status: res.status, statusText: res.statusText })
-  }
-
-  try {
-    const text = await res.text()
-    const data = JSON.parse(text)
-
-    if (data.success === false) {
-      throw new Response('Error calling API at /forgotPassword - bad success response', { status: 500, statusText: 'Server Error' })
-    }
-  
-    return data
-  } catch (err) {
-    throw err
-  }
 }
 
 export async function changePassword({ email, password, code }: { email: string; password: string; code: string }) {
-  const url = `${API_URL}/resetPassword`
-  const form = new FormData()
-  form.set('email', email)
-  form.set('password', password)
-  form.set('code', code)
-
-  const res = await fetch(url, {
-    body: form,
-    method: 'POST'
+  return postJSON({
+    url: '/resetPassword',
+    body: { email, password, code }
   })
-
-  try {
-    const data = await res.json()
-
-    if (data.success === false) {
-      throw new Response(`Error calling API at /resetPassword`, { status: 500, statusText: 'Server Error' })
-    }
-  
-    return data
-  } catch (err) {
-    throw err
-  }
 }
 
-export async function createPost(token: string, form: FormData) {
-  const url = `${API_URL}/createPost`
+type CreatePostBody = {
+  captchaKey: string
+  parent: string
+  content: string
+  tags: string
+  content_warning: string
+}
 
-  const res = await fetch(url, {
-    body: form,
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
+export async function createPost(token: string, body: CreatePostBody) {
+  return postJSON({
+    url: '/createPost',
+    token,
+    body
   })
-
-  if (!res.ok) {
-    throw new Response('Error calling API at /createPost - bad status code', { status: res.status, statusText: res.statusText })
-  }
-
-  try {
-    const text = await res.text()
-    const data = JSON.parse(text)
-
-    if (data.success === false) {
-      throw new Response('Error calling API at /createPost - bad success response', { status: 500, statusText: 'Server Error' })
-    }
-  
-    return data
-  } catch (err) {
-    throw err
-  }
 }
 
 export async function blockUser(token: string, userId: string) {
-  const url = `${API_URL}/block`
-
-  const form = new FormData()
-  form.set('userId', userId)
-  const res = await fetch(url, {
-    body: form,
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
+  return postJSON({
+    token,
+    url: '/block',
+    body: { userId }
   })
-
-  if (!res.ok) {
-    throw new Response('Error calling API at /block - bad status code', { status: res.status, statusText: res.statusText })
-  }
-
-  try {
-    const text = await res.text()
-    const data = JSON.parse(text)
-
-    if (data.success === false) {
-      throw new Response('Error calling API at /block - bad success response', { status: 500, statusText: 'Server Error' })
-    }
-  
-    return data
-  } catch (err) {
-    throw err
-  }
-}
-
-export async function reportPost(token: string, form: FormData) {
-  const url = `${API_URL}/reportPost`
-  const res = await fetch(url, {
-    body: form,
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  })
-
-  if (!res.ok) {
-    throw new Response('Error calling API at /reportPost - bad status code', { status: res.status, statusText: res.statusText })
-  }
-
-  try {
-    const text = await res.text()
-    const data = JSON.parse(text)
-
-    if (data.success === false) {
-      throw new Response('Error calling API at /reportPost - bad success response', { status: 500, statusText: 'Server Error' })
-    }
-  
-    return data
-  } catch (err) {
-    throw err
-  }
 }
 
 export async function deletePost(token: string, postId: string) {
@@ -527,22 +396,21 @@ export async function deletePost(token: string, postId: string) {
     }
   })
 
-  if (!res.ok) {
-    throw new Response('Error calling API at /deletePost - bad status code', { status: res.status, statusText: res.statusText })
-  }
+  return handleApiResponse(res)
+}
 
-  try {
-    const text = await res.text()
-    const data = JSON.parse(text)
+type ReportBody = {
+  description: string
+  severity: string
+  postId: string
+}
 
-    if (data.success === false) {
-      throw new Response('Error calling API at /deletePost - bad success response', { status: 500, statusText: 'Server Error' })
-    }
-  
-    return data
-  } catch (err) {
-    throw err
-  }
+export async function reportPost(token: string, body: ReportBody) {
+  return postJSON({
+    token,
+    url: '/reportPost',
+    body
+  })
 }
 
 export async function getNotifications(token: string) {
@@ -552,42 +420,13 @@ export async function getNotifications(token: string) {
     }
   })
 
-  if (!res.ok) {
-    throw new Response('Error calling API at /notifications - bad status code', { status: res.status, statusText: res.statusText })
-  }
-
-  const data = await res.json()
-  if (data.success === false) {
-    throw new Response('Error calling API at /deletePost - bad success response', { status: 500, statusText: 'Server Error' })
-  }
-
-  return data
+  return handleApiResponse(res)
 }
 
-export async function readNotifications(token: string, form: FormData) {
-  const url = `${API_URL}/readNotifications`
-  const res = await fetch(url, {
-    body: form,
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
+export async function readNotifications(token: string, time: string) {
+  return postJSON({
+    token,
+    url: '/readNotifications',
+    body: { time }
   })
-
-  if (!res.ok) {
-    throw new Response('Error calling API at /readNotifications - bad status code', { status: res.status, statusText: res.statusText })
-  }
-
-  try {
-    const text = await res.text()
-    const data = JSON.parse(text)
-
-    if (data.success === false) {
-      throw new Response('Error calling API at /readNotifications - bad success response', { status: 500, statusText: 'Server Error' })
-    }
-  
-    return data
-  } catch (err) {
-    throw err
-  }
 }

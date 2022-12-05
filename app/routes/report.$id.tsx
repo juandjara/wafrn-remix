@@ -42,9 +42,13 @@ export const action: ActionFunction = async ({ request }) => {
     await blockUser(token, userToBlock)
   }
 
-  await reportPost(token, formData)
+  const description = formData.get('description') as string
+  const severity = formData.get('severity') as string
+  const postId = formData.get('postId') as string
+
+  await reportPost(token, { description, severity, postId })
   const cookie = await setFlashMessage(request, 'The post has been reported and we will take action against it')
-  return redirect('/', {
+  return redirect('/dashboard', {
     headers: {
       'Set-Cookie': cookie
     }

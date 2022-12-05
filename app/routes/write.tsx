@@ -54,8 +54,7 @@ export default function Write() {
     const fd = new FormData(ev.target as HTMLFormElement)
     fetcher.submit(fd, {
       action: '/api/write',
-      method: 'post',
-      encType: 'multipart/form-data'
+      method: 'post'
     })
   }
 
@@ -92,7 +91,8 @@ export default function Write() {
         </fetcher.Form>
       </div>
       {reblog && (
-        <div className="my-4">
+        <div className="mt-12">
+          <label className={`${labelCN} block mb-2`}>Reblogging this post</label>
           <PostCard root post={reblog} />
         </div>
       )}

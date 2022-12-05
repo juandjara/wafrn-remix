@@ -49,7 +49,7 @@ export default function Blog() {
         <img alt="" src={MEDIA_URL.concat(detail.avatar)} className="h-40 rounded-md border-stone-300" />
         <p className='mt-2 text-xl text-purple-900 dark:text-purple-400 font-medium'>{detail.url}</p>
         <p className='my-8'>{detail.description}</p>
-        <FollowButton userId={detail.id} />
+        <FollowButton size='big' userId={detail.id} />
       </div>
       {posts.length === 0 && (
         <p>

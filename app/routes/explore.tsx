@@ -2,10 +2,11 @@ import Container from '@/components/Container'
 import PostList from '@/components/post/PostList'
 import type { Post } from '@/lib/api.server'
 import { getExplore } from '@/lib/api.server'
-import { headingCN } from '@/lib/style'
+import { cardCN, headingCN, linkCN } from '@/lib/style'
+import useUser from '@/lib/useUser'
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { Link, useLoaderData } from '@remix-run/react'
 
 type LoaderData = {
   posts: Post[]
@@ -26,11 +27,26 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export default function Explore() {
+  const user = useUser()
   const { posts, params: { startScroll } } = useLoaderData<LoaderData>()
 
   return (
     <Container>
       <h1 className={headingCN}>Explore</h1>
+      {!user && (
+        <div className={`${cardCN} mb-8 space-y-4`}>
+          <p className='text-center mt-4 mb-6'>A message from the <Link className={linkCN} to='/u/admin'>admin</Link> </p>
+          <p>
+            To fully enjoy this hellsite, please consider joining us, <Link className={linkCN} to='/register'>register into wafrn!</Link>
+          </p>
+          <p>
+            Bring your twisted ideas onto others, share recipies of cake that swap the flour for mayo or hot sauce!
+          </p>
+          <p>
+            Consider <Link className={linkCN} to='/register'>joining wafrn!</Link>
+          </p>
+        </div>
+      )}
       <PostList
         initialPosts={posts}
         getPageURL={page => `/explore?index&page=${page}&startScroll=${startScroll}`}

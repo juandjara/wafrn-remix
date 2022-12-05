@@ -5,6 +5,8 @@ import { buttonCN, cardCN, headingCN } from "@/lib/style"
 import type { ActionFunction} from "@remix-run/node"
 import { redirect } from "@remix-run/node"
 import { useFetcher } from "@remix-run/react"
+import { useEffect } from "react"
+import toast from "react-hot-toast"
 import invariant from "tiny-invariant"
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -22,16 +24,21 @@ export const action: ActionFunction = async ({ request, params }) => {
       })
     }
   } catch (err) {
-    console.error('ERROR', err)
-    return { error: true }
+    return { error: (err as Error).message }
   }
 }
 
 export default function Activate() {
   const fetcher = useFetcher()
   const busy = fetcher.state !== 'idle'
-  const hasError = fetcher.data?.error
+  const error = fetcher.data?.error
 
+  useEffect(() => {
+    if (error && !busy) {
+      toast.error(error)
+    }
+  }, [error, busy])
+ 
   return (
     <Container>
       <h1 className={headingCN}>
@@ -44,8 +51,8 @@ export default function Activate() {
         <p className="my-1">
           After that, you will be able to <strong>log in</strong> into your account.
         </p>
-        {hasError && (
-          <p className="text-red-600 text-sm mt-4">There was an error activating your account</p>
+        {error && (
+          <p className="text-red-600 dark:text-red-400 text-sm font-medium mt-4">There was an error activating your account</p>
         )}
         <fetcher.Form method="post">
           <button disabled={busy} type="submit" className={`mt-6 ${buttonCN.primary} ${buttonCN.normal}`}>

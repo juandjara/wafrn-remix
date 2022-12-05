@@ -20,7 +20,8 @@ export const loader: LoaderFunction = () => {
 export const action: ActionFunction = async ({ request }) => {
   const { token } = await requireUserSession(request)
   const form = await request.formData()
-  await readNotifications(token, form)
+  const time = form.get('time') as string
+  await readNotifications(token, time)
   return json({ success: true })
 }
 
@@ -67,7 +68,7 @@ export default function Notifications() {
   return (
     <Container>
       <h1 className={headingCN}>Notifications</h1>
-      <Form method="post">
+      <Form method="post" replace>
         <input type="hidden" name="time" value={time} />
         <button type="submit" disabled={loading} className={`mb-8 ${buttonCN.normal} ${buttonCN.primary}`}>
           Mark all as read

@@ -6,10 +6,9 @@ import { getSessionData, setSessionData } from "@/lib/session.server"
 import { buttonCN, inputCN, labelCN, linkCN } from "@/lib/style"
 import { LockClosedIcon } from "@heroicons/react/24/outline"
 import type { ActionFunction, LoaderFunction} from "@remix-run/node"
-import { unstable_createMemoryUploadHandler, unstable_parseMultipartFormData} from "@remix-run/node"
 import { redirect } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { Form, Link, useActionData, useLoaderData, useSearchParams, useSubmit, useTransition } from "@remix-run/react"
+import { Form, Link, useActionData, useLoaderData, useSubmit, useTransition } from "@remix-run/react"
 import type { FormEvent} from "react"
 import { useRef } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
@@ -19,7 +18,7 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  // If the user is already authenticated redirect to /dashboard directly
+  // if the user is already authenticated redirect to /dashboard
   const { user } = await getSessionData(request)
   if (user) {
     throw redirect('/dashboard')
@@ -31,15 +30,13 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  const uploadHandler = unstable_createMemoryUploadHandler()
-  const formData = await unstable_parseMultipartFormData(
-    request,
-    uploadHandler
-  )
-  formData.set('captchaResponse', formData.get('g-recaptcha-response') as string)
-  formData.delete('g-recaptcha-response')
+  const formData = await request.formData()
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+  const captcha = formData.get('g-recaptcha-response') as string
+
   try {
-    const token = await login(formData)
+    const { token } = await login({ email, password, captcha })
     const cookie = await setSessionData(request, { token })
     return redirect('/', {
       headers: {
@@ -47,8 +44,7 @@ export const action: ActionFunction = async ({ request }) => {
       }
     })
   } catch(err) {
-    console.error('ERROR', err)
-    return json({ error: err })
+    return { error: (err as Error).message }
   }
 }
 
@@ -64,10 +60,7 @@ export default function Login() {
     ev.preventDefault()
     await recaptchaRef.current?.executeAsync()
     const fd = new FormData(ev.target as HTMLFormElement)
-    submit(fd, {
-      method: 'post',
-      encType: 'multipart/form-data'
-    })
+    submit(fd, { method: 'post' })
   }
 
   return (
@@ -82,11 +75,6 @@ export default function Login() {
           onSubmit={handleSubmit}
           encType="multipart/form-data"
           className="space-y-6 my-8">
-          {actionData?.error && (
-            <p className="text-red-600 text-sm">
-              Incorrect email or password. Check those or if you have received the activation email
-            </p>
-          )}
           <div>
             <label htmlFor="email" className={`mb-1 ${labelCN}`}>Email</label>
             <input autoFocus required type="email" name="email" className={inputCN} />
@@ -98,6 +86,11 @@ export default function Login() {
             </div>
             <input required type="password" name="password" className={inputCN} />
           </div>
+          {actionData?.error && (
+            <p className="text-red-600 dark:text-red-400 text-sm font-medium mt-4 mb-2">
+              Incorrect email or password. Check those or if you have received the activation email
+            </p>
+          )}
           <button
             type='submit'
             disabled={busy}

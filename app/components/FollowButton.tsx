@@ -31,7 +31,7 @@ export default function FollowButton({
       <button
         type="submit"
         disabled={fetcher.state !== 'idle'}
-        className={`${buttonCN[size]} text-sm ${isFollowing ? buttonCN.delete : buttonCN.primary}`}>
+        className={`w-full ${buttonCN[size]} ${isFollowing ? buttonCN.delete : buttonCN.primary}`}>
         {isFollowing ? 'Unfollow' : 'Follow'}
       </button>
     </fetcher.Form>

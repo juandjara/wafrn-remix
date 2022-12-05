@@ -43,6 +43,10 @@ export default function Profile() {
   const busy = transition.state !== 'idle'
 
   useEffect(() => {
+    setImage(MEDIA_URL.concat(details.avatar))
+  }, [details.avatar])
+
+  useEffect(() => {
     if (actionData) {
       toast.success('Your profile was updated successfully', { duration: 5000 })
     }
