@@ -1,5 +1,6 @@
 import YoutubeEmbed from "./YoutubeEmbed"
-import LinkPreviewCard from "./LinkPreviewCard"
+// import LinkPreviewCard from "./LinkPreviewCard"
+import { linkCN } from "@/lib/style"
 
 function getYoutubeID(link = '') {
   try {
@@ -22,5 +23,6 @@ export default function Embed({ link }: { link: string }) {
     return <YoutubeEmbed id={ytID} />
   }
 
-  return <LinkPreviewCard link={link} />
+  return <a target='blank' rel='noreferrer' href={link} className={linkCN}>{link}</a>
+  // return <LinkPreviewCard link={link} />
 }
