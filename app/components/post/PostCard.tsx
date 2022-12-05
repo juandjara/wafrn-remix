@@ -73,7 +73,7 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
               )}
             </button>
           )}
-          <ul id="post-chidlren-list" className='divide-y divide-gray-300 border-t border-stone-300 dark:border-stone-500'>
+          <ul id="post-chidlren-list" className='divide-y divide-stone-300 dark:divide-stone-500 border-t border-stone-300 dark:border-stone-500'>
             {children
               .slice(expanded ? undefined : -1 * POST_COMPACT_LIMIT)
               .map((p) => <PostCard key={p.id} post={p} />)}
