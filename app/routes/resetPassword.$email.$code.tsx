@@ -2,7 +2,7 @@ import Container from "@/components/Container"
 import Spinner from "@/components/Spinner"
 import { changePassword } from "@/lib/api.server"
 import env from "@/lib/env.server"
-import { setFlashMessage } from "@/lib/session.server"
+import { getSessionData, setFlashMessage } from "@/lib/session.server"
 import { buttonCN, cardCN, headingCN, inputCN, labelCN } from "@/lib/style"
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline"
 import type { ActionFunction, LoaderFunction} from "@remix-run/node"
@@ -22,6 +22,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export const action: ActionFunction = async ({ request, params }) => {
+  const { user } = await getSessionData(request)
   const { email, code } = params
   invariant(email, 'email param must be defined in activate page')
   invariant(code, 'code param must be defined in activate page')  
@@ -32,8 +33,8 @@ export const action: ActionFunction = async ({ request, params }) => {
   try {
     const data = await changePassword({ email, password, code })
     if (data.success) {
-      const cookie = await setFlashMessage(request, 'Great! Your password was changed! You can now log in.')
-      return redirect('/login', {
+      const cookie = await setFlashMessage(request, `Great! Your password was changed! ${user ? '' : 'You can now log in.'}`)
+      return redirect(user ? '/dashboard' : '/login', {
         headers: {
           'Set-Cookie': cookie
         },
