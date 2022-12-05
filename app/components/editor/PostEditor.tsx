@@ -164,6 +164,12 @@ export default function PostEditor() {
         .ql-toolbar.ql-snow .ql-picker-options {
           color: #44403c;
         }
+        .ql-snow .ql-picker.ql-size {
+          width: 76px;
+        }
+        .ql-toolbar.ql-snow .ql-formats {
+          margin-right: 12px;
+        }
         .ql-toolbar.ql-snow .ql-picker {
           color: currentColor;
         }
@@ -187,7 +193,7 @@ export default function PostEditor() {
           font-size: 16px;
           border-radius: 0 0 4px 4px;
           outline: none;
-          padding: 4px 12px;
+          padding: 6px 12px;
         }
         .ql-wrapper .ql-editor + .ql-tooltip::after {
           content: '';

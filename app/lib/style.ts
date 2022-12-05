@@ -64,6 +64,6 @@ export const buttonCN = {
 
 export const labelCN = 'text-stone-500 dark:text-stone-300 text-sm'
 export const linkCN = 'text-purple-700 dark:text-purple-300 hover:underline'
-export const cardCN = 'bg-white dark:bg-stone-700 rounded-md border border-stone-300 dark:border-stone-500 p-4'
+export const cardCN = 'bg-white dark:bg-stone-700 rounded-md border border-stone-300 dark:border-stone-500 p-3'
 export const headingCN = 'mb-4 text-4xl font-medium text-gray-500 dark:text-gray-300'
 export const shadowCN = 'hover:shadow-md dark:hover:shadow hover:dark:shadow-purple-300'
