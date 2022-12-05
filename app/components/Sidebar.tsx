@@ -183,7 +183,7 @@ function Drawer({ open, setOpen, children }: { open: boolean, setOpen: (b: boole
 function UserMenu({ user }: { user: User }) {
   return (
     <div className='p-4 pb-0 flex items-center justify-between'>
-      <NavLink to={`/u/${user.url}`} className='font-medium text-purple-900 dark:text-purple-400'>@{user.url}</NavLink>
+      <NavLink to={`/u/${user.url}`} className='font-medium text-purple-900 dark:text-purple-300'>@{user.url}</NavLink>
       <Menu as='div' className='relative'>
         {({ open }) => (
           <>  
