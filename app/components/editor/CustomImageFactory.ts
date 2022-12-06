@@ -1,4 +1,4 @@
-const ATTRIBUTES = ['alt', 'height', 'width', 'style', 'data-nsfw']
+const ATTRIBUTES = ['id', 'alt', 'height', 'width', 'style', 'data-nsfw']
 const ALLOWED_STYLE_KEYS = ['display', 'margin', 'float']
 
 function sanitize(style: string) {

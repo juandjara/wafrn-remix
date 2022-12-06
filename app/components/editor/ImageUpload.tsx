@@ -108,19 +108,6 @@ export default function ImageUpload({ onUpload }: { onUpload: (files: UploadedMe
     }
   }
 
-  function getHTMLForFile(props: { url: string; description: string; nsfw: boolean }) {
-    const { url, description, nsfw } = props
-    if (url.startsWith('data:image') || (url.startsWith('http') && url.endsWith('.webp'))) {
-      return description
-        ? `<img src="${url}" alt="${description}" data-nsfw="${nsfw}">`
-        : `<img src="${url}" data-nsfw="${nsfw}">`
-    }
-    if (url.startsWith('data:video') || (url.startsWith('http') && url.endsWith('.mp4'))) {
-      return `<video src="${url}" controls=""></video>`
-    }
-    return ''
-  }
-
   async function handleSubmit() {
     setError('')
     setLoading(true)
@@ -132,7 +119,7 @@ export default function ImageUpload({ onUpload }: { onUpload: (files: UploadedMe
         url: MEDIA_URL.concat(d.url),
         description,
         nsfw,
-        html: getHTMLForFile({ url: MEDIA_URL.concat(d.url), description, nsfw })
+        html: ''
       }))
       onUpload(medias)
       resetForm()

@@ -4,15 +4,21 @@ export default function RawVideoBlot(quill: typeof Quill) {
   const BlockEmbed = quill.import('blots/block/embed')
 
   class RawVideo extends BlockEmbed {
-    static create(value: string) {
+    static create(props: Record<string, any>) {
       const node = super.create()
-      node.setAttribute('src', value)
+      node.setAttribute('id', props.id)
+      node.setAttribute('src', props.src)
+      node.setAttribute('data-nsfw', props['data-nsfw'])
       node.setAttribute('controls', '')
       return node
     }
 
-    static value(node: Element) {
-      return node.getAttribute('src')
+    static value(domNode: Element) {
+      return {
+        id: domNode.id,
+        src: domNode.getAttribute('src'),
+        'data-nsfw': domNode.getAttribute('data-nsfw')
+      }
     }
   }
 

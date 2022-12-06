@@ -137,21 +137,23 @@ export default function PostEditor() {
   }, [quill, Quill])
 
   function handleUpload(files: UploadedMedia[]) {
-    setFiles(prev => prev.concat(files))
     if (quill) {
       for (const file of files) {
         const { url, description, nsfw } = file
         const sel = quill.getSelection(true)
         if (url.startsWith('data:image') || (url.startsWith('http') && url.endsWith('.webp'))) {
-          quill.insertEmbed(sel.index, 'image', { src: url, alt: description, 'data-nsfw': String(nsfw) }, 'user')
+          quill.insertEmbed(sel.index, 'image', { src: url, id: file.id, alt: description, 'data-nsfw': String(nsfw) }, 'user')
+          file.html = document.getElementById(file.id)?.outerHTML || ''
         }
         if (url.startsWith('data:video') || (url.startsWith('http') && url.endsWith('.mp4'))) {
-          quill.insertEmbed(sel.index, 'rawvideo', url, 'user')
+          quill.insertEmbed(sel.index, 'rawvideo', { src: url, id: file.id, 'data-nsfw': String(nsfw) }, 'user')
+          file.html = document.getElementById(file.id)?.outerHTML || ''
         }
         quill.insertText(sel.index + 1, '\n', 'user')
         quill.setSelection(sel.index + 2, 0, 'silent')
       }
     }
+    setFiles(prev => prev.concat(files))
   }
 
   return (
