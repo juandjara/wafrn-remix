@@ -15,7 +15,7 @@ import PostActions, { ReportIcon } from "./PostActions"
 
 const POST_COMPACT_LIMIT = 2
 
-export default function PostCard({ post, root = false }: { post: Post, root?: boolean }) {
+export default function PostCard({ post, root = false, disableThread = false }: { post: Post, root?: boolean, disableThread?: boolean }) {
   const isEmptyReblog = !post.content && !post.tags.length
   const [expanded, setExpanded] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState<string>('')
@@ -27,10 +27,16 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
       return aDate - bDate
     })
 
+  const collapseChildren = !disableThread && children.length > POST_COMPACT_LIMIT
+  const numHiddenPosts = children.length - 1
+  const shownChildren = collapseChildren && !expanded
+    ? isEmptyReblog
+      ? children.slice(-1)
+      : []
+    : children.slice(1)
+
   return (
-    <motion.li
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+    <li
       className={clsx('bg-white dark:bg-stone-700 block', root ? 'border dark:border-stone-500 border-stone-300 rounded-md p-4' : '')}>
       {root && children.length > 0 ? (
         <div id="root-header" className='flex items-center gap-2 mb-2 text-sm'>
@@ -57,31 +63,30 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
           </div>
         </div>
       ) : null}
-      {!!children.length && (
-        <>
-          {children.length > POST_COMPACT_LIMIT && (
-            <button
-              id="thread-expand-button"
-              onClick={() => setExpanded(flag => !flag)}
-              className={`my-6 mx-auto block ${buttonCN.normal} ${buttonCN.primary}`}>
-              {expanded ? 'Close thread' : (
-                <span>
-                  Expand thread <span className="text-xs">
-                    ({children.length - POST_COMPACT_LIMIT} more post{children.length - POST_COMPACT_LIMIT === 1 ? '' : 's'})
+      {children.length ? (
+        <ul id="post-thread" className='divide-y divide-stone-300 dark:divide-stone-500 border-t border-stone-300 dark:border-stone-500'>
+          <PostCard post={children[0]} />
+          {collapseChildren ? (
+            <li>
+              <button
+                id="thread-expand-button"
+                onClick={() => setExpanded(flag => !flag)}
+                className={`my-6 mx-auto block ${buttonCN.normal} ${buttonCN.primary}`}>
+                {expanded ? 'Close thread' : (
+                  <span>
+                    Expand thread <span className="text-xs">
+                      ({numHiddenPosts} more post{numHiddenPosts === 1 ? '' : 's'})
+                    </span>
                   </span>
-                </span>
-              )}
-            </button>
-          )}
-          <ul id="post-chidlren-list" className='divide-y divide-stone-300 dark:divide-stone-500 border-t border-stone-300 dark:border-stone-500'>
-            {children
-              .slice(expanded ? undefined : -1 * POST_COMPACT_LIMIT)
-              .map((p) => <PostCard key={p.id} post={p} />)}
-          </ul>
-        </>
-      )}
+                )}
+              </button>
+            </li>
+          ) : null}
+          {shownChildren.map((p) => <PostCard key={p.id} post={p} />)}
+        </ul>
+      ) : null}
       {isEmptyReblog ? null : (
-        <article id="post-content" className={root ? 'pb-4' : 'pt-2 pb-4'}>
+        <article id="post-content-wrapper" className={root ? 'pb-4' : 'pt-2 pb-4'}>
           <div className={clsx('flex items-center gap-2 my-2', { 'mt-0': root, 'pt-4 border-t border-stone-300 dark:border-stone-500': root && post.ancestors?.length })}>
             <img
               alt='avatar'
@@ -114,9 +119,9 @@ export default function PostCard({ post, root = false }: { post: Post, root?: bo
           </div>
         </article>
       )}
-      {root && <PostToolbar post={post} onDelete={() => setDeleteModalOpen(post.id)} />}
+      {root ? <PostToolbar post={post} onDelete={() => setDeleteModalOpen(post.id)} /> : null}
       <DeleteModal postId={deleteModalOpen} open={!!deleteModalOpen} onClose={() => setDeleteModalOpen('')} />
-    </motion.li>
+    </li>
   )
 }
 

@@ -26,7 +26,7 @@ export default function PostDetail() {
   const { post } = useLoaderData<LoaderData>()
   return (
     <Container>
-      <PostCard root post={post} />
+      <PostCard root disableThread post={post} />
     </Container>
   )  
 }

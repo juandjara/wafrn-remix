@@ -93,7 +93,7 @@ export default function Write() {
       {reblog && (
         <div className="mt-12">
           <label className={`${labelCN} block mb-2`}>Reblogging this post</label>
-          <PostCard root post={reblog} />
+          <PostCard disableThread root post={reblog} />
         </div>
       )}
     </Container>
