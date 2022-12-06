@@ -1,4 +1,5 @@
 import { MEDIA_URL, API_URL } from './config'
+import { linkCN } from './style'
 
 export type PostTag = {
   tagName: string
@@ -243,7 +244,7 @@ async function processHTML(post: Post) {
       const key = `[mentionuserid="${m.userId}"]`
       const value = `<a 
           data-mention="${m.user.url}"
-          class="text-purple-700 hover:underline"
+          class="${linkCN}"
           href="/u/${m.user.url}">@${m.user.url}</a>`
       content = content.replace(key, value)
     }
@@ -283,7 +284,7 @@ async function processHTML(post: Post) {
       .use(rehypeParse, {fragment: true})
       .use(rehypeSanitize.default, {
         ...rehypeSanitize.defaultSchema,
-        tagNames: [...(rehypeSanitize.defaultSchema.tagNames || []), 'marquee', 'video'],
+        tagNames: [...(rehypeSanitize.defaultSchema.tagNames || []), 'marquee', 'video', 'u'],
         attributes: {
           ...rehypeSanitize.defaultSchema.attributes,
           '*': ['data*', 'className', 'style', ...(rehypeSanitize.defaultSchema.attributes?.['*'] || [])],
