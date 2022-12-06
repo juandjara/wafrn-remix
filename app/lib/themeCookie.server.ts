@@ -3,7 +3,8 @@ import { createCookie } from "@remix-run/node"
 export const themeCookie = createCookie("color-scheme", {
   sameSite: "lax",
   path: "/",
-  httpOnly: true
+  httpOnly: true,
+  maxAge: 60 * 60 * 24 * 365
 })
 
 // from here: https://rossmoody.com/writing/remix-stitches
