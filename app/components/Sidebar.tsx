@@ -63,7 +63,7 @@ export default function Sidebar() {
         <ul className="space-y-4 text-purple-900 dark:text-purple-50">
           {!user && (
             <li>
-              <NavLink to="/login" className={navLinkCN}>
+              <NavLink onClick={() => setOpen(false)} to="/login" className={navLinkCN}>
                 <LockClosedIcon className={iconCN} />
                 <span>Log in</span>
               </NavLink>
@@ -72,13 +72,13 @@ export default function Sidebar() {
           {user && (
             <>
               <li className='border-b dark:border-stone-500 border-stone-300 pb-4 mb-4'>
-                <NavLink to="/write" className={navLinkCNInverse}>
+                <NavLink onClick={() => setOpen(false)} to="/write" className={navLinkCNInverse}>
                   <PencilSquareIcon className='w-6 h-6 text-white' />
                   <span>Write</span>
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard" className={navLinkCN}>
+                <NavLink onClick={() => setOpen(false)} to="/dashboard" className={navLinkCN}>
                   <HomeIcon className={iconCN} />
                   <span>Home</span>
                 </NavLink>
@@ -86,13 +86,13 @@ export default function Sidebar() {
             </>
           )}
           <li>
-            <NavLink to="/explore" className={navLinkCN}>
+            <NavLink onClick={() => setOpen(false)} to="/explore" className={navLinkCN}>
               <RectangleGroupIcon className={iconCN} />
               <span>Explore {user ? '' : 'without login'}</span>
             </NavLink>
           </li>
           <li>
-            <NavLink to="/search" className={navLinkCN}>
+            <NavLink onClick={() => setOpen(false)} to="/search" className={navLinkCN}>
               <MagnifyingGlassIcon className={iconCN} />
               <span>Search</span>
             </NavLink>
@@ -100,13 +100,13 @@ export default function Sidebar() {
           {user && (
             <>
               <li>
-                <NavLink to={`/u/${user.url}`} className={navLinkCN}>
+                <NavLink onClick={() => setOpen(false)} to={`/u/${user.url}`} className={navLinkCN}>
                   <UserIcon className={iconCN} />
                   <span>My blog</span>
                 </NavLink>
               </li>
               <li>
-                <NavLink to={`/profile`} className={navLinkCN}>
+                <NavLink onClick={() => setOpen(false)} to={`/profile`} className={navLinkCN}>
                   <UserCircleIcon className={iconCN} />
                   <span>Edit Profile</span>
                 </NavLink>
@@ -140,7 +140,7 @@ export default function Sidebar() {
 
   return (
     <div id='sidebar-wrapper'>
-      <button onClick={() => setOpen(true)} className='p-2 bg-purple-100 rounded-full fixed top-2 left-2'>
+      <button onClick={() => setOpen(true)} className='p-2 bg-purple-100 dark:bg-purple-200 rounded-full z-20 fixed top-2 left-2'>
         <Bars3Icon className='w-6 h-6 text-purple-700' />
         <span className='sr-only'>Open menu</span>
       </button>
@@ -154,7 +154,7 @@ export default function Sidebar() {
 
 function Drawer({ open, setOpen, children }: { open: boolean, setOpen: (b: boolean) => void; children: JSX.Element }) {
   const drawerCN = [
-    'fixed overflow-hidden z-10 bg-gray-900 bg-opacity-25 inset-0 transform',
+    'fixed overflow-hidden z-30 bg-gray-900 bg-opacity-25 inset-0 transform',
     open
       ? "transition-opacity opacity-100 duration-200"
       : "transition-opacity delay-200 opacity-0 pointer-events-none"

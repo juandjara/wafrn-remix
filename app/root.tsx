@@ -24,9 +24,10 @@ import { getFlashMessage, getSessionData } from "./lib/session.server"
 import tailwind from "./tailwind.css"
 import quillCSS from 'quill/dist/quill.snow.css'
 import env from "./lib/env.server"
-import type { Notifications } from "./components/NotificationCount"
 import NotificationCount from "./components/NotificationCount"
 import { getTheme, toggleTheme } from "./lib/themeCookie.server"
+import type { Notifications } from "./lib/processNotifications"
+import processNotifications from "./lib/processNotifications"
 
 export function links() {
   return [
@@ -64,11 +65,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     followedUsers: [] as string[],
     blockedUsers: [] as string[]
   }
-  let notifications = {
-    follows: [],
-    mentions: [],
-    reblogs: []
-  }
+  let notifications = [] as Notifications
   if (user && token) {
     const data = await Promise.all([
       getUserRelations(token),
@@ -76,7 +73,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     ])
 
     relations = data[0]
-    notifications = data[1]
+    notifications = processNotifications(user, data[1])
   }
 
   const theme = await getTheme(request)
@@ -117,7 +114,7 @@ export default function App() {
           }
         `}</style>
       </head>
-      <body className="dark:text-stone-100 text-stone-700 dark:bg-stone-800 bg-stone-100">
+      <body className="overflow-x-hidden dark:text-stone-100 text-stone-700 dark:bg-stone-800 bg-stone-100">
         <GlobalSpinner />
         <ClientOnly>{() => (
           <>

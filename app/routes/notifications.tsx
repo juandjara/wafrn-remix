@@ -5,7 +5,8 @@ import { requireUserSession } from "@/lib/session.server"
 import { buttonCN, headingCN, linkCN } from "@/lib/style"
 import type { RootLoaderData } from "@/root"
 import { ArrowPathRoundedSquareIcon, AtSymbolIcon, ChatBubbleLeftIcon, UserPlusIcon } from "@heroicons/react/24/outline"
-import { ActionFunction, json, LoaderFunction } from "@remix-run/node"
+import type { ActionFunction, LoaderFunction } from "@remix-run/node"
+import { json } from "@remix-run/node"
 import { Form, Link, useLoaderData, useMatches, useTransition } from "@remix-run/react"
 import { motion } from 'framer-motion'
 
@@ -32,39 +33,6 @@ export default function Notifications() {
   const transition = useTransition()
   const loading = transition.state !== 'idle'
 
-  const mentions = notifications.mentions.map((m) => ({
-    type: 'mention',
-    date: new Date(m.createdAt),
-    content: m.content,
-    user: m.user,
-    id: m.id
-  }))
-
-  const reblogs = notifications.reblogs.map((m) => ({
-    type: m.content ? 'reply' : 'reblog',
-    date: new Date(m.createdAt),
-    content: m.content,
-    user: m.user,
-    id: m.id
-  }))
-
-  const follows = notifications.follows.map((m) => ({
-    type: 'follow',
-    date: new Date(m.follows.createdAt),
-    content: '',
-    user: {
-      url: m.url,
-      avatar: m.avatar
-    },
-    id: m.url,
-  }))
-
-  const items = [...mentions, ...reblogs, ...follows].sort((a, b) => {
-    const aTime = a.date.getTime()
-    const bTime = b.date.getTime()
-    return bTime - aTime
-  })
-
   return (
     <Container>
       <h1 className={headingCN}>Notifications</h1>
@@ -75,10 +43,10 @@ export default function Notifications() {
         </button>
       </Form>
       <ul className="divide-y divide-stone-300">
-        {items.length === 0 && (
+        {notifications.length === 0 && (
           <p>Nothing to show here</p>
         )}
-        {items.map((item) => (
+        {notifications.map((item) => (
           <motion.li 
             key={item.id}
             initial={{ opacity: 0 }}
@@ -116,7 +84,7 @@ export default function Notifications() {
                 {item.type === 'mention' && <span className="hover:underline">has mentioned you in a post</span>}
               </Link>
               <p className="text-xs mt-1 font-medium text-stone-500">
-                {item.date.toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })}
+                {new Date(item.date).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })}
               </p>
             </div>
           </motion.li>

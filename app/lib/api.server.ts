@@ -414,6 +414,29 @@ export async function reportPost(token: string, body: ReportBody) {
   })
 }
 
+export type APINotifications = {
+  reblogs: {
+    id: string
+    createdAt: number
+    content: string
+    user: PostUser
+    userId: string
+  }[]
+  follows: {
+    avatar: string
+    url: string
+    follows: {
+      createdAt: string
+    }
+  }[]
+  mentions: {
+    id: string
+    content: string
+    createdAt: string
+    user: PostUser
+  }[]
+}
+
 export async function getNotifications(token: string) {
   const res = await fetch(`${API_URL}/notifications`, {
     headers: {
@@ -421,7 +444,8 @@ export async function getNotifications(token: string) {
     }
   })
 
-  return handleApiResponse(res)
+  const data = await handleApiResponse(res)
+  return data as APINotifications
 }
 
 export async function readNotifications(token: string, time: string) {
