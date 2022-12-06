@@ -145,7 +145,7 @@ export default function Sidebar() {
         <span className='sr-only'>Open menu</span>
       </button>
       <Drawer open={open} setOpen={setOpen}>{sidebarContent}</Drawer>
-      <aside className={`hidden md:block ${sidebarCN} sticky top-0 self-start min-h-screen`}>
+      <aside className={`hidden md:block ${sidebarCN} sticky z-40 top-0 self-start min-h-screen`}>
         {sidebarContent}
       </aside>
     </div>
