@@ -13,7 +13,7 @@ import DeleteModal from "../DeleteModal"
 import ReblogMenu from "./ReblogMenu"
 import PostActions, { ReportIcon } from "./PostActions"
 
-const POST_COMPACT_LIMIT = 2
+const POST_COMPACT_LIMIT = 3
 
 export default function PostCard({ post, root = false, disableThread = false }: { post: Post, root?: boolean, disableThread?: boolean }) {
   const isEmptyReblog = !post.content && !post.tags.length
@@ -28,10 +28,10 @@ export default function PostCard({ post, root = false, disableThread = false }: 
     })
 
   const collapseChildren = !disableThread && children.length > POST_COMPACT_LIMIT
-  const numHiddenPosts = children.length - 1
+  const numHiddenPosts = children.length - (POST_COMPACT_LIMIT - 1)
   const shownChildren = collapseChildren && !expanded
     ? isEmptyReblog
-      ? children.slice(-1)
+      ? children.slice(-1 * (POST_COMPACT_LIMIT - 1))
       : []
     : children.slice(1)
 
