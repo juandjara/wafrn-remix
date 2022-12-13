@@ -1,0 +1,73 @@
+/* style fixes for toolbar menus (pickers) */
+.ql-toolbar.ql-snow .ql-picker-options {
+  color: #44403c;
+}
+
+.ql-toolbar.ql-snow .ql-picker.ql-size {
+  width: 76px;
+}
+
+.ql-toolbar.ql-snow .ql-picker {
+  color: currentColor;
+}
+
+/* fixes for toolbar icons to inherit default color */
+.ql-toolbar.ql-snow .ql-stroke {
+  stroke: currentColor;
+}
+
+.ql-toolbar.ql-snow .ql-fill {
+  fill: currentColor;
+}
+
+/* fix to get custom button height same as other  */
+.ql-marquee {
+  line-height: 18px;
+}
+
+/* fixes for layout and borders in main area */
+.ql-toolbar.ql-snow .ql-formats {
+  margin-right: 12px;
+}
+
+.ql-toolbar.ql-snow {
+  border: none;
+  display: inline;
+  padding: 0;
+}
+
+.ql-container.ql-snow {
+  border: none;
+}
+
+.ql-wrapper:focus-within {
+  border: 1px solid white;
+}
+
+/* editor content styles */
+.ql-wrapper .ql-editor {
+  min-height: 160px;
+  font-size: 16px;
+  outline: none;
+  padding-top: 36px;
+  padding-bottom: 42px;
+}
+
+/* editor placeholder styles */
+.ql-wrapper .ql-editor.ql-blank::before {
+  color: currentColor;
+  opacity: 0.4;
+}
+
+/* tooltip top arrow */
+.ql-wrapper .ql-editor+.ql-tooltip::after {
+  content: '';
+  position: absolute;
+  top: -16px;
+  right: 50%;
+  transform: translateX(-50%);
+  margin-left: -8px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+}
