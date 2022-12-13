@@ -13,6 +13,7 @@ import { useFetcher, useLoaderData, useSearchParams } from "@remix-run/react"
 import type { FormEvent} from "react"
 import { lazy, useRef } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
+import { toast } from "react-hot-toast"
 import { ClientOnly } from "remix-utils"
 
 const PostEditor = lazy(() => import('@/components/editor/PostEditor'))
@@ -50,7 +51,12 @@ export default function Write() {
 
   async function handleSubmit(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
-    await recaptchaRef.current?.executeAsync()
+    try {
+      await recaptchaRef.current?.executeAsync()
+    } catch (err) {
+      console.error(err)
+      toast.error('Error getting CAPTCHA code')
+    }
     const fd = new FormData(ev.target as HTMLFormElement)
     fetcher.submit(fd, {
       action: '/api/write',

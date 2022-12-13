@@ -12,6 +12,7 @@ import { Form, Link, useActionData, useLoaderData, useSubmit, useTransition } fr
 import type { ChangeEvent, FormEvent} from "react"
 import { useRef, useState } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
+import { toast } from "react-hot-toast"
 import invariant from "tiny-invariant"
 
 type LoaderData = {
@@ -88,7 +89,12 @@ export default function Register() {
 
   async function handleSubmit(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
-    await recaptchaRef.current?.executeAsync()
+    try {
+      await recaptchaRef.current?.executeAsync()
+    } catch (err) {
+      console.error(err)
+      toast.error('Error getting CAPTCHA code')
+    }
     const fd = new FormData(ev.target as HTMLFormElement)
     submit(fd, {
       method: 'post',

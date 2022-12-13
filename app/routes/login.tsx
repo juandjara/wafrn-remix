@@ -12,6 +12,7 @@ import { Form, Link, useActionData, useLoaderData, useSubmit, useTransition } fr
 import type { FormEvent} from "react"
 import { useRef } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
+import { toast } from "react-hot-toast"
 
 type LoaderData = {
   recaptchaKey: string
@@ -58,7 +59,12 @@ export default function Login() {
 
   async function handleSubmit(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
-    await recaptchaRef.current?.executeAsync()
+    try {
+      await recaptchaRef.current?.executeAsync()
+    } catch (err) {
+      console.error(err)
+      toast.error('Error getting CAPTCHA code')
+    }
     const fd = new FormData(ev.target as HTMLFormElement)
     submit(fd, { method: 'post' })
   }

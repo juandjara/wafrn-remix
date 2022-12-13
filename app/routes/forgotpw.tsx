@@ -55,7 +55,12 @@ export default function ForgotPW() {
 
   async function handleSubmit(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
-    await recaptchaRef.current?.executeAsync()
+    try {
+      await recaptchaRef.current?.executeAsync()
+    } catch (err) {
+      console.error(err)
+      toast.error('Error getting CAPTCHA code')
+    }
     const fd = new FormData(ev.target as HTMLFormElement)
     submit(fd, { method: 'post' })
   }
