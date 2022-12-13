@@ -15,22 +15,19 @@ import RawVideoBlot from './RawVideo'
 function EditorToolbar() {
   return (
     <div id="ql-toolbar-container">
-      <span className="ql-formats">
+      <span className="ql-formats z-10 absolute top-2 left-2">
         <select className="ql-size"></select>
       </span>
-      <span className="ql-formats h-6">
+      <span className="ql-formats h-6 z-10 absolute bottom-2 left-2">
         <button className="ql-list" value="bullet"></button>
         <select className="ql-align"></select>
-
+        <button className="ql-link"></button>
         <button className="ql-bold"></button>
         <button className="ql-italic"></button>
         <button className="ql-underline"></button>
         <button className="ql-strike"></button>
-
         <select className="ql-color"></select>
         <select className="ql-background"></select>
-
-        <button className="ql-link"></button>
         <button className='ql-marquee'>M</button>
       </span>
     </div>
@@ -155,121 +152,19 @@ export default function PostEditor() {
     }
     setFiles(prev => prev.concat(files))
   }
+  
+  const wrapperCN = [
+    'ql-wrapper',
+    'dark:bg-stone-800 bg-stone-50',
+    'border border-stone-300 dark:border-stone-500',
+    '-m-3 mb-0 rounded-t-md relative'
+  ].join(' ')
 
   return (
-    <div className='dark:bg-stone-800 bg-stone-50 ql-wrapper border border-stone-300 dark:border-stone-500'>
-      <style>{`
-        .ql-toolbar.ql-snow {
-          border: none;
-          padding: 8px 2px;
-        }
-        .ql-toolbar.ql-snow .ql-picker-options {
-          color: #44403c;
-        }
-        .ql-snow .ql-picker.ql-size {
-          width: 76px;
-        }
-        .ql-toolbar.ql-snow .ql-formats {
-          margin-right: 12px;
-        }
-        .ql-toolbar.ql-snow .ql-picker {
-          color: currentColor;
-        }
-        .ql-toolbar.ql-snow .ql-stroke {
-          stroke: currentColor;
-        }
-        .ql-toolbar.ql-snow .ql-fill {
-          fill: currentColor;
-        }
-        .ql-container.ql-snow {
-          border: none;
-        }
-        .ql-wrapper {
-          border-radius: 4px;
-        }
-        .ql-wrapper:focus-within {
-          outline: auto;
-        }
-        .ql-wrapper .ql-editor {
-          min-height: 140px;
-          font-size: 16px;
-          border-radius: 0 0 4px 4px;
-          outline: none;
-          padding: 6px 12px;
-        }
-        .ql-wrapper .ql-editor + .ql-tooltip::after {
-          content: '';
-          position: absolute;
-          top: -16px;
-          right: 50%;
-          transform: translateX(-50%);
-          margin-left: -8px;
-          border-width: 8px;
-          border-style: solid;
-          border-color: transparent transparent white transparent;
-        }
-        .ql-wrapper .ql-editor.ql-blank::before {
-          left: 8px;
-          color: currentColor;
-          opacity: 0.4;
-        }
-        .ql-marquee {
-          line-height: 18px;
-        }
-      `}</style>
-      <style>{`
-        /* copied and modified from quill-mentions.css */
-        .ql-mention-list-container {
-          width: 270px;
-          border: 1px solid #f0f0f0;
-          border-radius: 4px;
-          background-color: #ffffff;
-          box-shadow: 0 2px 12px 0 rgba(30, 30, 30, 0.08);
-          z-index: 9001;
-          overflow: auto;
-        }
-        
-        .ql-mention-loading {
-          line-height: 44px;
-          padding: 0 20px;
-          vertical-align: middle;
-          font-size: 16px;
-        }
-        
-        .ql-mention-list {
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          overflow: hidden;
-          color: #44403c;
-        }
-        
-        .ql-mention-list-item {
-          cursor: pointer;
-          line-height: 44px;
-          font-size: 16px;
-          padding: 0 20px;
-          vertical-align: middle;
-        }
-        
-        .ql-mention-list-item.disabled {
-          cursor: auto;
-        }
-        
-        .ql-mention-list-item.selected {
-          background-color: #d3e1eb;
-          text-decoration: none;
-        }
-        
-        .mention {
-          user-select: all;
-          color: #a855f7;
-          text-decoration: underline;
-        }
-      `}</style>
-      <EditorToolbar />
+    <div className={wrapperCN}>
       <ImageUpload onUpload={handleUpload} />
       <div ref={quillRef}></div>
+      <EditorToolbar />
       <input type="hidden" name="content" value={value} />
       <input type="hidden" name="mentions" value={JSON.stringify(mentions)} />
       <input type="hidden" name="files" value={JSON.stringify(files)} />

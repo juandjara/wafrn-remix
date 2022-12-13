@@ -15,6 +15,15 @@ import { lazy, useRef } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
 import { toast } from "react-hot-toast"
 import { ClientOnly } from "remix-utils"
+import editorCSS from '@/components/editor/styles/editor.css'
+import mentionsCSS from '@/components/editor/styles/mentions.css'
+
+export function links() {
+  return [
+    { rel: "stylesheet", href: editorCSS },
+    { rel: "stylesheet", href: mentionsCSS },
+  ]
+}
 
 const PostEditor = lazy(() => import('@/components/editor/PostEditor'))
 
@@ -73,22 +82,24 @@ export default function Write() {
         <div id="portal-root"></div>
         <fetcher.Form action="/api/write" method="post" onSubmit={handleSubmit}>
           <ClientOnly>{() => <PostEditor />}</ClientOnly>
-          <input type="hidden" name="parent" value={parent || ''} />
-          <div className="mt-6">
-            <label htmlFor="tags" className={`${labelCN} mb-1 block`}>Tags</label>
-            <input type="text" name="tags" className={`${inputCN} max-w-sm`} placeholder="Enter tags separated by commas" />
+          <div className="flex items-end gap-3">
+            <div className="mt-6 flex-grow">
+              <label htmlFor="tags" className={`${labelCN} mb-1 block`}>Tags</label>
+              <input type="text" name="tags" className={inputCN} placeholder="tags separated by comma" />
+            </div>
+            <button
+              type='submit'
+              disabled={busy}
+              className={`${buttonCN.normal} ${buttonCN.primary} ${buttonCN.iconLeft} flex-shrink-0`}
+            >
+              {busy ? <Spinner size='w-5 h-5' /> : <PaperAirplaneIcon className='w-5 h-5' />}
+              <p className="flex-grow text-center">Publish</p>
+            </button>
           </div>
+          <input type="hidden" name="parent" value={parent || ''} />
           {hasError && (
             <p className="text-red-600 text-sm mt-4">There was an error creating your post</p>
           )}
-          <button
-            type='submit'
-            disabled={busy}
-            className={`${buttonCN.normal} ${buttonCN.primary} ${buttonCN.iconLeft} mt-6`}
-          >
-            {busy ? <Spinner size='w-5 h-5' /> : <PaperAirplaneIcon className='w-5 h-5' />}
-            <p className="flex-grow text-center">Publish</p>
-          </button>
           <ReCAPTCHA
             ref={recaptchaRef}
             size="invisible"

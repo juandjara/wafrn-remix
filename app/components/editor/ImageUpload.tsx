@@ -132,15 +132,15 @@ export default function ImageUpload({ onUpload }: { onUpload: (files: UploadedMe
   }
 
   return portalRoot && createPortal(
-    <Popover className="absolute top-7 right-7">
-      <Popover.Button ref={toggleButtonRef} title='Upload image or video' aria-label='Upload image or video'>
+    <Popover className="absolute w-full top-2 inset-x-0 z-10 pr-2">
+      <Popover.Button className='ml-auto block' ref={toggleButtonRef} title='Upload image or video' aria-label='Upload image or video'>
         <svg viewBox="0 0 18 18" height='18px'>
           <rect stroke='currentColor' fill='none' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' height="10" width="12" x="3" y="4"></rect>
           <circle fill='currentColor' cx="6" cy="7" r="1"></circle>
           <polyline fillRule='evenodd' fill='currentColor' points="5 12 5 11 7 9 8 10 11 7 13 9 13 12 5 12"></polyline>
         </svg>
       </Popover.Button>
-      <Popover.Panel className={`absolute top-full -right-5 z-10 w-80 shadow-md ${cardCN}`}>
+      <Popover.Panel className={`max-w-xs w-full absolute top-full right-0 mt-2 z-10 shadow-md ${cardCN}`}>
         <div>
           <input
             multiple
