@@ -84,8 +84,10 @@ export default function Write() {
           <ClientOnly>{() => <PostEditor />}</ClientOnly>
           <div className="flex items-end gap-3">
             <div className="mt-6 flex-grow">
-              <label htmlFor="tags" className={`${labelCN} mb-1 block`}>Tags</label>
-              <input type="text" name="tags" className={inputCN} placeholder="tags separated by comma" />
+              <label htmlFor="tags" className={`${labelCN} mb-1 block`}>
+                Tags (<small>separated by comma</small>)
+              </label>
+              <input type="text" name="tags" className={inputCN} placeholder="Write your tags here" />
             </div>
             <button
               type='submit'
