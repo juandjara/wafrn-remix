@@ -22,7 +22,7 @@ export default function processNotifications(user: User, notifications: APINotif
 
   const follows = notifications.follows.map((m) => ({
     type: 'follow',
-    date: new Date(m.follows.createdAt),
+    date: m.follows.createdAt,
     content: '',
     user: {
       url: m.url,
@@ -32,8 +32,8 @@ export default function processNotifications(user: User, notifications: APINotif
   }))
 
   let items = [...mentions, ...reblogs, ...follows].sort((a, b) => {
-    const aTime = a.date.getTime()
-    const bTime = b.date.getTime()
+    const aTime = new Date(a.date).getTime()
+    const bTime = new Date(b.date).getTime()
     return bTime - aTime
   })
 
