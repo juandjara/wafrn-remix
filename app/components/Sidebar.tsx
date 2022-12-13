@@ -1,7 +1,7 @@
 import type { User } from '@/lib/session.server'
 import { shadowCN } from '@/lib/style'
 import useUser from '@/lib/useUser'
-import { Menu, Transition } from '@headlessui/react'
+import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   MagnifyingGlassIcon,
   RectangleGroupIcon,
@@ -17,7 +17,7 @@ import {
   XMarkIcon
 } from '@heroicons/react/24/outline'
 import { Link, NavLink } from '@remix-run/react'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import DarkModeToggler from './DarkModeToggler'
 import LogoutButton from './LogoutButton'
 
@@ -43,7 +43,7 @@ const navLinkCNInverse = ({ isActive }: { isActive: boolean }) => [
   linkCNInverse
 ].join(' ')
 
-const sidebarCN = 'w-80 bg-white dark:bg-stone-700'
+const sidebarCN = 'bg-white dark:bg-stone-700'
 const iconCN = 'w-6 h-6 text-purple-500 dark:text-purple-300'
 
 export default function Sidebar() {
@@ -145,7 +145,7 @@ export default function Sidebar() {
         <span className='sr-only'>Open menu</span>
       </button>
       <Drawer open={open} setOpen={setOpen}>{sidebarContent}</Drawer>
-      <aside className={`hidden md:block ${sidebarCN} sticky z-40 top-0 self-start min-h-screen`}>
+      <aside className={`hidden md:block w-80 ${sidebarCN} sticky z-40 top-0 self-start min-h-screen`}>
         {sidebarContent}
       </aside>
     </div>
@@ -153,35 +153,50 @@ export default function Sidebar() {
 }
 
 function Drawer({ open, setOpen, children }: { open: boolean, setOpen: (b: boolean) => void; children: JSX.Element }) {
-  const drawerCN = [
-    'fixed overflow-hidden z-40 bg-gray-900 bg-opacity-25 inset-0 transform',
-    open
-      ? "transition-opacity opacity-100 duration-200"
-      : "transition-opacity delay-200 opacity-0 pointer-events-none"
-  ].join(' ')
-
+  const drawerCN = 'max-w-xs w-full fixed overflow-hidden z-40 inset-0'
   const contentCN = [
     sidebarCN,
     'overflow-y-auto',
-    'left-0 absolute bg-white h-full shadow-xl',
-    'delay-400 duration-500 ease-in-out transition-all transform',
-    open ? "translate-x-0" : "-translate-x-full"
+    'absolute left-0 bg-white h-full shadow-xl',
   ].join(' ')
 
+  const toggleCN = 'p-1 rounded-md bg-white bg-opacity-10 fixed top-2 right-2'
+
   return (
-    <div className={drawerCN}>
-      <aside className={contentCN}>
-        <button onClick={() => setOpen(false)} className='p-1 rounded-md bg-white bg-opacity-10 fixed top-2 right-2'>
-          <XMarkIcon className='w-5 h-5 text-white' />
-          <span className='sr-only'>Close menu</span>
-        </button>
-        {children}
-      </aside>
-      <section
-        className="w-screen h-full cursor-pointer"
-        onClick={() => setOpen(false)}
-      ></section>
-    </div>
+    <Transition show={open} as={Fragment}>
+      <Dialog onClose={() => setOpen(false)}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div id="dialog-backdrop" className="fixed z-40 inset-0 bg-black/30" aria-hidden="true" />
+        </Transition.Child>
+        <Transition.Child
+          as={Fragment}
+          enter="transform ease-out duration-300"
+          enterFrom="opacity-0 -translate-x-full"
+          enterTo="opacity-100 translate-x-0"
+          leave="transform ease-in duration-200"
+          leaveFrom="opacity-100 translate-x-0"
+          leaveTo="opacity-0 -translate-x-full"
+        >
+          <Dialog.Panel as="div" className={drawerCN}>
+            <aside className={contentCN}>
+              <button onClick={() => setOpen(false)} className={toggleCN}>
+                <XMarkIcon className='w-5 h-5 text-white' />
+                <span className='sr-only'>Close menu</span>
+              </button>
+              {children}
+            </aside>
+          </Dialog.Panel>
+        </Transition.Child>
+      </Dialog>
+    </Transition>
   )
 }
 
