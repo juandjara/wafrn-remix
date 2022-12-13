@@ -154,7 +154,7 @@ export default function Sidebar() {
 
 function Drawer({ open, setOpen, children }: { open: boolean, setOpen: (b: boolean) => void; children: JSX.Element }) {
   const drawerCN = [
-    'fixed overflow-hidden z-30 bg-gray-900 bg-opacity-25 inset-0 transform',
+    'fixed overflow-hidden z-40 bg-gray-900 bg-opacity-25 inset-0 transform',
     open
       ? "transition-opacity opacity-100 duration-200"
       : "transition-opacity delay-200 opacity-0 pointer-events-none"

@@ -15,7 +15,7 @@ import RawVideoBlot from './RawVideo'
 function EditorToolbar() {
   return (
     <div id="ql-toolbar-container">
-      <span className="ql-formats z-10 absolute top-2 left-2">
+      <span className="ql-formats z-20 absolute top-2 left-2">
         <select className="ql-size"></select>
       </span>
       <span className="ql-formats h-6 z-10 absolute bottom-2 left-2">
