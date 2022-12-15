@@ -82,13 +82,11 @@ export default function Write() {
         <div id="portal-root"></div>
         <fetcher.Form action="/api/write" method="post" onSubmit={handleSubmit}>
           <ClientOnly>{() => <PostEditor />}</ClientOnly>
-          <div className="flex items-end gap-3">
-            <div className="mt-6 flex-grow">
-              <label htmlFor="tags" className={`${labelCN} mb-1 block`}>
-                Tags (<small>separated by comma</small>)
-              </label>
-              <input type="text" name="tags" className={inputCN} placeholder="Write your tags here" />
-            </div>
+          <label htmlFor="tags" className={`${labelCN} mt-6 mb-1 block`}>
+            Tags (<small>separated by comma</small>)
+          </label>
+          <div className="flex items-end gap-3">              
+            <input type="text" name="tags" className={`flex-grow ${inputCN}`} placeholder="Write your tags here" />
             <button
               type='submit'
               disabled={busy}
