@@ -43,10 +43,11 @@ export default function ReblogMenu({ post }: { post: Post }) {
     try {
       const captcha = await recaptchaRef.current?.executeAsync()
       const formData = new FormData()
-      formData.set('captchaKey', captcha!)
+      formData.set('g-recaptcha-response', captcha!)
       formData.set('tags', '')
       formData.set('content', '')
       formData.set('parent', post.id)
+      formData.set('content-warning', '')
 
       fetcher.submit(formData, {
         action: '/api/write',
