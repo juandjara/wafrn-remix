@@ -30,9 +30,7 @@ export default function PostCard({ post, root = false, disableThread = false }: 
   const collapseChildren = !disableThread && children.length > POST_COMPACT_LIMIT
   const numHiddenPosts = children.length - (POST_COMPACT_LIMIT - 1)
   const shownChildren = collapseChildren && !expanded
-    ? isEmptyReblog
-      ? children.slice(-1 * (POST_COMPACT_LIMIT - 1))
-      : []
+    ? children.slice(-1 * (POST_COMPACT_LIMIT - 2))
     : children.slice(1)
 
   return (
@@ -67,11 +65,11 @@ export default function PostCard({ post, root = false, disableThread = false }: 
         <ul id="post-thread" className='divide-y divide-stone-300 dark:divide-stone-500 border-t border-stone-300 dark:border-stone-500'>
           <PostCard post={children[0]} />
           {collapseChildren ? (
-            <li>
+            <li className="border-none">
               <button
                 id="thread-expand-button"
                 onClick={() => setExpanded(flag => !flag)}
-                className={`my-6 mx-auto block ${buttonCN.normal} ${buttonCN.primary}`}>
+                className={`my-6 block ml-auto text-right ${buttonCN.small} ${buttonCN.primary}`}>
                 {expanded ? 'Close thread' : (
                   <span>
                     Expand thread <span className="text-xs">
