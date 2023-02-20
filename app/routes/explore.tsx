@@ -18,7 +18,7 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const sp = new URL(request.url).searchParams
-  const local = !!sp.get('local')
+  const local = sp.get('local') === '1'
   const page = Number(sp.get('page')) || 0
   const startScroll = Number(sp.get('startScroll')) || Date.now()
   const params = { local, page, startScroll }
@@ -31,7 +31,7 @@ export default function Explore() {
   const user = useUser()
   const { posts, params: { startScroll } } = useLoaderData<LoaderData>()
   const [sp] = useSearchParams()
-  const isLocal = !!Number(sp.get('local'))
+  const isLocal = sp.get('local') === '1'
 
   return (
     <Container>
