@@ -1,6 +1,7 @@
 import type { ActionArgs, LoaderFunction, MetaFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import {
+  Link,
   Links,
   Meta,
   Outlet,
@@ -28,6 +29,7 @@ import NotificationCount from "./components/NotificationCount"
 import { getTheme, toggleTheme } from "./lib/themeCookie.server"
 import type { Notifications } from "./lib/processNotifications"
 import processNotifications from "./lib/processNotifications"
+import { PencilSquareIcon } from "@heroicons/react/24/outline"
 
 export function links() {
   return [
@@ -130,6 +132,12 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+        <div className="md:hidden fixed z-20 p-3 bottom-0 right-0 flex justify-end">
+          <Link to='/write' className='p-2 bg-purple-100 dark:bg-purple-200 rounded-full'>
+            <PencilSquareIcon className='w-6 h-6 text-purple-600' />
+            <span className='sr-only'>Write post</span>
+          </Link>
+        </div>
       </body>
     </html>
   )
