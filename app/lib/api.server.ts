@@ -137,8 +137,9 @@ export async function getDetails(userUrl: string) {
   return details
 }
 
-export async function getExplore({ page, startScroll }: { page: number; startScroll: number }) {
-  const res = await fetch(`${API_URL}/explore?page=${page}&startScroll=${startScroll}`)
+export async function getExplore({ local, page, startScroll }: { local: boolean; page: number; startScroll: number }) {
+  const path = local ? 'exploreLocal' : 'explore'
+  const res = await fetch(`${API_URL}/${path}?page=${page}&startScroll=${startScroll}`)
   const posts = await res.json()
 
   for (const post of posts) {

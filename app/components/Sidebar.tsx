@@ -86,9 +86,15 @@ export default function Sidebar() {
             </>
           )}
           <li>
-            <NavLink onClick={() => setOpen(false)} to="/explore" className={navLinkCN}>
+            <NavLink onClick={() => setOpen(false)} to="/explore?local=1" className={navLinkCN}>
               <RectangleGroupIcon className={iconCN} />
-              <span>Explore {user ? '' : 'without login'}</span>
+              <span>Explore: local</span>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink onClick={() => setOpen(false)} to="/explore?local=0" className={navLinkCN}>
+              <RectangleGroupIcon className={iconCN} />
+              <span>Explore: federated</span>
             </NavLink>
           </li>
           <li>
