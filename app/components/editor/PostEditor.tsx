@@ -6,11 +6,11 @@ import type { PostUser } from '@/lib/api.server'
 // @ts-ignore
 import { MentionBlot, Mention } from "@thesocialdev/quill-mention"
 import MagicUrl from 'quill-magic-url'
-import { MEDIA_URL } from '@/lib/config'
 import MarqueeBlot from './Marquee'
 import type { UploadedMedia } from './ImageUpload'
 import ImageUpload from './ImageUpload'
 import RawVideoBlot from './RawVideo'
+import formatImage from '@/lib/formatImage'
 
 function EditorToolbar() {
   return (
@@ -104,7 +104,7 @@ export default function PostEditor() {
               alt='avatar'
               loading='lazy'
               class='w-8 h-8 rounded-lg'
-              src="${MEDIA_URL.concat(item.avatar)}"
+              src="${formatImage(item.avatar)}"
             />
             <span>@${item.url}</span>
           </div>

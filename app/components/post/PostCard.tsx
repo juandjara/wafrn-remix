@@ -3,8 +3,6 @@ import { ArrowPathRoundedSquareIcon, ChatBubbleLeftIcon, TrashIcon } from "@hero
 import { Link } from "@remix-run/react"
 import clsx from "clsx"
 import PostContent from "./PostContent"
-import {  motion } from 'framer-motion'
-import { MEDIA_URL } from "@/lib/config"
 import FollowButton from "../FollowButton"
 import { useState } from "react"
 import { buttonCN, linkCN } from "@/lib/style"
@@ -12,6 +10,7 @@ import useUser from "@/lib/useUser"
 import DeleteModal from "../DeleteModal"
 import ReblogMenu from "./ReblogMenu"
 import PostActions, { ReportIcon } from "./PostActions"
+import formatImage from "@/lib/formatImage"
 
 const POST_COMPACT_LIMIT = 3
 
@@ -43,7 +42,7 @@ export default function PostCard({ post, root = false, disableThread = false }: 
               alt='avatar'
               loading='lazy'
               className='w-6 h-6 rounded-lg border border-stone-300 dark:border-stone-500'
-              src={MEDIA_URL.concat(post.user.avatar)}
+              src={formatImage(post.user.avatar)}
             />
             <span className="rounded-md p-0.5 absolute -top-2 -right-2 bg-white">
               {isEmptyReblog ? (
@@ -90,7 +89,7 @@ export default function PostCard({ post, root = false, disableThread = false }: 
               alt='avatar'
               loading='lazy'
               className='w-8 h-8 rounded-lg'
-              src={MEDIA_URL.concat(post.user.avatar)}
+              src={formatImage(post.user.avatar)}
             />
             <div className="flex-grow truncate">
               <Link className={linkCN} to={`/u/${post.user.url}`}>

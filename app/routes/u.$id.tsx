@@ -1,10 +1,11 @@
 import Container from '@/components/Container'
 import FollowButton from '@/components/FollowButton'
+import PostContent from '@/components/post/PostContent'
 import PostList from '@/components/post/PostList'
 import type { Post, UserDetails } from '@/lib/api.server'
 import { getDetails } from '@/lib/api.server'
 import { getBlog } from '@/lib/api.server'
-import { MEDIA_URL } from '@/lib/config'
+import formatImage from '@/lib/formatImage'
 import { cardCN } from '@/lib/style'
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
@@ -46,9 +47,11 @@ export default function Blog() {
   return (
     <Container>
       <div className={`${cardCN} mb-8 flex flex-col items-center`}>
-        <img alt="" src={MEDIA_URL.concat(detail.avatar)} className="h-40 rounded-md border-stone-300" />
+        <img alt="" src={formatImage(detail.avatar)} className="h-40 rounded-md border-stone-300" />
         <p className='mt-2 text-xl text-purple-900 dark:text-purple-400 font-medium'>{detail.url}</p>
-        <p className='my-8'>{detail.description}</p>
+        <p className='w-full my-8'>
+          <PostContent content={detail.description} />
+        </p>
         <FollowButton size='big' userId={detail.id} />
       </div>
       {posts.length === 0 && (

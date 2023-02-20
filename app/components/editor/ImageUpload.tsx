@@ -1,4 +1,5 @@
-import { API_URL, MEDIA_URL } from "@/lib/config"
+import { API_URL } from "@/lib/config"
+import formatImage from "@/lib/formatImage"
 import { buttonCN, cardCN, checkboxCN, inputCN, labelCN } from "@/lib/style"
 import { Popover } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
@@ -116,7 +117,7 @@ export default function ImageUpload({ onUpload }: { onUpload: (files: UploadedMe
       const data = await uploadMedia(token, { files, nsfw, description }) as Pick<UploadedMedia, 'id' | 'url'>[]
       const medias = data.map((d) => ({
         id: d.id,
-        url: MEDIA_URL.concat(d.url),
+        url: formatImage(d.url),
         description,
         nsfw,
         html: ''

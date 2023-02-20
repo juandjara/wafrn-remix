@@ -1,6 +1,6 @@
 import Container from "@/components/Container"
 import { readNotifications } from "@/lib/api.server"
-import { MEDIA_URL } from "@/lib/config"
+import formatImage from "@/lib/formatImage"
 import { requireUserSession } from "@/lib/session.server"
 import { buttonCN, headingCN, linkCN } from "@/lib/style"
 import type { RootLoaderData } from "@/root"
@@ -57,7 +57,7 @@ export default function Notifications() {
                 alt='avatar'
                 loading='lazy'
                 className='w-12 h-12 rounded-lg border border-gray-300'
-                src={MEDIA_URL.concat(item.user.avatar)}
+                src={formatImage(item.user.avatar)}
               />
               <span className="rounded-lg p-1 absolute -top-3 -right-3 bg-white">
                 {item.type === 'reply' && (

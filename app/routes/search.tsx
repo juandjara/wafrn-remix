@@ -3,10 +3,10 @@ import PostList from '@/components/post/PostList'
 import Spinner from '@/components/Spinner'
 import type { Post, PostUser} from '@/lib/api.server'
 import { searchPosts } from '@/lib/api.server'
-import { MEDIA_URL } from '@/lib/config'
+import formatImage from '@/lib/formatImage'
 import { buttonCN, cardCN, headingCN, inputCN, labelCN, linkCN } from '@/lib/style'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import type { ActionFunction, LoaderFunction } from '@remix-run/node'
+import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, useLoaderData, useTransition } from '@remix-run/react'
 
@@ -76,7 +76,7 @@ export default function Search() {
                   alt='avatar'
                   loading='lazy'
                   className='w-12 h-12 rounded-lg flex-shrink-0 my-1'
-                  src={MEDIA_URL.concat(user.avatar)}
+                  src={formatImage(user.avatar)}
                 />
                 <div className="flex-grow">
                   <Link className={`${linkCN} text-lg`} to={`/u/${user.url}`}>

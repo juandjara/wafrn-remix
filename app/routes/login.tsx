@@ -72,10 +72,10 @@ export default function Login() {
   return (
     <Container>
       <div className="bg-white dark:bg-stone-700 rounded-md shadow-sm px-3 pb-6">
-        <div className="bg-purple-900 p-4 -mx-3 rounded-t-md">
+        <div className="md:hidden bg-purple-900 p-4 -mx-3 rounded-t-md">
           <img src="/img/wafrn-logo.png" alt="WAFRN" className="h-16 mx-auto" />
         </div>
-        <h1 className="text-center mt-8 mb-4 font-bold text-2xl">Welcome back!</h1>
+        <h1 className="text-center pt-8 mb-4 font-bold text-2xl">Welcome back!</h1>
         <Form
           method="post"
           onSubmit={handleSubmit}

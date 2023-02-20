@@ -1,5 +1,7 @@
-import { MEDIA_URL, API_URL } from './config'
+import { API_URL } from './config'
+import formatImage from './formatImage'
 import { linkCN } from './style'
+import imageExtensions from 'image-extensions'
 
 export type PostTag = {
   tagName: string
@@ -129,7 +131,10 @@ export async function getDetails(userUrl: string) {
     throw new Response(`User "${userUrl}" not found`, { status: 404, statusText: 'Not Found' })
   }
 
-  return data as UserDetails
+  const details = data as UserDetails
+  details.description = await sanitizeHTML(details.description)
+
+  return details
 }
 
 export async function getExplore({ page, startScroll }: { page: number; startScroll: number }) {
@@ -219,11 +224,11 @@ export async function searchPosts({ query, page }: { query: string; page: number
 
 async function processPost(post: Post) {
   if (post.content) {
-    await processHTML(post)
+    await processPostContent(post)
   }
   if (post.ancestors) {    
     for (const ancestor of post.ancestors) {
-      await processHTML(ancestor)
+      await processPostContent(ancestor)
     }
   }
 
@@ -232,7 +237,7 @@ async function processPost(post: Post) {
 
 const contentMap = new Map()
 
-async function processHTML(post: Post) {
+async function processPostContent(post: Post) {
   let content = post.content
 
   // if this post has been previously visited, return processed html from the cache
@@ -245,7 +250,7 @@ async function processHTML(post: Post) {
       const value = `<a 
           data-mention="${m.user.url}"
           class="${linkCN}"
-          href="/u/${m.user.url}">@${m.user.url}</a>`
+          href="/u/${m.user.url}">@${m.user.url.replace(/^@/, '')}</a>`
       content = content.replace(key, value)
     }
 
@@ -254,51 +259,57 @@ async function processHTML(post: Post) {
     for (const m of post.medias) {
       const key = `[wafrnmediaid="${m.id}"]`
       const extension = m.url.split('.').slice(-1)[0]
-      const isImage = extension === 'webp'
+      const isImage = imageExtensions.includes(extension)
       const isSensible = m.NSFW || m.adultContent
       const value = isSensible 
         ? `<img
             loading="lazy"
             src="/img/nsfw.webp"
-            data-src="${MEDIA_URL}${m.url}"
+            data-src="${formatImage(m.url)}"
             data-type="${isImage ? 'image' : 'video'}"
             data-nsfw="true"
           />`
         : isImage
-          ? `<img loading="lazy" src="${MEDIA_URL}${m.url}" alt=${m.description} />`
-          : `<video controls src="${MEDIA_URL}${m.url}" />`
+          ? `<img loading="lazy" src="${formatImage(m.url)}" alt=${m.description} />`
+          : `<video controls src="${formatImage(m.url)}" />`
   
       content = content.replace(key, value)
     }
-  
-    // load the html parsing libraries
-    const [ unified, rehypeParse, rehypeSanitize, rehypeStringify ] = await Promise.all([
-      import('unified').then(mod => mod.unified),
-      import('rehype-parse').then(mod => mod.default),
-      import('rehype-sanitize'),
-      import('rehype-stringify').then(mod => mod.default)
-    ])
-  
-    // apply the html sanitizer
-    const html = await unified()
-      .use(rehypeParse, {fragment: true})
-      .use(rehypeSanitize.default, {
-        ...rehypeSanitize.defaultSchema,
-        tagNames: [...(rehypeSanitize.defaultSchema.tagNames || []), 'marquee', 'video', 'u'],
-        attributes: {
-          ...rehypeSanitize.defaultSchema.attributes,
-          '*': ['data*', 'className', 'style', ...(rehypeSanitize.defaultSchema.attributes?.['*'] || [])],
-          'img': ['loading', ...(rehypeSanitize.defaultSchema.attributes?.['img'] || [])],
-          'video': ['src', 'controls', ...(rehypeSanitize.defaultSchema.attributes?.['video'] || [])],
-        }
-      })
-      .use(rehypeStringify)
-      .process(content)
+
+    const html = await sanitizeHTML(content)
   
     // store visited post in the cache
-    contentMap.set(post.id, html.toString())
+    contentMap.set(post.id, html)
     post.content = contentMap.get(post.id)
   }
+}
+
+export async function sanitizeHTML(content: string) {
+  // load the html parsing libraries
+  const [ unified, rehypeParse, rehypeSanitize, rehypeStringify ] = await Promise.all([
+    import('unified').then(mod => mod.unified),
+    import('rehype-parse').then(mod => mod.default),
+    import('rehype-sanitize'),
+    import('rehype-stringify').then(mod => mod.default)
+  ])
+
+  // apply the html sanitizer
+  const html = await unified()
+    .use(rehypeParse, {fragment: true})
+    .use(rehypeSanitize.default, {
+      ...rehypeSanitize.defaultSchema,
+      tagNames: [...(rehypeSanitize.defaultSchema.tagNames || []), 'marquee', 'video', 'u'],
+      attributes: {
+        ...rehypeSanitize.defaultSchema.attributes,
+        '*': ['data*', 'className', 'style', ...(rehypeSanitize.defaultSchema.attributes?.['*'] || [])],
+        'img': ['loading', ...(rehypeSanitize.defaultSchema.attributes?.['img'] || [])],
+        'video': ['src', 'controls', ...(rehypeSanitize.defaultSchema.attributes?.['video'] || [])],
+      }
+    })
+    .use(rehypeStringify)
+    .process(content)
+
+  return html.toString()
 }
 
 export async function login({ email, password, captcha }: { email: string; password: string; captcha: string }) {

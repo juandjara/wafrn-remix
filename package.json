@@ -23,6 +23,7 @@
     "clsx": "^1.2.1",
     "framer-motion": "^7.6.5",
     "html-get": "2.9.23",
+    "image-extensions": "^1.1.0",
     "metascraper": "5.31.1",
     "metascraper-description": "5.31.1",
     "metascraper-iframe": "^5.31.1",

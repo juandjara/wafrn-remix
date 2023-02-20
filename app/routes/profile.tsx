@@ -2,7 +2,7 @@ import Container from "@/components/Container"
 import type { UserDetails } from "@/lib/api.server"
 import { editProfile } from "@/lib/api.server"
 import { getDetails } from "@/lib/api.server"
-import { MEDIA_URL } from "@/lib/config"
+import formatImage from "@/lib/formatImage"
 import { requireUserSession } from "@/lib/session.server"
 import { buttonCN, cardCN, headingCN, inputCN, labelCN, linkCN } from "@/lib/style"
 import { XCircleIcon } from "@heroicons/react/20/solid"
@@ -36,14 +36,14 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Profile() {
   const { details } = useLoaderData<LoaderData>()
-  const [image, setImage] = useState(MEDIA_URL.concat(details.avatar))
+  const [image, setImage] = useState(formatImage(details.avatar))
   const inputFileRef = useRef<HTMLInputElement>(null)
   const actionData = useActionData()
   const transition = useTransition()
   const busy = transition.state !== 'idle'
 
   useEffect(() => {
-    setImage(MEDIA_URL.concat(details.avatar))
+    setImage(formatImage(details.avatar))
   }, [details.avatar])
 
   useEffect(() => {
