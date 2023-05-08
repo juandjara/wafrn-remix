@@ -73,7 +73,7 @@ async function handleApiResponse(res: Response) {
     text = await res.text()
     json = JSON.parse(text)
   } catch (e) {
-    throw new Error(`Failed parsing JSON response from text "${text}"`)
+    throw new Error(`Failed parsing JSON response from URL ${url} \n parsing text "${text}"`)
   }
 
   if (json.success === false) {
@@ -451,12 +451,12 @@ export type APINotifications = {
 }
 
 export async function getNotifications(token: string) {
-  const res = await fetch(`${API_URL}/notifications`, {
+  const res = await fetch(`${API_URL}/notificationsScroll`, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
   })
-
+  
   const data = await handleApiResponse(res)
   return data as APINotifications
 }
